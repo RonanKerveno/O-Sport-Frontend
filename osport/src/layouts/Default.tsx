@@ -6,7 +6,7 @@ interface DefaultLayoutProps {
   children: ReactNode;
 }
 
-export default function DefaultLayout({ children }: DefaultLayoutProps){
+export default function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
     <>
       <Header />
@@ -14,4 +14,4 @@ export default function DefaultLayout({ children }: DefaultLayoutProps){
       <NavBar />
     </>
   );
-};
+}
