@@ -6,6 +6,7 @@ interface DefaultLayoutProps {
   children: ReactNode;
 }
 
+// Définition de la structure des pages par défaut.
 export default function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
     <>

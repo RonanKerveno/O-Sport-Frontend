@@ -14,6 +14,7 @@
   ],
   "rules": {
     "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "react/jsx-one-expression-per-line": "off",
     "@next/next/no-img-element": "off",
     "import/extensions": [
       "error",
