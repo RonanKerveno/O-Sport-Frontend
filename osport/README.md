@@ -1,34 +1,17 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# O'Sport - Frontend
 
-## Getting Started
+## Projet d'apothéose école O'Clock
 
-First, run the development server:
+O'Sport est un projet engagé dans le cadre de la formation O'Clock "Développeur Fullstack JS".
+https://oclock.io/formations/developpeur-web-fullstack-javascript
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## Objectif
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Mise en place d’un site web pour mettre en relation des particuliers autour du sport. Le principe : un utilisateur peut proposer un événement sportif auquels d'autres utilisateurs peuvent s'inscrire.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## L'équipe
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Meddy Chalder (https://github.com/MeddyCHALDER)
+- Ronan Kerveno (https://github.com/RonanKerveno)
+- Emmanuel Lenoir (https://github.com/LenoirEmmanuel)
+- Géraldine Pérez (https://github.com/Geraldine-Perez)
