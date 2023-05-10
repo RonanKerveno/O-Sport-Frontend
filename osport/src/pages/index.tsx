@@ -2,22 +2,22 @@ import Head from 'next/head';
 import Navbar from '../components/Navbar';
 import Description from '../components/Description';
 import Card from '../components/Card';
-import Sportssearch from '../components/sportssearch';
+import SportSearch from '../components/SportSearch';
 import Footer from '../components/Footer';
 
 export default function Home() {
-    return (
-        <>
-           <Head>
+  return (
+    <>
+      <Head>
         <title>Accueil - osport</title>
-          </Head>
-          <Description />
-            <Card />
-            <Sportssearch />
-            <Navbar />
-            <Footer />
-            
-        </>
+      </Head>
+      <Description />
+      <Card />
+      <SportSearch />
+      <Navbar />
+      <Footer />
 
-    );
+    </>
+
+  );
 }
