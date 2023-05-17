@@ -3,7 +3,7 @@ import {
   MdSportsFootball, MdSportsGolf, MdSportsHandball, MdSportsRugby, MdSportsGymnastics,
 } from 'react-icons/md';
 
-export default function Sportssearch() {
+export default function SportSearch() {
   return (
     <div className="overflow-auto flex flex-row justify-center border-t-2 border-b-2 border-{#0a248f} space-x-4 mt-6 mb-6 pt-4 pb-4 ">
       <a href="#"><MdSportsBasketball size={50} color="#b430a6" /></a>

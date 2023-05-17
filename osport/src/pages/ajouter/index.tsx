@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { HiUserGroup, HiUserCircle } from 'react-icons/hi2';
 import { MdSportsHandball } from 'react-icons/md';
 
-export default function Ajouter() {
+export default function AddEvent() {
   const router = useRouter();
   const { id } = router.query;
   return (
