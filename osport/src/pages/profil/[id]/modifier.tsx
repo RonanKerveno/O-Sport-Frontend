@@ -2,20 +2,21 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { HiUserCircle } from 'react-icons/hi2';
 import { useState } from 'react';
+import Footer from '../../../components/footer';
 
 export default function ModifierProfil({ id }) {
   const [isEditMode, setIsEditMode] = useState(false);
   const [nouvellesDonnees, setNouvellesDonnees] = useState({
     nom: '',
     email: '',
-    photoProfil: null
+    photoProfil: null,
   });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setNouvellesDonnees((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -23,7 +24,7 @@ export default function ModifierProfil({ id }) {
     const photo = event.target.files[0];
     setNouvellesDonnees((prevState) => ({
       ...prevState,
-      photoProfil: photo
+      photoProfil: photo,
     }));
   };
 
@@ -43,7 +44,6 @@ export default function ModifierProfil({ id }) {
     // Mettre à jour les informations du profil avec les nouvelles données
     // Gérer les erreurs et renvoyer les messages appropriés
   };
-
 
   return (
     <>
@@ -101,11 +101,10 @@ export default function ModifierProfil({ id }) {
           ) : (
             <button onClick={handleModifierClick}>Modifier la photo de profil</button>
           )}
-        <div>
-          
-        </div>
+          <div />
         </div>
       </div>
+      <Footer />
     </>
   );
 }

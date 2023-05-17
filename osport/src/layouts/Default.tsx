@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import Header from '../components/Header';
-import NavBar from '../components/Navbar';
+import NavBar from '../components/navbar';
 
 interface DefaultLayoutProps {
   children: ReactNode;
@@ -13,6 +13,7 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
       <Header />
       <main>{children}</main>
       <NavBar />
+
     </>
   );
 }
