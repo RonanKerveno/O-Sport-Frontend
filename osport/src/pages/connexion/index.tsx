@@ -5,22 +5,29 @@ export default function Login() {
   const { isLogged, login, logout } = useAuth();
 
   return (
-    <>
+    <div>
       <Head>
         <title>Connexion - osport</title>
       </Head>
-      <h1>Connexion</h1>
-      <div>
-        <h1>Hello Context</h1>
-        <h2>User: {isLogged ? 'login' : 'logout'}</h2>
-        <div>
-          <button onClick={login} type="button">Login</button>
-        </div>
-        <div>
-          <button onClick={logout} type="button">Logout</button>
-        </div>
+      <div className="border flex flex-col m-4">
+        <label htmlFor="Email" className="m-2">Email</label>
+        <input type="text" id="Email" name="Email" className="border w-44 m-2" />
       </div>
-    </>
+
+      <div className="border flex flex-col m-4">
+        <label htmlFor="pass" className="m-2">Password (8 characters minimum):</label>
+        <input
+          type="password"
+          id="pass"
+          name="password"
+          minLength="8"
+          required
+          className="border w-44 m-2"
+        />
+      </div>
+
+      <div className="text-center border w-20 m-4"><button type="button" aria-label="Submit" className="hover:bg-gray-50"><input type="submit" value="Sign in" /></button></div>
+    </div>
 
   );
 }

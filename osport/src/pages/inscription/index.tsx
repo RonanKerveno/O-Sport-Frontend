@@ -6,18 +6,18 @@ export default function Suscribe() {
       <Head>
         <title>Inscription - osport</title>
       </Head>
-      <div className="flex flex-col">
+      <div className="flex flex-col space-">
         <div className="text-[#b430a6] text-1xl font-sans font-bold text-center border">
           <h1> Inscription </h1>
         </div>
-        <div>Nom<input type="text" /></div>
-        <div>Prenom<input type="text" /></div>
-        <div>Date de naissance<input type="date" /></div>
-        <div>N°<input type="number" /> Adresse <input type="text" /></div>
-        <div>Code Postale<input type="number" /></div>
-        <div>Ville<input type="texte" /></div>
-        <div>Email<input type="mail" /></div>
-        <div className="mt-5 mb-5"><button className="bg-[#b430a6] text-white font-bold py-2 px-4 rounded" type="submit">Inscription</button></div>
+        <div className="mt-5 mb-5">Nom<input className="ml-5 border" type="text" /></div>
+        <div className="mt-5 mb-5">Prenom<input className="ml-5 border" type="text" /></div>
+        <div className="mt-5 mb-5">Date de naissance<input className="ml-5 border" type="date" /></div>
+        <div className="mt-5 mb-5">N°<span className="ml-40">Adresse</span> <br /><input className="border" type="number" /> <input className="border" type="text" /></div>
+        <div className="mt-5 mb-5">Code Postale<input className="ml-5 border" type="number" /></div>
+        <div className="mt-5 mb-5">Ville<input className="ml-5 border" type="texte" /></div>
+        <div className="mt-5 mb-5">Email<input className="ml-5 border" type="mail" /></div>
+        <div className="mt-5 mb-5 text-center"><button className="bg-[#b430a6] text-white font-bold py-2 px-4 rounded" type="submit">Inscription</button></div>
 
       </div>
     </>
