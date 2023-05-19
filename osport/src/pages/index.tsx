@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Description from '../components/Description';
-import Card from '../components/Card';
+import Cards from '../components/Cards';
 import SportSearch from '../components/SportSearch';
 
 export default function Home() {
@@ -9,10 +9,13 @@ export default function Home() {
       <Head>
         <title>Accueil - osport</title>
       </Head>
-      <Description />
-      <Card />
-      <SportSearch />
-    </>
+      <div className="flex flex-col flex-wrap">
+        <Description />
 
+        <Cards />
+
+        <SportSearch />
+      </div>
+    </>
   );
 }

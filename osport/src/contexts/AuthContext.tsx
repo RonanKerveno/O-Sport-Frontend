@@ -2,7 +2,7 @@ import {
   createContext, ReactNode, useContext, useEffect, useMemo, useState,
 } from 'react';
 import jwtDecode from 'jwt-decode';
-import loginUser from '../services/userService';
+import { loginUser } from '../services/userService';
 
 interface DecodedToken {
   userId: string;
@@ -73,7 +73,7 @@ export function AuthProvider({ children }: Props) {
       setUserId(decoded.userId);
       setError('');
     } else {
-      setError('Email ou mot de passe invalide');
+      setError(response.error ?? 'Erreur serveur');
     }
   };
 
