@@ -1,11 +1,11 @@
 import Head from 'next/head';
 import { useAuth } from '../../contexts/AuthContext';
-import withLoggedRedirect from '../../hocs/withLoggedRedirect';
+import useLoggedRedirect from '../../hooks/useLoggedRedirect';
 
-type SuscribeProps = {};
-
-function Suscribe() {
+export default function Suscribe() {
   const { isLogged } = useAuth();
+
+  useLoggedRedirect();
 
   // Si l'utilisateur est déjà inscrit on lui indique un message
   if (isLogged) {
@@ -34,5 +34,3 @@ function Suscribe() {
     </>
   );
 }
-
-export default withLoggedRedirect<SuscribeProps>(Suscribe);

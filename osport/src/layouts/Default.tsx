@@ -31,7 +31,7 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
           <main>{children}<Footer /></main>
         </>
       )}
-      <ToastContainer autoClose={3000} />
+      <ToastContainer autoClose={1000} />
     </div>
   );
 }

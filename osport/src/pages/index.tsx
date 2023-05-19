@@ -13,12 +13,10 @@ export default function Home() {
   useEffect(() => {
     if (showLoggedStatus) {
       const message = isLogged ? 'Vous êtes connecté' : 'Vous êtes déconnecté';
-      toast(message); // Utilisez l'alerte pour afficher le message
+      toast(message);
 
       // Réinitialisez l'état après l'affichage du message
-      setTimeout(() => {
-        setShowLoggedStatus(false);
-      }, 3000); // Affichez le message pendant 3 secondes
+      setShowLoggedStatus(false);
     }
   }, [isLogged, setShowLoggedStatus, showLoggedStatus]);
 

@@ -1,14 +1,14 @@
 import Head from 'next/head';
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import withLoggedRedirect from '../../hocs/withLoggedRedirect';
+import useLoggedRedirect from '../../hooks/useLoggedRedirect';
 
-type LoginProps = {};
-
-function Login() {
+export default function Login() {
   const { login, error, isLogged } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useLoggedRedirect();
 
   const handleLogin = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
@@ -62,5 +62,3 @@ function Login() {
     </div>
   );
 }
-
-export default withLoggedRedirect<LoginProps>(Login);
