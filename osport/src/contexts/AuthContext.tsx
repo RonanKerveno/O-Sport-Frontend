@@ -1,7 +1,8 @@
 import {
-  createContext, ReactNode, useContext, useEffect, useMemo, useState,
+  createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
 import jwtDecode from 'jwt-decode';
+import { useRouter } from 'next/router';
 import { loginUser } from '../services/userService';
 
 interface DecodedToken {
@@ -15,6 +16,9 @@ type authContextType = {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   userId: string | null;
+  showLoggedStatus: boolean;
+  // eslint-disable-next-line no-unused-vars
+  setShowLoggedStatus: (status: boolean) => void;
   error: string;
 };
 
@@ -24,6 +28,8 @@ const authContextDefaultValues: authContextType = {
   login: async () => { },
   logout: () => { },
   userId: null,
+  showLoggedStatus: false,
+  setShowLoggedStatus: () => {},
   error: '',
 };
 
@@ -42,10 +48,12 @@ type Props = {
 
 // Composant fournisseur du contexte d'authentification
 export function AuthProvider({ children }: Props) {
+  const router = useRouter();
   // nouvel état pour gérer le chargement
   const [isLoading, setLoading] = useState(true);
   const [isLogged, setLogState] = useState<boolean>(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const [showLoggedStatus, setShowLoggedStatus] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
   // Utiliser useEffect pour vérifier la présence d'un token une fois le composant monté
@@ -63,7 +71,7 @@ export function AuthProvider({ children }: Props) {
   }, []);
 
   // Fonction de connexion
-  const login = async (email: string, password: string) => {
+  const login = useCallback(async (email: string, password: string) => {
     const response = await loginUser(email, password);
 
     if (response.success) {
@@ -72,17 +80,23 @@ export function AuthProvider({ children }: Props) {
       const decoded = jwtDecode<DecodedToken>(response.token);
       setUserId(decoded.userId);
       setError('');
+      setShowLoggedStatus(true);
+      // Redirection vers la page d'accueil après la connexion
+      await router.push('/');
     } else {
       setError(response.error ?? 'Erreur serveur');
     }
-  };
+  }, [router]);
 
   // Fonction de déconnexion
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem('token');
     setLogState(false);
     setUserId(null);
-  };
+    setShowLoggedStatus(true);
+    // Redirection vers la page d'accueil après la déconnexion
+    router.push('/');
+  }, [router]);
 
   // Valeur du contexte d'authentification
   const value = useMemo(() => ({
@@ -90,8 +104,10 @@ export function AuthProvider({ children }: Props) {
     login,
     logout,
     userId,
+    showLoggedStatus,
+    setShowLoggedStatus,
     error,
-  }), [error, isLogged, userId]);
+  }), [error, isLogged, login, logout, showLoggedStatus, userId]);
 
   // Si l'état est en chargement, ne pas rendre le composant
   if (isLoading) {

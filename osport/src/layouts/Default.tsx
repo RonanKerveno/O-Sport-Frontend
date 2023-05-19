@@ -1,8 +1,7 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable import/extensions */
-/* eslint-disable import/no-extraneous-dependencies */
 import React, { ReactNode } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Footer from '@/components/Footer';
 import Header from '../components/Header';
 import NavBar from '../components/Navbar';
@@ -32,6 +31,7 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
           <main>{children}<Footer /></main>
         </>
       )}
+      <ToastContainer autoClose={3000} />
     </div>
   );
 }
