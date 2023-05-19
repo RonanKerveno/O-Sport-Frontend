@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import Footer from '@/components/footer';
 
 export default function Home() {
   return (
@@ -21,7 +20,7 @@ export default function Home() {
             <option value="Handball">Hanndball</option>
             <option value="Tennis">Tennis</option>
             <option value="Danse">Danse</option>
-               </select>
+          </select>
           </div>
         </div>
         <div>

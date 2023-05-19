@@ -4,9 +4,9 @@
 import React, { ReactNode } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
 import Header from '../components/Header';
-import NavBar from '../components/navbar';
-import Sidebar from '../components/layout/Sidebar';
-import Footer from '@/components/footer';
+import NavBar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
+import Footer from '@/components/Footer';
 
 interface DefaultLayoutProps {
   children: ReactNode;

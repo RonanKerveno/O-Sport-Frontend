@@ -1,4 +1,4 @@
-import Card from './card';
+import Card from './Card';
 
 export default function Cards() {
   const cardIds = [1, 2, 3, 4, 5]; // Liste des IDs des cards à afficher
