@@ -3,10 +3,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { ReactNode } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
+import Footer from '@/components/Footer';
 import Header from '../components/Header';
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
-import Footer from '@/components/Footer';
 
 interface DefaultLayoutProps {
   children: ReactNode;
@@ -18,19 +18,17 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
     <div className="flex flex-row">
       {isMobile ? (
-        <>
+        <div>
           <NavBar />
-          <div>
-            <Header />
-            <main>{children} <Footer /></main>
-          </div>
-        </>
+          <Header />
+          <main>{children}</main>
+        </div>
       ) : (
-        <>
+        <div className="flex flex-row">
           <Sidebar />
 
-          <main>{children}<Footer /></main>
-        </>
+          <main>{children}</main>
+        </div>
       )}
     </div>
   );

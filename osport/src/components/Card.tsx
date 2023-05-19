@@ -3,7 +3,7 @@ import { MdSportsBasketball } from 'react-icons/md';
 
 export default function Card() {
   return (
-    <div className="border-2 w-40 h-64 border-[#0a248f] text-center grid justify-items-center mt-6 mb-6">
+    <div className="border-2 w-40 h-72 border-black rounded-md text-center grid justify-items-center mb-6">
       <div className="flex justify-start"><HiUserGroup />5/23</div>
       <div><MdSportsBasketball /></div>
       <div className="#">
@@ -16,7 +16,7 @@ export default function Card() {
           <div className="flex justify-center mb-4"><HiUser size={24} color="#b430a6" /></div>
           <div>François</div>
         </div>
-        <div className="flex flex-row justify-center"><HiStar color="#b430a6" /><HiStar color="#b430a6" /><HiStar color="#b430a6" /><HiStar color="#b430a6" /><HiStar color="#b430a6" /></div>
+        <div className="flex flex-row justify-center"><HiStar color="#e9c46a" /><HiStar color="#e9c46a" /><HiStar color="#e9c46a" /><HiStar color="#e9c46a" /><HiStar color="#e9c46a" /></div>
       </div>
     </div>
   );
