@@ -3,10 +3,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { ReactNode } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
+import Footer from '@/components/Footer';
 import Header from '../components/Header';
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
-import Footer from '@/components/Footer';
 
 interface DefaultLayoutProps {
   children: ReactNode;
