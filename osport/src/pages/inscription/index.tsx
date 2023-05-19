@@ -1,6 +1,17 @@
 import Head from 'next/head';
+import { useAuth } from '../../contexts/AuthContext';
+import withLoggedRedirect from '../../hocs/withLoggedRedirect';
 
-export default function Suscribe() {
+type SuscribeProps = {};
+
+function Suscribe() {
+  const { isLogged } = useAuth();
+
+  // Si l'utilisateur est déjà inscrit on lui indique un message
+  if (isLogged) {
+    return <p>Vous êtes déjà connecté.</p>;
+  }
+
   return (
     <>
       <Head>
@@ -10,6 +21,7 @@ export default function Suscribe() {
         <div className="text-[#b430a6] text-1xl font-sans font-bold text-center border">
           <h1> Inscription </h1>
         </div>
+        {/* Champs d'inscription */}
         <div className="mt-5 mb-5">Nom<input className="ml-5 border" type="text" /></div>
         <div className="mt-5 mb-5">Prenom<input className="ml-5 border" type="text" /></div>
         <div className="mt-5 mb-5">Date de naissance<input className="ml-5 border" type="date" /></div>
@@ -18,9 +30,9 @@ export default function Suscribe() {
         <div className="mt-5 mb-5">Ville<input className="ml-5 border" type="texte" /></div>
         <div className="mt-5 mb-5">Email<input className="ml-5 border" type="mail" /></div>
         <div className="mt-5 mb-5 text-center"><button className="bg-[#b430a6] text-white font-bold py-2 px-4 rounded" type="submit">Inscription</button></div>
-
       </div>
     </>
-
   );
 }
+
+export default withLoggedRedirect<SuscribeProps>(Suscribe);

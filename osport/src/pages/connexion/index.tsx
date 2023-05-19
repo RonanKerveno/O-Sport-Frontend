@@ -1,25 +1,24 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import withLoggedRedirect from '../../hocs/withLoggedRedirect';
 
-export default function Login() {
-  const router = useRouter();
+type LoginProps = {};
+
+function Login() {
   const { login, error, isLogged } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  useEffect(() => {
-    // si l'utilisateur est déjà connecté, redirige vers la page d'accueil
-    if (isLogged) {
-      router.push('/');
-    }
-  }, [isLogged, router]);
 
   const handleLogin = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     await login(email, password);
   };
+
+  // Si l'utilisateur est déjà connecté on lui indique un message
+  if (isLogged) {
+    return <p>Vous êtes déjà connecté.</p>;
+  }
 
   return (
     <div>
@@ -63,3 +62,5 @@ export default function Login() {
     </div>
   );
 }
+
+export default withLoggedRedirect<LoginProps>(Login);
