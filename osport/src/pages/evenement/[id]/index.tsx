@@ -3,7 +3,6 @@ import { HiUserCircle, HiUserGroup } from 'react-icons/hi2';
 import { MdSportsHandball } from 'react-icons/md';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import Footer from '../../../components/footer';
 
 // Visualisation d'un événement en fonction de son ID
 export default function Event() {
@@ -52,7 +51,6 @@ export default function Event() {
           <span className="flex flex-col">Jude <HiUserCircle size={20} /></span>
         </div>
       </div>
-      <Footer />
     </>
 
   );

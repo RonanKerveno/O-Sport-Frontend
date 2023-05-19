@@ -2,7 +2,6 @@ import Head from 'next/head';
 import Description from '../components/description';
 import Cards from '../components/Cards';
 import Sportssearch from '../components/sportssearch';
-import Footer from '../components/footer';
 
 export default function Home() {
   return (
@@ -17,8 +16,6 @@ export default function Home() {
 
         <Sportssearch />
       </div>
-
-      <Footer />
     </>
   );
 }

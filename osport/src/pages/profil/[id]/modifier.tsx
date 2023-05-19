@@ -1,6 +1,4 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { HiUserCircle } from 'react-icons/hi2';
 import { useState } from 'react';
 import Footer from '../../../components/footer';
 

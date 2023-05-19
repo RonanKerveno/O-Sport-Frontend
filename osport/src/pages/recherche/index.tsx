@@ -48,7 +48,6 @@ export default function Home() {
         <div><div className="border-t border-b">Rechercher un membre</div> <div><input type="text" name="search" id="" placeholder="nom d'utilisateur" /></div></div>
         <button type="submit">Chercher</button>
       </div>
-      <Footer />
     </>
 
   );

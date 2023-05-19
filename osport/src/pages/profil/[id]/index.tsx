@@ -59,7 +59,6 @@ export default function Profile() {
         {/* etc.. */}
       </div>
       <div><Link href="/profil/:1/modifier">Modifié mon profil</Link></div>
-      <Footer />
     </>
   );
 }

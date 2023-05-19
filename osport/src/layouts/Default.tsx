@@ -1,6 +1,12 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-extraneous-dependencies */
 import React, { ReactNode } from 'react';
+import { useMediaQuery } from 'usehooks-ts';
 import Header from '../components/Header';
 import NavBar from '../components/navbar';
+import Sidebar from '../components/layout/Sidebar';
+import Footer from '@/components/footer';
 
 interface DefaultLayoutProps {
   children: ReactNode;
@@ -8,12 +14,24 @@ interface DefaultLayoutProps {
 
 // Définition de la structure des pages par défaut.
 export default function DefaultLayout({ children }: DefaultLayoutProps) {
+  const isMobile = useMediaQuery('(max-width: 768px)');
   return (
-    <>
-      <Header />
-      <main>{children}</main>
-      <NavBar />
+    <div className="flex flex-row">
+      {isMobile ? (
+        <>
+          <NavBar />
+          <div>
+            <Header />
+            <main>{children} <Footer /></main>
+          </div>
+        </>
+      ) : (
+        <>
+          <Sidebar />
 
-    </>
+          <main>{children}<Footer /></main>
+        </>
+      )}
+    </div>
   );
 }
