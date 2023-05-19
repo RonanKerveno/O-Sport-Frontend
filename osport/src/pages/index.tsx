@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import Description from '../components/description';
+import Description from '../components/Description';
 import Cards from '../components/Cards';
 import Sportssearch from '../components/sportssearch';
 
