@@ -6,6 +6,7 @@ import {
 } from 'react';
 import jwtDecode from 'jwt-decode';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 import { loginUser } from '../services/userService';
 
 // Typage TypeScript des informations extraites du token JWT
@@ -69,21 +70,16 @@ export function AuthProvider({ children }: Props) {
   const [showLoggedStatus, setShowLoggedStatus] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
-  // Utilisations d'un useEffect qui vérifie la présence d'un token JWT dans le localstorage
+  // Utilisation d'un useEffect qui vérifie la présence d'un cookie "token".
   // Cela permet de vérifier si l'utilisateur a déjà une session ouverte au montage du composant.
   useEffect(() => {
-    // "localStorage" est une propriété de l'objet window indisponible lors du rendu coté
-    // serveur (SSR). On s'assure que le code s'exécute dans un environnement de navigateur
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
-      if (token) {
-        setLogState(true);
-        // On extrait l'ID de l'utilisateur connecté depuis le token.
-        const decoded = jwtDecode<DecodedToken>(token);
-        setUserId(decoded.userId);
-      }
+    const token = Cookies.get('token');
+    if (token) {
+      setLogState(true);
+      // On extrait l'ID de l'utilisateur connecté depuis le token.
+      const decoded = jwtDecode<DecodedToken>(token);
+      setUserId(decoded.userId);
     }
-    // une fois que vous avez vérifié, vous pouvez arrêter le chargement
     setLoading(false);
   }, []);
 
@@ -94,13 +90,18 @@ export function AuthProvider({ children }: Props) {
     // Si l'API authentifie correctement l'utilisateur on met l'etat is Logged sur true et on
     // modifie les états liés.
     if (response.success) {
-      localStorage.setItem('token', response.token);
-      setLogState(true);
       // On extrait l'ID de l'utilisateur connecté depuis le token.
-      const decoded = jwtDecode<DecodedToken>(response.token);
+      const decoded = jwtDecode<DecodedToken & { exp: number }>(response.token);
+      setLogState(true);
       setUserId(decoded.userId);
       setError('');
       setShowLoggedStatus(true);
+      // On calcule l'expiration en utilisant la propriété 'exp' du token JWT
+      // 'exp' est un timestamp Unix, donc on le multiplie par 1000 pour obtenir des millisecondes
+      const expires = new Date(decoded.exp * 1000);
+      // On crée un cookie "token" avec les données du token et en reportant la durée
+      // d'expiration convertie.
+      Cookies.set('token', response.token, { expires });
       // Redirection vers la page d'accueil après la connexion
       await router.push('/');
     } else {
@@ -108,9 +109,9 @@ export function AuthProvider({ children }: Props) {
     }
   }, [router]);
 
-  // Fonction de déconnexion. On supprime le token JWT du localStorage et on modifie nos états.
+  // Fonction de déconnexion. On supprime le cookie "token" et on modifie nos états.
   const logout = useCallback(() => {
-    localStorage.removeItem('token');
+    Cookies.remove('token');
     setLogState(false);
     setUserId(null);
     setShowLoggedStatus(true);
