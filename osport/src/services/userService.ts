@@ -1,5 +1,3 @@
-// Requêtes API liées aux utilisateurs.
-
 import axios, { AxiosError } from 'axios';
 import { API_URL } from './apiConfig';
 
@@ -9,7 +7,7 @@ interface ServerError {
 }
 
 // Test des identifiants et récupération du token JWT
-export async function loginUser(email: string, password: string) {
+export const loginUser = async (email: string, password: string) => {
   try {
     const response = await axios.post(`${API_URL}/users/login`, {
       email,
@@ -40,10 +38,10 @@ export async function loginUser(email: string, password: string) {
       error: 'An unexpected error occurred',
     };
   }
-}
+};
 
 // Recupération des données d'un utilisateur via son ID.
-export async function getUserById(userId: string) {
+export const getUserById = async (userId: string) => {
   try {
     const response = await axios.get(`${API_URL}/users/${userId}`);
     // Recupération des données de l'utilisateur
@@ -60,10 +58,35 @@ export async function getUserById(userId: string) {
       success: false,
     };
   }
-}
+};
+
+// Recupération des données provées d'un utilisateur via son ID.
+// Le token a été extrait du cookie depuis le rendu SSR.
+export const getUserByIdPrivate = async (userId: string, token: string) => {
+  try {
+    const response = await axios.get(`${API_URL}/users/${userId}/private`, {
+      // On passe le token JWT dans l'entête de la requête.
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // Recupération des données de l'utilisateur
+    const userPrivateData = response.data;
+    return {
+      success: true,
+      userPrivate: userPrivateData,
+    };
+
+    // gestion des erreurs
+  } catch (error) {
+    return {
+      success: false,
+    };
+  }
+};
 
 // Récupèration la liste des sports préférés d'un utilisateur ciblé par son ID
-export async function getAllSportsFromOneUser(userId: string) {
+export const getAllSportsFromOneUser = async (userId: string) => {
   try {
     const response = await axios.get(`${API_URL}/users/${userId}/sports`);
 
@@ -81,10 +104,10 @@ export async function getAllSportsFromOneUser(userId: string) {
       success: false,
     };
   }
-}
+};
 
 // Récupèration la liste des événements auxquels un utilisateur ayant l’ID spécifié participe
-export async function getAllEventsFromOneUser(userId: string) {
+export const getAllEventsFromOneUser = async (userId: string) => {
   try {
     const response = await axios.get(`${API_URL}/users/${userId}/events`);
 
@@ -102,10 +125,10 @@ export async function getAllEventsFromOneUser(userId: string) {
       success: false,
     };
   }
-}
+};
 
 // Récupèration la liste des événements créés par l'utilisateur ayant l’ID spécifié
-export async function getAllEventsCreatedByOneUser(userId: string) {
+export const getAllEventsCreatedByOneUser = async (userId: string) => {
   try {
     const response = await axios.get(`${API_URL}/users/${userId}/created-events`);
 
@@ -123,4 +146,4 @@ export async function getAllEventsCreatedByOneUser(userId: string) {
       success: false,
     };
   }
-}
+};
