@@ -1,3 +1,5 @@
+// Composant gérant la barre de navigation en vue mobile
+
 import {
   HiHome, HiUser, HiSearch, HiPlus,
 } from 'react-icons/hi';
@@ -26,6 +28,7 @@ export default function Navbar() {
           <HiHome size={24} color="#0343f4" />
           <span className="sr-only">Home</span>
         </Link>
+        {/* Lien dépendant de l'état connecté ou non */}
         <Link
           href={isLogged ? `/profil/${userId}` : '/connexion'}
           passHref

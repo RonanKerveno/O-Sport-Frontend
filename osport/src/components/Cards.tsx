@@ -1,3 +1,5 @@
+// Composant d'affichage des cartes événements
+
 import Card from './Card';
 
 export default function Cards() {

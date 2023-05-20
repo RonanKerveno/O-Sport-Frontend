@@ -1,3 +1,5 @@
+// Composant gérant le filtre des événements par sport.
+
 import {
   MdSportsBasketball,
   MdSportsFootball, MdSportsGolf, MdSportsHandball, MdSportsRugby, MdSportsGymnastics,

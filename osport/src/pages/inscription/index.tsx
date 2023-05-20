@@ -1,3 +1,5 @@
+// Page d'inscription au site
+
 import Head from 'next/head';
 import { useAuth } from '../../contexts/AuthContext';
 import useLoggedRedirect from '../../hooks/useLoggedRedirect';

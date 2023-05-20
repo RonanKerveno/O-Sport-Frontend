@@ -1,3 +1,5 @@
+// Structure générale/squelette des pages du site
+
 import React, { ReactNode } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
 import { ToastContainer } from 'react-toastify';
@@ -7,11 +9,12 @@ import Header from '../components/Header';
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 
+// Typage TypeScript
 interface DefaultLayoutProps {
   children: ReactNode;
 }
 
-// Définition de la structure des pages par défaut.
+// Définition de la structure avec les composants qui seront toujours présents.
 export default function DefaultLayout({ children }: DefaultLayoutProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
   return (
@@ -31,6 +34,7 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
           <main>{children}<Footer /></main>
         </>
       )}
+      {/* Définition des notifications react-toastify */}
       <ToastContainer autoClose={1000} />
     </div>
   );

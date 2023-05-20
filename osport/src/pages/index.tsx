@@ -1,3 +1,5 @@
+// Page d'accueil
+
 import { useEffect } from 'react';
 import Head from 'next/head';
 import { toast } from 'react-toastify';
@@ -10,12 +12,13 @@ import SportSearch from '../components/SportSearch';
 export default function Home() {
   const { isLogged, showLoggedStatus, setShowLoggedStatus } = useAuth();
 
+  // On affiche un message juste après la redirection depuis une page de connexion/déconnexion.
   useEffect(() => {
     if (showLoggedStatus) {
       const message = isLogged ? 'Vous êtes connecté' : 'Vous êtes déconnecté';
       toast(message);
 
-      // Réinitialisez l'état après l'affichage du message
+      // Réinitialisation de l'état après l'affichage du message
       setShowLoggedStatus(false);
     }
   }, [isLogged, setShowLoggedStatus, showLoggedStatus]);
