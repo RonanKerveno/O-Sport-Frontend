@@ -1,6 +1,8 @@
+// Page de recherche d'événement
+
 import Head from 'next/head';
 
-export default function Home() {
+export default function SearchEvent() {
   return (
     <>
       <Head>

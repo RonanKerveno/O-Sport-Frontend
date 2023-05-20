@@ -1,3 +1,5 @@
+// Composant d'affichage d'une carte événement
+
 import { HiUser, HiStar, HiUserGroup } from 'react-icons/hi2';
 import { MdSportsBasketball } from 'react-icons/md';
 

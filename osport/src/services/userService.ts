@@ -1,6 +1,9 @@
+// Requêtes API liées aux utilisateurs.
+
 import axios, { AxiosError } from 'axios';
 import { API_URL } from './apiConfig';
 
+// Typage TypeScript
 interface ServerError {
   error: string;
 }
@@ -20,6 +23,8 @@ export async function loginUser(email: string, password: string) {
       success: true,
       token,
     };
+
+    // gestion des erreurs
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;
@@ -48,6 +53,8 @@ export async function getUserById(userId: string) {
       success: true,
       user: userData,
     };
+
+    // gestion des erreurs
   } catch (error) {
     return {
       success: false,
@@ -67,6 +74,8 @@ export async function getAllSportsFromOneUser(userId: string) {
       success: true,
       sports: userSportsData,
     };
+
+    // gestion des erreurs
   } catch (error) {
     return {
       success: false,
@@ -86,6 +95,8 @@ export async function getAllEventsFromOneUser(userId: string) {
       success: true,
       events: userEventsData,
     };
+
+    // gestion des erreurs
   } catch (error) {
     return {
       success: false,
@@ -105,6 +116,8 @@ export async function getAllEventsCreatedByOneUser(userId: string) {
       success: true,
       createdEvents: createdEventsData,
     };
+
+    // gestion des erreurs
   } catch (error) {
     return {
       success: false,

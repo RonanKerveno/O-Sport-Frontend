@@ -1,3 +1,5 @@
+// Page de modification du profil utilisateur.
+
 import Head from 'next/head';
 import { useState } from 'react';
 import Footer from '../../../components/footer';

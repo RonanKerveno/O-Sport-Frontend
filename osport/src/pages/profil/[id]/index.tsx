@@ -1,3 +1,5 @@
+// Page d'affichage du prodil d'un utilisateur
+
 import Head from 'next/head';
 import { HiUserCircle } from 'react-icons/hi2';
 import Link from 'next/link';
@@ -10,6 +12,7 @@ import {
 import UserAgenda from '../../../components/UserAgenda';
 import { useAuth } from '../../../contexts/AuthContext';
 
+// Typage TypeScript des données renvoyées par les requêtes sous getServerSideProps.
 interface ProfileProps {
   userData: UserPublicData;
   userEvents: EventListData;
@@ -71,22 +74,27 @@ export default function Profile({
   );
 }
 
+// Fonction spéciale Next.js qui s'exécute coté serveur (SSR). Elle permet de récupérer les données
+// de l'API avant de rendre la page.
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const userId = context.params?.id;
 
+  // On redirige vers la page 404 si l'ID est d'un autre type que string
   if (typeof userId !== 'string') {
     return { notFound: true };
   }
 
+  // On lance les requêtes API.
   const userResponse = await getUserById(userId);
   const userEventsResponse = await getAllEventsFromOneUser(userId);
   const createdEventsResponse = await getAllEventsCreatedByOneUser(userId);
 
-  // Si non trouvé on renvoie vers la page 404
+  // Si l'ID n'est pas trouvé on redirige vers la page 404
   if (!userResponse.success) {
     return { notFound: true };
   }
 
+  // On retourne des tableaux vides en cas d'echec des requêtes retournant des listes.
   return {
     props: {
       userData: userResponse.user,

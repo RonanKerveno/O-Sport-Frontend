@@ -1,6 +1,9 @@
+// Composant gérant l'affichage de l'agenda des evenements d'un utilisateur.
+
 import { format } from 'date-fns';
 import { EventListData } from '../types';
 
+// Typage TypeScript
 interface UserAgendaProps {
   events: EventListData;
 }
@@ -16,6 +19,7 @@ export default function UserAgenda({ events }: UserAgendaProps) {
   return (
     <div>
       <h2 className="font-bold mb-2">Agenda :</h2>
+      {/* On retourne chaque évenement en reprenant les données de events */}
       {sortedEvents.map((event) => {
         const startingDate = format(new Date(event.startingTime), 'dd/MM/yyyy HH:mm');
         const endingDate = format(new Date(event.endingTime), 'dd/MM/yyyy HH:mm');
