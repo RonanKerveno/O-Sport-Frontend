@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import Head from 'next/head';
 import { useMediaQuery } from 'usehooks-ts';
 import Footer from '@/components/Footer';
@@ -12,14 +13,17 @@ export default function Home() {
       <Head>
         <title>Accueil - osport</title>
       </Head>
-      <div className="w-full h-full flex flex-col flex-wrap bg-[#e0e1dd]">
+      <div className="flex flex-col flex-wrap bg-[#e0e1dd] w-full h-full">
         <Description />
         {isMobile ? (
-          <div className="flex flex-col">
-            <Cards />
+          <>
+            <div className="flex flex-col">
+              <Cards />
 
-            <SportSearch />
-          </div>
+              <SportSearch />
+            </div>
+            <Footer />
+          </>
         ) : (
           <>
             <div className="flex flex-row m-2">

@@ -12,9 +12,6 @@ export default function Footer() {
           <li>
             <Link href="/" className="mr-4 hover:underline ">Politique général</Link>
           </li>
-          <li className="mr-4 hover:underline ">
-            <Link href="/">Coockies</Link>
-          </li>
           <li className="hover:underline">
             <Link href="/">Contact</Link>
           </li>
