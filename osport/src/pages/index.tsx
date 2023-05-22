@@ -1,15 +1,15 @@
-// Page d'accueil
-
-import { useEffect } from 'react';
 import Head from 'next/head';
+import { useMediaQuery } from 'usehooks-ts';
+import Footer from '@/components/Footer';
+import { useEffect } from 'react';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import Description from '../components/Description';
 import Cards from '../components/Cards';
 import SportSearch from '../components/SportSearch';
 
 export default function Home() {
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const { isLogged, showLoggedStatus, setShowLoggedStatus } = useAuth();
 
   // On affiche un message juste après la redirection depuis une page de connexion/déconnexion.
@@ -28,12 +28,29 @@ export default function Home() {
       <Head>
         <title>Accueil - osport</title>
       </Head>
-      <div className="flex flex-col flex-wrap">
+      <div className="flex flex-col flex-wrap bg-[#e0e1dd] w-full h-full">
         <Description />
+        {isMobile ? (
+          <>
+            <div className="flex flex-col">
+              <Cards />
 
-        <Cards />
+              <SportSearch />
+            </div>
+            <Footer />
+          </>
+        ) : (
+          <>
+            <div className="flex flex-row m-2">
+              <Cards />
 
-        <SportSearch />
+              <SportSearch />
+
+            </div>
+            <Footer />
+          </>
+        )}
+
       </div>
     </>
   );

@@ -4,7 +4,6 @@ import React, { ReactNode } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Footer from '@/components/Footer';
 import Header from '../components/Header';
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
@@ -20,19 +19,16 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
     <div className="flex flex-row">
       {isMobile ? (
-        <>
+        <div>
+          <Header />
+          <main>{children} </main>
           <NavBar />
-          <div>
-            <Header />
-            <main>{children} <Footer /></main>
-          </div>
-        </>
+        </div>
       ) : (
-        <>
+        <div className="flex flex-row">
           <Sidebar />
-
-          <main>{children}<Footer /></main>
-        </>
+          <main>{children}</main>
+        </div>
       )}
       {/* Définition des notifications react-toastify */}
       <ToastContainer autoClose={1000} />

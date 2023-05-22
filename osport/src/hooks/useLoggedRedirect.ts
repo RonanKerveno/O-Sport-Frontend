@@ -1,4 +1,4 @@
-// Hook personnalisé pour rédirigé vers la page d'accueil les utilisateurs déjà loggués.
+// Hook personnalisé pour rédiriger vers la page d'accueil les utilisateurs déjà loggués.
 // Utile pour de ne plus accéder à certaines pages comme la connexion ou l'inscription.
 
 import { useEffect } from 'react';

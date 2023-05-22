@@ -26,44 +26,49 @@ export default function Login() {
   }
 
   return (
-    <div>
+    <>
       <Head>
         <title>Connexion - osport</title>
       </Head>
-      <form onSubmit={handleLogin} className="border flex flex-col m-4">
-        <label htmlFor="EmailInput" className="m-2">
-          Email
-          <input
-            type="text"
-            id="EmailInput"
-            name="Email"
-            className="border w-44 m-2"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
+      <div>
+        <div className="flex bg-white border border-black m-4 rounded-md p-4 h-1/4">
+          <form onSubmit={handleLogin} className="flex flex-col">
+            <label htmlFor="EmailInput" className="m-2 p-1 pl-2 border rounded-md border-gray-400">
+              Email :
+              <input
+                type="text"
+                id="EmailInput"
+                name="Email"
+                className="border w-44 m-2"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </label>
 
-        <label htmlFor="PasswordInput" className="m-2">
-          Mot de passe (3 caractères minimum)
-          <input
-            type="password"
-            id="PasswordInput"
-            name="password"
-            minLength={5}
-            required
-            className="border w-44 m-2"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </label>
+            <label htmlFor="PasswordInput" className="m-2 p-1 pl-2 border rounded-md border-gray-400">
+              Mot de passe (3 caractères minimum) :
+              <input
+                type="password"
+                id="PasswordInput"
+                name="password"
+                minLength={5}
+                required
+                className="border w-44 m-2"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </label>
+            <div className="w-full text-center">
+              <button type="submit" className="text-center border p-2  rounded-md hover:bg-blue-600 hover:text-[#f9fafb] ">
+                Connexion
+              </button>
+            </div>
 
-        <button type="submit" className="text-center border w-20 m-4">
-          Connexion
-        </button>
-
-        {/* Affichage de l'erreur en cas d'échec de la connexion */}
-        {error && <p>{error}</p>}
-      </form>
-    </div>
+            {/* Affichage de l'erreur en cas d'échec de la connexion */}
+            {error && <p>{error}</p>}
+          </form>
+        </div>
+      </div>
+    </>
   );
 }
