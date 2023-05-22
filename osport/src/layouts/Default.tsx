@@ -3,7 +3,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { ReactNode } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
-import Footer from '@/components/Footer';
 import Header from '../components/Header';
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
@@ -19,9 +18,9 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
     <div className="flex flex-row">
       {isMobile ? (
         <div>
-          <NavBar />
           <Header />
-          <main>{children}</main>
+          <main>{children} </main>
+          <NavBar />
         </div>
       ) : (
         <div className="flex flex-row">
