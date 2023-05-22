@@ -1,21 +1,39 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { UserPublicData, UserPrivateData } from '../../../types';
+import { getUserByIdPrivate } from '../../../services/userService';
 import getPrivateServerSideProps from '../../../utils/userPrivateServerSide';
 
 interface EditProfileProps {
   userData: UserPublicData;
-  userPrivateData: UserPrivateData;
 }
 
-export default function EditProfile({ userData, userPrivateData }: EditProfileProps) {
+export default function EditProfile({ userData }: EditProfileProps) {
   const router = useRouter();
   const [username, setUsername] = useState(userData.userName);
   const [description, setDescription] = useState(userData.description);
-  const [email, setEmail] = useState(userPrivateData.email);
-  const [firstname, setFirstName] = useState(userPrivateData.firstName);
-  const [lastname, setLastName] = useState(userPrivateData.lastName);
+
+  // These will be filled in once the component mounts and the private user data is fetched
+  const [email, setEmail] = useState('');
+  const [firstname, setFirstName] = useState('');
+  const [lastname, setLastName] = useState('');
+
+  useEffect(() => {
+    const fetchPrivateData = async () => {
+      const response = await getUserByIdPrivate(userData.id);
+      if (response.success) {
+        const userPrivateData: UserPrivateData = response.userPrivate;
+        setEmail(userPrivateData.email);
+        setFirstName(userPrivateData.firstName);
+        setLastName(userPrivateData.lastName);
+      } else {
+        // handle error
+      }
+    };
+
+    fetchPrivateData();
+  }, [userData.id]);
 
   // This would be replaced with a real API call.
   const updateUserProfile = async () => {

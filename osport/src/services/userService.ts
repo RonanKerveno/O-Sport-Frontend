@@ -125,13 +125,9 @@ export const getUserById = async (userId: string) => {
 
 // Recupération des données privées d'un utilisateur via son ID.
 // Le cookie a été récupéré depuis le rendu SSR.
-export const getUserByIdPrivate = async (userId: string, cookie: string | undefined) => {
+export const getUserByIdPrivate = async (userId: string) => {
   try {
     const response = await axios.get(`${API_URL}/users/${userId}/private`, {
-      // Ajout du cookie dans l'en-tête de la requête
-      headers: {
-        Cookie: cookie,
-      },
       withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
     // Recupération des données de l'utilisateur
