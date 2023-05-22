@@ -1,3 +1,5 @@
+// Composant gérant le texte de présentation sur la page d'accueil
+
 export default function Description() {
   return (
     <div className="overflow-auto bg-[#e5e6f6] font-sans border-solid border border-[#140f07] w-screen p-1 h-32 md:w-auto rounded-md " id="description">

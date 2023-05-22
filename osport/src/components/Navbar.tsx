@@ -8,38 +8,38 @@ export default function Navbar() {
   const { isLogged, userId } = useAuth();
 
   return (
-    <div className="fixed bottom-0 left-0 z-50 w-full h-16">
+    <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-gray-900 border-t border-gray-200">
       <div className="grid h-full max-w-lg grid-cols-4 mx-auto">
         <Link
           href="/recherche"
           passHref
-          className="border-r border-[#3293ff] bg-[#dbedf6] inline-flex flex-col items-center justify-center px-5 rounded-l-full hover:bg-gray-50 dark:hover:bg-gray-800 group cursor-pointer"
+          className=" inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 hover:text-black group cursor-pointer"
         >
-          <HiSearch size={24} color="#0343f4" />
+          <HiSearch size={24} color="#f9fafb" />
           <span className="sr-only">Search</span>
         </Link>
         <Link
           href="/"
           passHref
-          className="border-r border-[#3293ff] bg-[#dbedf6] inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group cursor-pointer"
+          className=" inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 hover:text-black group cursor-pointer"
         >
-          <HiHome size={24} color="#0343f4" />
+          <HiHome size={24} color="#f9fafb" />
           <span className="sr-only">Home</span>
         </Link>
         <Link
           href={isLogged ? `/profil/${userId}` : '/connexion'}
           passHref
-          className="border-r border-[#3293ff] bg-[#dbedf6] inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group cursor-pointer"
+          className=" inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 hover:text-black group cursor-pointer"
         >
-          <HiUser size={24} color="#0343f4" />
+          <HiUser size={24} color="#f9fafb" />
           <span className="sr-only">{isLogged ? 'Profil' : 'Connexion'}</span>
         </Link>
         <Link
           href="/ajouter"
           passHref
-          className="bg-[#dbedf6] inline-flex flex-col items-center justify-center px-5 rounded-r-full hover:bg-gray-50 dark:hover:bg-gray-800 group cursor-pointer"
+          className=" inline-flex flex-col items-center justify-center px-5 hover:text-sky-600 group cursor-pointer"
         >
-          <HiPlus size={24} color="#0343f4" />
+          <HiPlus size={24} color="#f9fafb" />
           <span className="sr-only">Add</span>
         </Link>
       </div>
