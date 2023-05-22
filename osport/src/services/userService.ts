@@ -9,17 +9,80 @@ interface ServerError {
 // Test des identifiants et récupération du token JWT
 export const loginUser = async (email: string, password: string) => {
   try {
-    const response = await axios.post(`${API_URL}/users/login`, {
+    await axios.post(`${API_URL}/users/login`, {
       email,
       password,
+    }, {
+      withCredentials: true,
     });
-
-    // Récupération du token de la réponse
-    const { token } = response.data;
 
     return {
       success: true,
-      token,
+    };
+
+    // gestion des erreurs
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: serverError.response.data.error,
+        };
+      }
+    }
+    return {
+      success: false,
+      error: 'An unexpected error occurred',
+    };
+  }
+};
+
+// Récupération des informations de bases sur l'utilisateur connecté.
+// L'API renvoit ces informations à partir du token JWT encapsulé dans le cookie.
+export const getLoggedInUser = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/users/login-info`, {
+      withCredentials: true, // Permet l'envoi du cookie dans la requête
+    });
+
+    // Récupération des données de l'utilisateur.
+    const { success, userId, isAdmin } = response.data;
+
+    return {
+      success,
+      userId,
+      isAdmin,
+    };
+
+    // gestion des erreurs
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: serverError.response.data.error,
+        };
+      }
+    }
+    return {
+      success: false,
+      error: 'An unexpected error occurred',
+    };
+  }
+};
+
+// Déconnexion de l'utilisateur. L'API va supprimer le cookie d'authentification en
+// l'écrasant par un cookie expirant immédiatement.
+export const logoutUser = async () => {
+  try {
+    await axios.post(`${API_URL}/users/logout`, {}, {
+      withCredentials: true,
+    });
+
+    return {
+      success: true,
     };
 
     // gestion des erreurs
@@ -60,18 +123,20 @@ export const getUserById = async (userId: string) => {
   }
 };
 
-// Recupération des données provées d'un utilisateur via son ID.
-// Le token a été extrait du cookie depuis le rendu SSR.
-export const getUserByIdPrivate = async (userId: string, token: string) => {
+// Recupération des données privées d'un utilisateur via son ID.
+// Le cookie a été récupéré depuis le rendu SSR.
+export const getUserByIdPrivate = async (userId: string, cookie: string | undefined) => {
   try {
     const response = await axios.get(`${API_URL}/users/${userId}/private`, {
-      // On passe le token JWT dans l'entête de la requête.
+      // Ajout du cookie dans l'en-tête de la requête
       headers: {
-        Authorization: `Bearer ${token}`,
+        Cookie: cookie,
       },
+      withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
     // Recupération des données de l'utilisateur
     const userPrivateData = response.data;
+
     return {
       success: true,
       userPrivate: userPrivateData,

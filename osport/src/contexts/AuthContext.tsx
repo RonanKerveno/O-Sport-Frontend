@@ -4,15 +4,8 @@
 import {
   createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
-import jwtDecode from 'jwt-decode';
 import { useRouter } from 'next/router';
-import Cookies from 'js-cookie';
-import { loginUser } from '../services/userService';
-
-// Typage TypeScript des informations extraites du token JWT
-interface DecodedToken {
-  userId: string;
-}
+import { loginUser, getLoggedInUser, logoutUser } from '../services/userService';
 
 // Typage des informations du contexte d'authentification
 type authContextType = {
@@ -70,17 +63,19 @@ export function AuthProvider({ children }: Props) {
   const [showLoggedStatus, setShowLoggedStatus] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
-  // Utilisation d'un useEffect qui vérifie la présence d'un cookie "token".
-  // Cela permet de vérifier si l'utilisateur a déjà une session ouverte au montage du composant.
+  // Utilisation d'un useEffect qui vérifie si un utilisateur est connecté en interrogeant l'API.
+  // L'API va chercher un cookie d'authentification et si présent va decrypter les informations sur
+  // l'utilisateur contenues dans le JWT pour nous les renvoyer.
   useEffect(() => {
-    const token = Cookies.get('token');
-    if (token) {
-      setLogState(true);
-      // On extrait l'ID de l'utilisateur connecté depuis le token.
-      const decoded = jwtDecode<DecodedToken>(token);
-      setUserId(decoded.userId);
-    }
-    setLoading(false);
+    const checkLoggedInUser = async () => {
+      const response = await getLoggedInUser();
+      if (response.success) {
+        setLogState(true);
+        setUserId(response.userId);
+      }
+      setLoading(false);
+    };
+    checkLoggedInUser();
   }, []);
 
   // Fonction de connexion et actions liées au login.
@@ -90,33 +85,33 @@ export function AuthProvider({ children }: Props) {
     // Si l'API authentifie correctement l'utilisateur on met l'etat is Logged sur true et on
     // modifie les états liés.
     if (response.success) {
-      // On extrait l'ID de l'utilisateur connecté depuis le token.
-      const decoded = jwtDecode<DecodedToken & { exp: number }>(response.token);
-      setLogState(true);
-      setUserId(decoded.userId);
-      setError('');
-      setShowLoggedStatus(true);
-      // On calcule l'expiration en utilisant la propriété 'exp' du token JWT
-      // 'exp' est un timestamp Unix, donc on le multiplie par 1000 pour obtenir des millisecondes
-      const expires = new Date(decoded.exp * 1000);
-      // On crée un cookie "token" avec les données du token et en reportant la durée
-      // d'expiration convertie.
-      Cookies.set('token', response.token, { expires });
-      // Redirection vers la page d'accueil après la connexion
-      await router.push('/');
+      const userResponse = await getLoggedInUser();
+      if (userResponse.success) {
+        setLogState(true);
+        setUserId(userResponse.userId);
+        setError('');
+        setShowLoggedStatus(true);
+        // Redirection vers la page d'accueil après la connexion
+        await router.push('/');
+      }
     } else {
       setError(response.error ?? 'Erreur serveur');
     }
   }, [router]);
 
-  // Fonction de déconnexion. On supprime le cookie "token" et on modifie nos états.
-  const logout = useCallback(() => {
-    Cookies.remove('token');
-    setLogState(false);
-    setUserId(null);
-    setShowLoggedStatus(true);
-    // Redirection vers la page d'accueil après la déconnexion
-    router.push('/');
+  // Fonction de déconnexion. On appelle l'API pour supprimer le cookie "token" et on modifie
+  // nos états.
+  const logout = useCallback(async () => {
+    const response = await logoutUser();
+    if (response.success) {
+      setLogState(false);
+      setUserId(null);
+      setShowLoggedStatus(true);
+      // Redirection vers la page d'accueil après la déconnexion
+      router.push('/');
+    } else {
+      setError(response.error ?? 'Erreur serveur');
+    }
   }, [router]);
 
   // Valeurs du contexte d'authentification que l'on va transmettre. UseMemo évite des récalculs de
