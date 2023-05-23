@@ -2,7 +2,7 @@
 import Head from 'next/head';
 import { useMediaQuery } from 'usehooks-ts';
 import Footer from '@/components/Footer';
-import Description from '../components/Description';
+import Description from '@/components/description';
 import Cards from '../components/Cards';
 import SportSearch from '../components/SportSearch';
 

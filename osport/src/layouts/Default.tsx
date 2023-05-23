@@ -4,7 +4,7 @@
 import React, { ReactNode } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
 import Header from '../components/Header';
-import NavBar from '../components/navbar';
+import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 
 interface DefaultLayoutProps {
@@ -20,7 +20,7 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
         <div>
           <Header />
           <main>{children} </main>
-          <NavBar />
+          <Navbar />
         </div>
       ) : (
         <div className="flex flex-row">

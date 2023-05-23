@@ -3,12 +3,33 @@ import { HiUserCircle } from 'react-icons/hi2';
 import Link from 'next/link';
 import { GetServerSideProps } from 'next';
 import { format, differenceInYears } from 'date-fns';
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardFooter,
+  Avatar,
+  Typography,
+  Tabs,
+  TabsHeader,
+  Tab,
+  Switch,
+  Tooltip,
+  Button,
+} from '@material-tailwind/react';
+import {
+  HomeIcon,
+  ChatBubbleLeftEllipsisIcon,
+  Cog6ToothIcon,
+  PencilIcon,
+} from '@heroicons/react/24/solid';
 import { UserPublicData, EventListData } from '../../../types';
 import {
   getUserById, getAllEventsFromOneUser, getAllEventsCreatedByOneUser,
 } from '../../../services/userService';
 import UserAgenda from '../../../components/UserAgenda';
 import { useAuth } from '../../../contexts/AuthContext';
+import { ProfileInfoCard, MessageCard } from '@/widgets/cards';
 
 interface ProfileProps {
   userData: UserPublicData;
