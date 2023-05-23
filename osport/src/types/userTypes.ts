@@ -6,8 +6,9 @@ export interface FavoriteSport {
 export interface UserPublicData {
   id: string;
   userName: string;
-  dateOfBirth: Date;
+  dateOfBirth: string;
   gender: string;
+  region: string,
   city: string;
   createdAt: string;
   isAdmin: boolean;
@@ -17,8 +18,8 @@ export interface UserPublicData {
 
 export interface UserPrivateData {
   email: string;
-  lastName: string;
   firstName: string;
-  zipCode: number;
+  lastName: string;
+  zipCode: string;
   street: string;
 }
