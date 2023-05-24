@@ -7,7 +7,7 @@ export default function Footer() {
 
     <div className="bg-white rounded-lg shadow m-1 dark:bg-gray-800 xl:left-1/2 ">
       <div className="p-4 ">
-        <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
+        <ul className="flex justify-center items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
           <li className="mr-4 hover:underline ">
             <Link href="/">À propos</Link>
           </li>

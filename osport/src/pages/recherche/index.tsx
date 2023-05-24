@@ -19,9 +19,14 @@ export default function SearchEvent() {
               <option value="">--Choissisez un sport--</option>
               <option value="Football">Football</option>
               <option value="Rugby">Rugby</option>
-              <option value="Handball">Hanndball</option>
+              <option value="Handball">Handball</option>
               <option value="Tennis">Tennis</option>
               <option value="Danse">Danse</option>
+              <option value="Esports">Esports</option>
+              <option value="Esports">Basketball</option>
+              <option value="Esports">Golf</option>
+              <option value="Esports">Vélo</option>
+              <option value="Esports">Randonnée</option>
             </select>
           </div>
         </div>

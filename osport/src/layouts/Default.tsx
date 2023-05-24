@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Header from '../components/Header';
 import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import Footer from '../components/Footer';
 
 // Typage TypeScript
 interface DefaultLayoutProps {
@@ -17,7 +18,7 @@ interface DefaultLayoutProps {
 export default function DefaultLayout({ children }: DefaultLayoutProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-col justify-center">
       {isMobile ? (
         <div>
           <Header />
@@ -30,6 +31,9 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
           <main>{children}</main>
         </div>
       )}
+      <div className="flex justify-center">
+        <Footer />
+      </div>
       {/* Définition des notifications react-toastify */}
       <ToastContainer autoClose={1000} />
     </div>
