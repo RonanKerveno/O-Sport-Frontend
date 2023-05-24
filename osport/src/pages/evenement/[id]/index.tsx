@@ -1,3 +1,5 @@
+// Page affichant un événement
+
 /* eslint-disable react/no-unescaped-entities */
 import { HiUserCircle, HiUserGroup } from 'react-icons/hi2';
 import { MdSportsHandball } from 'react-icons/md';
