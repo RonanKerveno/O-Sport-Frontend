@@ -13,7 +13,7 @@ export default function Navbar() {
         <Link
           href="/recherche"
           passHref
-          className=" inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 hover:text-black group cursor-pointer"
+          className=" inline-flex flex-col items-center justify-center px-5 group cursor-pointer"
         >
           <HiSearch size={24} color="#f9fafb" />
           <span className="sr-only">Search</span>
@@ -21,7 +21,7 @@ export default function Navbar() {
         <Link
           href="/"
           passHref
-          className=" inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 hover:text-black group cursor-pointer"
+          className=" inline-flex flex-col items-center justify-center px-5 group cursor-pointer"
         >
           <HiHome size={24} color="#f9fafb" />
           <span className="sr-only">Home</span>
@@ -29,7 +29,7 @@ export default function Navbar() {
         <Link
           href={isLogged ? `/profil/${userId}` : '/connexion'}
           passHref
-          className=" inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 hover:text-black group cursor-pointer"
+          className=" inline-flex flex-col items-center justify-center px-5 group cursor-pointer"
         >
           <HiUser size={24} color="#f9fafb" />
           <span className="sr-only">{isLogged ? 'Profil' : 'Connexion'}</span>

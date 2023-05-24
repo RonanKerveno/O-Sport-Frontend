@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useState } from 'react';
-import Footer from '../../../components/footer';
+import Footer from '../../../components/Footer';
 
 export default function ModifierProfil({ id }) {
   const [isEditMode, setIsEditMode] = useState(false);
