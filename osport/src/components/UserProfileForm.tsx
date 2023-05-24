@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { UserPublicData, UserPrivateData } from '../types';
+import { UserPublicData, UserPrivateData, SportsListData } from '../types';
 import { getUserByIdPrivate } from '../services/userService';
 
 type FormValues = UserPublicData & UserPrivateData & { password: string; confirmPassword: string; };
@@ -10,11 +10,14 @@ type SubmittedData = Omit<FormValues, 'confirmPassword'>;
 interface UserProfileFormProps {
   isEdit: boolean;
   userData: UserPublicData;
+  sportsList: SportsListData;
   // eslint-disable-next-line no-unused-vars
   onSubmit: (submittedData: SubmittedData) => void;
 }
 
-export default function UserProfileForm({ isEdit, userData, onSubmit }: UserProfileFormProps) {
+export default function UserProfileForm({
+  isEdit, userData, sportsList, onSubmit,
+}: UserProfileFormProps) {
   const [changePassword, setChangePassword] = useState(!isEdit);
   const [userPrivateData, setUserPrivateData] = useState<UserPrivateData | null>(null);
   const {
@@ -41,6 +44,7 @@ export default function UserProfileForm({ isEdit, userData, onSubmit }: UserProf
   if (!userPrivateData) {
     return null; // Or render a loading spinner
   }
+  const favoriteSports = watch('favoriteSports');
 
   return (
     <div className="container mx-auto px-4">
@@ -172,6 +176,39 @@ export default function UserProfileForm({ isEdit, userData, onSubmit }: UserProf
             {errors.description && <div className="text-red-600">{errors.description.message}</div>}
           </label>
         </div>
+        <div className="my-4">
+          <label htmlFor="favoriteSports" className="font-bold block">
+            Sports favoris
+            {sportsList.map((sport) => (
+              <div key={sport.id}>
+                <Controller
+                  name="favoriteSports"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      type="checkbox"
+                      checked={favoriteSports.some((fs) => fs.id === sport.id)}
+                      onChange={(e) => {
+                        const isAlreadyAdded = favoriteSports.some((fs) => fs.id === sport.id);
+                        if (e.target.checked && !isAlreadyAdded) {
+                          const updatedSports = [...favoriteSports, sport];
+                          setValue('favoriteSports', updatedSports);
+                        } else if (!e.target.checked && isAlreadyAdded) {
+                          const updatedSports = favoriteSports.filter((fs) => fs.id !== sport.id);
+                          setValue('favoriteSports', updatedSports);
+                        }
+                      }}
+                      value={undefined}
+                    />
+                  )}
+                />
+                {sport.name}
+              </div>
+            ))}
+          </label>
+        </div>
+
         <div className="my-4">
           <label htmlFor="firstname" className="font-bold block">
             Prénom

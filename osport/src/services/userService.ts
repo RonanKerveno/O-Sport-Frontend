@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios';
+import { UserPublicData, UserPrivateData } from '@/types';
 import { API_URL } from './apiConfig';
 
 // Typage TypeScript
@@ -205,6 +206,36 @@ export const getAllEventsCreatedByOneUser = async (userId: string) => {
   } catch (error) {
     return {
       success: false,
+    };
+  }
+};
+
+// Mise à jour des informations de l’utilisateur ayant l’ID spécifié.
+export const modifyOneUser = async (userData: UserPublicData & UserPrivateData) => {
+  try {
+    const response = await axios.patch(`${API_URL}/users/${userData.id}`, userData, {
+      withCredentials: true,
+    });
+
+    return {
+      success: true,
+      user: response.data,
+    };
+
+    // gestion des erreurs
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: serverError.response.data.error,
+        };
+      }
+    }
+    return {
+      success: false,
+      error: 'An unexpected error occurred',
     };
   }
 };

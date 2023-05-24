@@ -2,16 +2,18 @@
 // de l'API avant de rendre la page.
 
 import { GetServerSidePropsContext } from 'next';
-import { UserPublicData } from '../types';
+import { UserPublicData, SportsListData } from '../types';
 import { getUserById } from '../services/userService';
+import { getAllSports } from '../services/sportService';
 
 // Typage des données reçues par l'API
-interface UserServerSideProps {
+interface ProfileServerSideProps {
   userData: UserPublicData;
+  sportsList: SportsListData;
 }
 
-const getPrivateServerSideProps = async (context: GetServerSidePropsContext):
-  Promise<UserServerSideProps> => {
+const getProfileServerSideProps = async (context: GetServerSidePropsContext):
+  Promise<ProfileServerSideProps> => {
   const userId = context.params?.id;
 
   // On redirige vers la page 404 si l'ID est d'un autre type que string
@@ -21,15 +23,22 @@ const getPrivateServerSideProps = async (context: GetServerSidePropsContext):
 
   // On lance la requête API.
   const userResponse = await getUserById(userId);
+  const sportsResponse = await getAllSports();
 
   // Si l'ID n'est pas trouvé on redirige vers la page 404
   if (!userResponse.success) {
     throw new Error('User not found');
   }
 
+  // Si la liste de sports n'est pas trouvé on redirige vers la page 404
+  if (!sportsResponse.success) {
+    throw new Error('Sports list not found');
+  }
+
   return {
     userData: userResponse.user,
+    sportsList: sportsResponse.sports,
   };
 };
 
-export default getPrivateServerSideProps;
+export default getProfileServerSideProps;
