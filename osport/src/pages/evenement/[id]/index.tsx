@@ -17,23 +17,34 @@ export default function Event() {
       <Head>
         <title>Evénement {id} - osport</title>
       </Head>
-      <div className="border-2 text-[#b430a6] text-center"><h1>Evénement {id}</h1></div>
+      <div className=" mb-1 text-[#b430a6] text-center"><h1>Evénement {id}</h1></div>
       <div className="border-2">
-        <div className="flex flex-row space-x-80">
-          <span className="flex flex-col">5/15 <HiUserGroup /></span>
-          <span><MdSportsHandball size={30} /></span>
+        <div className="border-4 mb-1 bg-slate-200 bg-opacity-50">
+          <div className="flex items-center justify-between">
+            <span className="flex items-center">
+              <HiUserGroup className="text-5xl mr-3" />
+              <span className="text-xl">5/15</span>
+            </span>
+            <span className="text-right"><MdSportsHandball size={50} /></span>
+          </div>
+          <div className="text-center text-4xl font-bold p-6">Titre événement</div>
+          <div className="text-left mb-1">
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1" type="submit">
+              S'inscrire
+            </button>
+          </div>
         </div>
-        <div className="text-center">Titre événement</div>
-        <div className="text-center"><button className="border-2 bg" type="submit">S'inscrire</button></div>
-        <div className="border-2">
-          <div>Ville</div>
-          <div>Adresse</div>
-          <div>Date de rendez-vous</div>
-          <div>Heure de rendez-vous</div>
-          <div>Sport</div>
+        <div className="border-4 mb-1 p-8 bg-slate-200 bg-opacity-50">
+          <div className="mt-2 mb-2">Ville</div>
+          <div className="mt-2 mb-2">Adresse</div>
+          <div className="mt-2 mb-2">Date de rendez-vous</div>
+          <div className="mt-2 mb-2">Heure de rendez-vous</div>
+          <div className="mt-2 mb-2">Sport</div>
+        </div>
 
-        </div>
-        <div className="border-2">Description de l'événement : <br />
+        <div className="border-4 mb-1 p-6 bg-slate-200 bg-opacity-50">
+          <span className="text-2xl">Description de l'événement :</span> <br />
+          <br />
           Lorem Ipsum is simply dummy text of the printing and
           typesetting industry. Lorem Ipsum has been
           the industry's standard dummy text ever since the 1500s,
@@ -44,13 +55,19 @@ export default function Event() {
           in the 1960s with the release of Letraset sheets containing
         </div>
 
-        <div className="ml-2 flex flex-row space-x-4">
-          <span>Participant a l'évènement :</span>
-          <span className="flex flex-col">Jude <HiUserCircle size={20} /></span>
+        <div className="border-4 mb-1 flex flex-row space-x-4 p-6 bg-slate-200 bg-opacity-50">
+          <span>Participant à l'événement :</span>
+          <span className="flex flex-col items-center">
+            <HiUserCircle size={30} />
+            <span>Jude</span>
+          </span>
         </div>
-        <div className="ml-2 flex flex-row space-x-4">
+        <div className="border-4 flex flex-row space-x-4 p-6 bg-slate-200 bg-opacity-50">
           <span>Créateur de l'évènement :</span>
-          <span className="flex flex-col">Jude <HiUserCircle size={20} /></span>
+          <span className="flex flex-col items-center">
+            <HiUserCircle size={30} />
+            <span>Jude</span>
+          </span>
         </div>
       </div>
     </>

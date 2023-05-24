@@ -17,10 +17,10 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
   return (
     <div className="flex flex-col justify-center">
+      <Header />
       {isMobile ? (
         <div>
-          <Header />
-          <main>{children} </main>
+          <main>{children}</main>
           <NavBar />
         </div>
       ) : (
@@ -29,7 +29,7 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
           <main>{children}</main>
         </div>
       )}
-      <div className="flex justify-center">
+      <div className="mt-auto">
         <Footer />
       </div>
       <ToastContainer autoClose={1000} />
