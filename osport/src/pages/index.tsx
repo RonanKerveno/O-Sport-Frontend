@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import { useMediaQuery } from 'usehooks-ts';
-import Footer from '@/components/Footer';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from '@/contexts/AuthContext';
@@ -31,24 +30,18 @@ export default function Home() {
       <div className="flex flex-col flex-wrap bg-[#e0e1dd] w-full h-full">
         <Description />
         {isMobile ? (
-          <>
-            <div className="flex flex-col">
-              <Cards />
+          <div className="flex flex-col">
+            <Cards />
 
-              <SportSearch />
-            </div>
-            <Footer />
-          </>
+            <SportSearch />
+          </div>
         ) : (
-          <>
-            <div className="flex flex-row m-2">
-              <Cards />
+          <div className="flex flex-row m-2">
+            <Cards />
 
-              <SportSearch />
+            <SportSearch />
 
-            </div>
-            <Footer />
-          </>
+          </div>
         )}
 
       </div>

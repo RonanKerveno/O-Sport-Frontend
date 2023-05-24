@@ -9,12 +9,10 @@ import NavBar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 
-// Typage TypeScript
 interface DefaultLayoutProps {
   children: ReactNode;
 }
 
-// Définition de la structure avec les composants qui seront toujours présents.
 export default function DefaultLayout({ children }: DefaultLayoutProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
   return (
@@ -34,7 +32,6 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
       <div className="flex justify-center">
         <Footer />
       </div>
-      {/* Définition des notifications react-toastify */}
       <ToastContainer autoClose={1000} />
     </div>
   );
