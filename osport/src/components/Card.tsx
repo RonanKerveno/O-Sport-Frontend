@@ -1,5 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
 // Composant d'affichage d'une carte événement
-
 import { HiUser, HiUserGroup } from 'react-icons/hi2';
 import { MdSportsBasketball } from 'react-icons/md';
 import Link from 'next/link';

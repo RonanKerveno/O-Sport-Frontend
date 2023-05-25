@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { useMediaQuery } from 'usehooks-ts';
 import Footer from '@/components/Footer';
 import { useEffect } from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { toast } from 'react-toastify';
 import { useAuth } from '@/contexts/AuthContext';
 import Description from '../components/Description';
