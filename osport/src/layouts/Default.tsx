@@ -1,8 +1,8 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable import/extensions */
-/* eslint-disable import/no-extraneous-dependencies */
+// Structure générale/squelette des pages du site
+
 import React, { ReactNode } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
+import { ToastContainer } from 'react-toastify';
 import Header from '../components/Header';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
@@ -12,7 +12,7 @@ interface DefaultLayoutProps {
   children: ReactNode;
 }
 
-// Définition de la structure des pages par défaut.
+// Définition de la structure avec les composants qui seront toujours présents.
 export default function DefaultLayout({ children }: DefaultLayoutProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const isTablet = useMediaQuery('(min-width: 320px, max-width: 768px)');
@@ -33,6 +33,8 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
           </div>
         </div>
       )}
+      {/* Définition des notifications react-toastify */}
+      <ToastContainer autoClose={1000} />
     </div>
   );
 }

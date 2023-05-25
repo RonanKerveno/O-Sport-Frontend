@@ -1,3 +1,5 @@
+// Pied de page
+
 import Link from 'next/link';
 
 export default function Footer() {

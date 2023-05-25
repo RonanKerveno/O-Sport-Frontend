@@ -1,3 +1,5 @@
+// Page de modification d'un événement.
+
 /* eslint-disable react/no-unescaped-entities */
 import Head from 'next/head';
 import { useRouter } from 'next/router';

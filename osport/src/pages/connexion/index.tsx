@@ -1,25 +1,29 @@
+// Page de connexion
+
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import useLoggedRedirect from '../../hooks/useLoggedRedirect';
 
 export default function Login() {
-  const router = useRouter();
   const { login, error, isLogged } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  useEffect(() => {
-    // si l'utilisateur est déjà connecté, redirige vers la page d'accueil
-    if (isLogged) {
-      router.push('/');
-    }
-  }, [isLogged, router]);
+  // Hook personnalisé de redirection vers l'accueil des utilisateurs déjà connectés
+  useLoggedRedirect();
 
+  // Lancement de la requêtre d elogin via le Context d'authentification.
   const handleLogin = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     await login(email, password);
   };
+
+  // Si l'utilisateur est déjà connecté on lui indique un message. Utile en complément
+  // de la redirection car la page apparait juste avant la redirection.
+  if (isLogged) {
+    return <p>Vous êtes déjà connecté.</p>;
+  }
 
   return (
     <>

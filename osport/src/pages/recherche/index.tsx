@@ -2,7 +2,7 @@
 import Head from 'next/head';
 import Searchfiltre from '@/components/Searchfiltre';
 
-export default function Home() {
+export default function SearchEvent() {
   return (
     <>
       <Head>

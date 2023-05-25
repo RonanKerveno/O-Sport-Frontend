@@ -1,108 +1,122 @@
-import Head from 'next/head';
-import { useState } from 'react';
-import Footer from '../../../components/Footer';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { UserPublicData, UserPrivateData } from '../../../types';
+import { getUserByIdPrivate } from '../../../services/userService';
+import getPrivateServerSideProps from '../../../utils/userPrivateServerSide';
 
-export default function ModifierProfil({ id }) {
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [nouvellesDonnees, setNouvellesDonnees] = useState({
-    nom: '',
-    email: '',
-    photoProfil: null,
-  });
+interface EditProfileProps {
+  userData: UserPublicData;
+}
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setNouvellesDonnees((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+export default function EditProfile({ userData }: EditProfileProps) {
+  const router = useRouter();
+  const [username, setUsername] = useState(userData.userName);
+  const [description, setDescription] = useState(userData.description);
 
-  const handlePhotoChange = (event) => {
-    const photo = event.target.files[0];
-    setNouvellesDonnees((prevState) => ({
-      ...prevState,
-      photoProfil: photo,
-    }));
-  };
+  // These will be filled in once the component mounts and the private user data is fetched
+  const [email, setEmail] = useState('');
+  const [firstname, setFirstName] = useState('');
+  const [lastname, setLastName] = useState('');
 
-  const handleModifierClick = () => {
-    setIsEditMode(true);
-  };
+  useEffect(() => {
+    const fetchPrivateData = async () => {
+      const response = await getUserByIdPrivate(userData.id);
+      if (response.success) {
+        const userPrivateData: UserPrivateData = response.userPrivate;
+        setEmail(userPrivateData.email);
+        setFirstName(userPrivateData.firstName);
+        setLastName(userPrivateData.lastName);
+      } else {
+        // handle error
+      }
+    };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Appeler la fonction de modification de profil avec les nouvelles données
-    modifierProfil(nouvellesDonnees);
-    setIsEditMode(false); // Sortir du mode édition après la soumission
-  };
+    fetchPrivateData();
+  }, [userData.id]);
 
-  const modifierProfil = (nouvellesDonnees) => {
-    // Effectuer les vérifications et les validations des nouvelles données
-    // Mettre à jour les informations du profil avec les nouvelles données
-    // Gérer les erreurs et renvoyer les messages appropriés
+  // This would be replaced with a real API call.
+  const updateUserProfile = async () => {
+    // Call the API to update the user profile.
+    // After the update, redirect back to the profile page.
+    router.push(`/profil/${userData.id}`);
   };
 
   return (
-    <>
-      <Head>
-        <title>Modification utilisateur {id} - osport</title>
-      </Head>
-      <h1>Modification utilisateur {id}</h1>
-      <div>
-        <div className="border-t-2 border-b-2 text-center">
-          <h1>Mon profil</h1>
+    <div className="container mx-auto px-4">
+      <h1 className="text-2xl font-bold my-4">Modifier mon profil</h1>
+      <form onSubmit={updateUserProfile} className="max-w-sm">
+        <div className="my-4">
+          <label htmlFor="username" className="font-bold block">
+            Nom d&#39;utilisateur
+            <input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full px-2 py-1 border border-gray-300 rounded mt-1 font-normal"
+            />
+          </label>
         </div>
-        <form onSubmit={handleSubmit}>
-          <div>
-            {isEditMode ? (
-              <>
-                <label htmlFor="avatar">
-                  <img src="photo-actuelle.jpg" alt="Photo de profil actuelle" />
-                </label>
-                <input
-                  type="file"
-                  id="avatar"
-                  name="avatar"
-                  accept="image/png, image/jpeg"
-                  onChange={handlePhotoChange}
-                />
-              </>
-            ) : (
-              <img src="photo-actuelle.jpg" alt="Photo de profil actuelle" />
-            )}
-          </div>
-          <div>
-            <label htmlFor="nom">Nom :</label>
+        <div className="my-4">
+          <label htmlFor="description" className="font-bold block">
+            Description
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full px-2 py-1 border border-gray-300 rounded mt-1 resize-y font-normal"
+            />
+          </label>
+        </div>
+        <div className="my-4">
+          <label htmlFor="email" className="font-bold block">
+            Email
             <input
               type="text"
-              id="nom"
-              name="nom"
-              value={nouvellesDonnees.nom}
-              onChange={handleChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-2 py-1 border border-gray-300 rounded mt-1 font-normal"
             />
-          </div>
-          <div>
-            <label htmlFor="email">Email :</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={nouvellesDonnees.email}
-              onChange={handleChange}
-            />
-          </div>
-        </form>
-        <div className="border text-center">
-          {isEditMode ? (
-            <button type="submit">Enregistrer les modifications</button>
-          ) : (
-            <button onClick={handleModifierClick}>Modifier la photo de profil</button>
-          )}
-          <div />
+          </label>
         </div>
-      </div>
-      <Footer />
-    </>
+        <div className="my-4">
+          <label htmlFor="firstname" className="font-bold block">
+            Prénom
+            <input
+              type="text"
+              value={firstname}
+              onChange={(e) => setFirstName(e.target.value)}
+              className="w-full px-2 py-1 border border-gray-300 rounded mt-1 font-normal"
+            />
+          </label>
+        </div>
+        <div className="my-4">
+          <label htmlFor="lastname" className="font-bold block">
+            Nom
+            <input
+              type="text"
+              value={lastname}
+              onChange={(e) => setLastName(e.target.value)}
+              className="w-full px-2 py-1 border border-gray-300 rounded mt-1 font-normal"
+            />
+          </label>
+        </div>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Mettre à jour
+        </button>
+      </form>
+    </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  try {
+    const props = await getPrivateServerSideProps(context);
+    return { props };
+  } catch (error) {
+    return { notFound: true };
+  }
+};

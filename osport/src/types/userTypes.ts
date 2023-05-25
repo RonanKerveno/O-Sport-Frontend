@@ -14,3 +14,11 @@ export interface UserPublicData {
   description: string;
   favoriteSports: FavoriteSport[];
 }
+
+export interface UserPrivateData {
+  email: string;
+  lastName: string;
+  firstName: string;
+  zipCode: number;
+  street: string;
+}
