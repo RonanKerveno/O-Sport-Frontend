@@ -2,10 +2,10 @@
 
 import React, { ReactNode } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import Header from '../components/Header';
-import NavBar from '../components/Navbar';
+import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 
@@ -15,18 +15,22 @@ interface DefaultLayoutProps {
 
 export default function DefaultLayout({ children }: DefaultLayoutProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const isTablet = useMediaQuery('(min-width: 320px, max-width: 768px)');
   return (
-    <div className="flex flex-col justify-center">
-      <Header />
-      {isMobile ? (
+    <div className="flex flex-row w-screen h-screen bg-slate-100">
+      {isMobile || isTablet ? (
         <div>
+          <Header />
           <main>{children}</main>
-          <NavBar />
+          <Navbar />
+          <Footer />
         </div>
       ) : (
-        <div className="flex flex-row">
+        <div className="flex flex-row w-screen h-screen bg-slate-100">
           <Sidebar />
-          <main>{children}</main>
+          <div className="flex flex-col"><main>{children}</main>
+            <Footer />
+          </div>
         </div>
       )}
       <div className="mt-auto">

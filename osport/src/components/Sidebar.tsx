@@ -9,7 +9,7 @@ import { useAuth } from '../contexts/AuthContext';
 export default function Sidebar() {
   const { isLogged, userId } = useAuth();
   return (
-    <div className="flex bg-gray-900">
+    <div className="flex bg-gray-900 mb-0">
       <div className="flex flex-col h-screen p-3 shadow w-60">
         <div className="space-y-3">
           <div className="flex items-center ml-2 text-gray-100">

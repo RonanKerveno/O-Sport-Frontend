@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useMediaQuery } from 'usehooks-ts';
 import { useEffect } from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { toast } from 'react-toastify';
 import { useAuth } from '@/contexts/AuthContext';
 import Description from '../components/Description';
@@ -27,20 +28,20 @@ export default function Home() {
       <Head>
         <title>Accueil - osport</title>
       </Head>
-      <div className="flex flex-col flex-wrap bg-[#e0e1dd] w-full h-full">
+      <div className="flex flex-col flex-wrap bg-slate-100 w-full h-full justify-center items-center">
         <Description />
         {isMobile ? (
-          <div className="flex flex-col">
+          <div className="">
             <Cards />
-
-            <SportSearch />
+            <div>
+              <SportSearch />
+            </div>
+            <Footer />
           </div>
         ) : (
           <div className="flex flex-row m-2">
             <Cards />
-
             <SportSearch />
-
           </div>
         )}
 

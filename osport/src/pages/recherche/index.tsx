@@ -1,9 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 import Head from 'next/head';
+import Searchfiltre from '@/components/Searchfiltre';
 
 export default function SearchEvent() {
   return (
-    <div className="w-full h-full">
+    <>
       <Head>
         <title>Recherche - osport</title>
       </Head>
@@ -53,7 +54,7 @@ export default function SearchEvent() {
         </div>
         <div><div className="border-t border-b text-center p-4 mb-1">Rechercher un membre</div> <div className="flex flex-row"><div><input type="text" name="search" id="" placeholder=" nom d'utilisateur" className="border border-black rounded-md m-1 mt-3" /></div><button type="submit" className="bg-blue-500 hover:bg-blue-700 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded m-1">Chercher</button></div></div>
       </div>
-    </div>
+    </>
 
   );
 }
