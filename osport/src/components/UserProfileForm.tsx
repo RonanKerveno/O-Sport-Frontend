@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { UserPublicData, UserPrivateData, SportsListData } from '../types';
+import {
+  UserPublicData, UserPrivateData, SportsListData, FavoriteSport,
+} from '../types';
 import { getUserByIdPrivate } from '../services/userService';
+import FormTextField from './FormTextField';
 
 type FormValues = UserPublicData & UserPrivateData & { password: string; confirmPassword: string; };
 
@@ -15,22 +18,46 @@ interface UserProfileFormProps {
   onSubmit: (submittedData: SubmittedData) => void;
 }
 
+const nullUserPrivateData = {
+  email: '',
+  firstName: '',
+  password: '',
+  confirmPassword: '',
+  lastName: '',
+  zipCode: '',
+  street: '',
+};
+
 export default function UserProfileForm({
   isEdit, userData, sportsList, onSubmit,
 }: UserProfileFormProps) {
   const [changePassword, setChangePassword] = useState(!isEdit);
   const [userPrivateData, setUserPrivateData] = useState<UserPrivateData | null>(null);
+  // Etat pour le suivi des sports sélectionnés
+  const [selectedSports, setSelectedSports] = useState<FavoriteSport[]>([]);
   const {
-    handleSubmit, control, setValue, formState: { errors }, watch, reset,
+    handleSubmit, control, setValue, setError, formState: { errors }, watch, reset,
   } = useForm<FormValues>({ defaultValues: { ...userData, ...userPrivateData } });
 
   useEffect(() => {
     const fetchPrivateData = async () => {
-      const response = await getUserByIdPrivate(userData.id);
-      if (response.success) {
-        setUserPrivateData(response.userPrivate);
-        // Update default values
-        const updatedDefaultValues = { ...userData, ...response.userPrivate };
+      let updatedDefaultValues;
+
+      if (isEdit) {
+        const response = await getUserByIdPrivate(userData.id);
+        if (response.success) {
+          setUserPrivateData(response.userPrivate);
+          // Update default values
+          updatedDefaultValues = { ...userData, ...response.userPrivate };
+          if (!changePassword) {
+            updatedDefaultValues.password = ''; // Clear the password field if changePassword is false
+            updatedDefaultValues.confirmPassword = '';
+          }
+          reset(updatedDefaultValues);
+        }
+      } else {
+        setUserPrivateData(nullUserPrivateData);
+        updatedDefaultValues = { ...userData, ...nullUserPrivateData };
         if (!changePassword) {
           updatedDefaultValues.password = ''; // Clear the password field if changePassword is false
           updatedDefaultValues.confirmPassword = '';
@@ -39,7 +66,7 @@ export default function UserProfileForm({
       }
     };
     fetchPrivateData();
-  }, [userData.id, userData, reset, changePassword]);
+  }, [userData.id, userData, reset, changePassword, isEdit]);
 
   if (!userPrivateData) {
     return null; // Or render a loading spinner
@@ -51,46 +78,37 @@ export default function UserProfileForm({
       <form
         onSubmit={handleSubmit((data) => {
           const { confirmPassword, ...submittedData } = data;
-          onSubmit(submittedData as SubmittedData);
+          // vérifier si le nombre de sports sélectionnés est entre 1 et 5
+          if (selectedSports.length < 1 || selectedSports.length > 5) {
+            // si ce n'est pas le cas, définir une erreur personnalisée
+            setError('favoriteSports', {
+              type: 'manual',
+              message: 'Vous devez sélectionner entre 1 et 5 sports',
+            });
+          } else {
+            // si c'est correct, continuez avec la soumission du formulaire
+            onSubmit(submittedData as SubmittedData);
+          }
         })}
         className="max-w-sm"
       >
-        <div className="my-4">
-          <label htmlFor="username" className="font-bold block">
-            Nom d&#39;utilisateur
-            <Controller
-              name="userName"
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  id="username"
-                  className={`w-full px-2 py-1 border ${errors.userName ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
-                />
-              )}
-              rules={{ required: 'Nom d\'utilisateur est obligatoire' }}
-            />
-            {errors.userName && <div className="text-red-600">{errors.userName.message}</div>}
-          </label>
-        </div>
-        <div className="my-4">
-          <label htmlFor="email" className="font-bold block">
-            Email
-            <Controller
-              name="email"
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  id="email"
-                  className={`w-full px-2 py-1 border ${errors.email ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
-                />
-              )}
-              rules={{ required: 'Email est obligatoire' }}
-            />
-            {errors.email && <div className="text-red-600">{errors.email.message}</div>}
-          </label>
-        </div>
+
+        <FormTextField
+          control={control}
+          name="userName"
+          label="Nom d'utilisateur"
+          rules={{ required: 'Nom d\'utilisateur est obligatoire' }}
+          error={errors.userName}
+        />
+        <FormTextField
+          control={control}
+          name="email"
+          label="Email"
+          type="email"
+          rules={{ required: 'Email est obligatoire' }}
+          error={errors.email}
+        />
+
         {isEdit && (
           <div className="my-4">
             <label htmlFor="changePassword" className="font-bold block">
@@ -113,49 +131,27 @@ export default function UserProfileForm({
         )}
         {(!isEdit || changePassword) && (
           <>
-            <div className="my-4">
-              <label htmlFor="password" className="font-bold block">
-                {isEdit ? 'Nouveau mot de passe' : 'Mot de passe'}
-                <Controller
-                  name="password"
-                  control={control}
-                  render={({ field }) => (
-                    <input
-                      {...field}
-                      id="password"
-                      type="password"
-                      className={`w-full px-2 py-1 border ${errors.password ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
-                    />
-                  )}
-                  rules={{
-                    required: changePassword ? 'Mot de passe est obligatoire' : false,
-                  }}
-                />
-                {errors.password && <div className="text-red-600">{errors.password.message}</div>}
-              </label>
-            </div>
-            <div className="my-4">
-              <label htmlFor="confirmPassword" className="font-bold block">
-                Confirmer le mot de passe
-                <Controller
-                  name="confirmPassword"
-                  control={control}
-                  render={({ field }) => (
-                    <input
-                      {...field}
-                      id="confirmPassword"
-                      type="password"
-                      className={`w-full px-2 py-1 border ${errors.confirmPassword ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
-                    />
-                  )}
-                  rules={{
-                    required: changePassword ? 'Confirmation du mot de passe est obligatoire' : false,
-                    validate: (value) => (changePassword ? value === watch('password') || 'Les mots de passe ne correspondent pas' : true),
-                  }}
-                />
-                {errors.confirmPassword && <div className="text-red-600">{errors.confirmPassword.message}</div>}
-              </label>
-            </div>
+            <FormTextField
+              control={control}
+              name="password"
+              label={isEdit ? 'Nouveau mot de passe' : 'Mot de passe'}
+              type="password"
+              rules={{
+                required: changePassword ? 'Mot de passe est obligatoire' : false,
+              }}
+              error={errors.password}
+            />
+            <FormTextField
+              control={control}
+              name="confirmPassword"
+              label="Confirmer le mot de passe"
+              type="password"
+              rules={{
+                required: changePassword ? 'Confirmation du mot de passe est obligatoire' : false,
+                validate: (value) => (changePassword ? value === watch('password') || 'Les mots de passe ne correspondent pas' : true),
+              }}
+              error={errors.confirmPassword}
+            />
           </>
         )}
         <div className="my-4">
@@ -171,7 +167,10 @@ export default function UserProfileForm({
                   className={`w-full px-2 py-1 border ${errors.description ? 'border-red-600' : 'border-gray-300'} rounded mt-1 resize-y font-normal`}
                 />
               )}
-              rules={{ required: 'Description est obligatoire' }}
+              rules={{
+                required: 'Description est obligatoire',
+                maxLength: { value: 255, message: 'La description ne doit pas dépasser 255 caractères' },
+              }}
             />
             {errors.description && <div className="text-red-600">{errors.description.message}</div>}
           </label>
@@ -194,9 +193,11 @@ export default function UserProfileForm({
                         if (e.target.checked && !isAlreadyAdded) {
                           const updatedSports = [...favoriteSports, sport];
                           setValue('favoriteSports', updatedSports);
+                          setSelectedSports(updatedSports);
                         } else if (!e.target.checked && isAlreadyAdded) {
                           const updatedSports = favoriteSports.filter((fs) => fs.id !== sport.id);
                           setValue('favoriteSports', updatedSports);
+                          setSelectedSports(updatedSports);
                         }
                       }}
                       value={undefined}
@@ -207,44 +208,22 @@ export default function UserProfileForm({
               </div>
             ))}
           </label>
+          {errors.favoriteSports && <div className="text-red-600">{errors.favoriteSports.message}</div>}
         </div>
-
-        <div className="my-4">
-          <label htmlFor="firstname" className="font-bold block">
-            Prénom
-            <Controller
-              name="firstName"
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  id="firstname"
-                  className={`w-full px-2 py-1 border ${errors.firstName ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
-                />
-              )}
-              rules={{ required: 'Prénom est obligatoire' }}
-            />
-            {errors.firstName && <div className="text-red-600">{errors.firstName.message}</div>}
-          </label>
-        </div>
-        <div className="my-4">
-          <label htmlFor="lastname" className="font-bold block">
-            Nom
-            <Controller
-              name="lastName"
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  id="lastname"
-                  className={`w-full px-2 py-1 border ${errors.lastName ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
-                />
-              )}
-              rules={{ required: 'Nom est obligatoire' }}
-            />
-            {errors.lastName && <div className="text-red-600">{errors.lastName.message}</div>}
-          </label>
-        </div>
+        <FormTextField
+          control={control}
+          name="firstName"
+          label="Prénom"
+          rules={{ required: 'Prénom est obligatoire' }}
+          error={errors.firstName}
+        />
+        <FormTextField
+          control={control}
+          name="lastName"
+          label="Nom"
+          rules={{ required: 'Nom est obligatoire' }}
+          error={errors.lastName}
+        />
         <div className="my-4">
           <label htmlFor="dateOfBirth" className="font-bold block">
             Date de naissance
@@ -286,84 +265,37 @@ export default function UserProfileForm({
             {errors.gender && <div className="text-red-600">{errors.gender.message}</div>}
           </label>
         </div>
-        <div className="my-4">
-          <label htmlFor="region" className="font-bold block">
-            Région
-            <Controller
-              name="region"
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  id="region"
-                  className={`w-full px-2 py-1 border ${errors.region ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
-                />
-              )}
-              rules={{ required: 'Région est obligatoire' }}
-            />
-            {errors.region && <div className="text-red-600">{errors.region.message}</div>}
-          </label>
-        </div>
-        <div className="my-4">
-          <label htmlFor="zipCode" className="font-bold block">
-            Code postal
-            <Controller
-              name="zipCode"
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  id="zipCode"
-                  type="text"
-                  className={`w-full px-2 py-1 border ${errors.zipCode ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
-                />
-              )}
-              rules={{ required: 'Code postal est obligatoire' }}
-            />
-            {errors.zipCode && <div className="text-red-600">{errors.zipCode.message}</div>}
-          </label>
-        </div>
-        <div className="my-4">
-          <label htmlFor="city" className="font-bold block">
-            Ville
-            <Controller
-              name="city"
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  id="city"
-                  type="text"
-                  className={`w-full px-2 py-1 border ${errors.city ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
-                />
-              )}
-              rules={{ required: 'Ville est obligatoire' }}
-            />
-            {errors.city && <div className="text-red-600">{errors.city.message}</div>}
-          </label>
-        </div>
-        <div className="my-4">
-          <label htmlFor="street" className="font-bold block">
-            Rue
-            <Controller
-              name="street"
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  id="street"
-                  type="text"
-                  className={`w-full px-2 py-1 border ${errors.street ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
-                />
-              )}
-              rules={{ required: 'Rue est obligatoire' }}
-            />
-            {errors.street && <div className="text-red-600">{errors.street.message}</div>}
-          </label>
-        </div>
+        <FormTextField
+          control={control}
+          name="region"
+          label="Région"
+          rules={{ required: 'Région est obligatoire' }}
+          error={errors.region}
+        />
+        <FormTextField
+          control={control}
+          name="zipCode"
+          label="Code postal"
+          rules={{ required: 'Code postal est obligatoire' }}
+          error={errors.zipCode}
+        />
+        <FormTextField
+          control={control}
+          name="city"
+          label="Ville"
+          rules={{ required: 'Ville est obligatoire' }}
+          error={errors.city}
+        />
+        <FormTextField
+          control={control}
+          name="street"
+          label="Rue"
+          rules={{ required: 'Rue est obligatoire' }}
+          error={errors.street}
+        />
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="bg-blue-500 text-white mt-4 px-4 py-2 rounded hover:bg-blue-600"
         >
           Valider
         </button>
