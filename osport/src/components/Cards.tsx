@@ -2,18 +2,18 @@ import { useMediaQuery } from 'usehooks-ts';
 import Card from './Card';
 
 export default function Cards() {
-  const cardIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Liste des IDs des cards à afficher
+  const cardIds = [1, 2, 3, 4, 5, 6, 7, 8]; // Liste des IDs des cards à afficher
   const isMobile = useMediaQuery('(max-width: 768px)');
   return (
     <div>
       {isMobile ? (
-        <div className="flex flex-wrap justify-center space-x-1 overflow-x-auto h-72">
+        <div className="mb-5 mt-5 grid gap-y-10 gap-x-6 md:grid-cols-2">
           {cardIds.map((id) => (
             <Card key={id} />
           ))}
         </div>
       ) : (
-        <div className="flex flex-row flex-wrap justify-center space-x-1 space-y-0 overflow-auto h-100">
+        <div className="mt-4 grid gap-y-10 gap-x-6 grid-cols-4">
           {cardIds.map((id) => (
             <Card key={id} />
           ))}

@@ -2,6 +2,7 @@ import { useMediaQuery } from 'usehooks-ts';
 import {
   MdSportsBasketball,
   MdSportsFootball, MdSportsGolf, MdSportsHandball, MdSportsRugby, MdSportsGymnastics,
+  MdSportsEsports, MdSportsTennis,
 } from 'react-icons/md';
 import Link from 'next/link';
 
@@ -17,6 +18,8 @@ export default function SportSearch() {
         <Link href="/"><MdSportsHandball size={50} color="#black" /></Link>
         <Link href="/"><MdSportsRugby size={50} color="#black" /></Link>
         <Link href="/"><MdSportsGymnastics size={50} color="#black" /></Link>
+        <Link href="/"><MdSportsEsports size={50} color="#black" /></Link>
+        <Link href="/"><MdSportsTennis size={50} color="#black" /></Link>
 
       </div>
 
@@ -29,6 +32,8 @@ export default function SportSearch() {
         <Link href="/"><MdSportsHandball size={50} color="#black" /></Link>
         <Link href="/"><MdSportsRugby size={50} color="#black" /></Link>
         <Link href="/"><MdSportsGymnastics size={50} color="#black" /></Link>
+        <Link href="/"><MdSportsEsports size={50} color="#black" /></Link>
+        <Link href="/"><MdSportsTennis size={50} color="#black" /></Link>
 
       </div>
 

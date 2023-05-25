@@ -1,54 +1,61 @@
 /* eslint-disable react/no-unescaped-entities */
 import Head from 'next/head';
+import Description from '../../components/Description';
 
 export default function SearchEvent() {
   return (
-    <div className="w-full h-full">
+    <>
       <Head>
         <title>Recherche - osport</title>
       </Head>
-      <div className="bg-white m-2 rounded-md border border-black p-2">
+      <Description />
+      <div className=" w-full h-full bg-white m-2 rounded-md ">
         <div>
-          <div className="flex flex-row space-x-20 border-2">
-            <h1>Recherche une sortie</h1>
-            <button className="border" type="submit">Reset</button>
+          <div className="flex flex-row space-x-20 bg-white text-gray-700 shadow-md p-4">
+            <h1 className="p-4">Recherche une sortie</h1>
+            <button className="border bg-black hover:bg-gray-500 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded m-1 text-right" type="submit">Reset</button>
           </div>
-          <div><input type="text" placeholder="Mot-clé, Organisateur..." className="border" /></div>
+          <div><input type="text" placeholder="Mot-clé, Organisateur..." className="border mt-2 mb-1 bg-white text-gray-700 shadow-md" /></div>
           <div>
-            <select name="Tout les sports" id="" className="border">
-              <option value="">--Choissisez un sport--</option>
+            <select name="Tout les sports" id="" className="bg-white text-gray-700 shadow-md mb-1">
+              <option value="">Choissisez un sport</option>
               <option value="Football">Football</option>
               <option value="Rugby">Rugby</option>
-              <option value="Handball">Hanndball</option>
+              <option value="Handball">Handball</option>
               <option value="Tennis">Tennis</option>
               <option value="Danse">Danse</option>
+              <option value="Esports">Esports</option>
+              <option value="Basketball">Basketball</option>
+              <option value="Golf">Golf</option>
+              <option value="Vélo">Vélo</option>
+              <option value="Randonnée">Randonnée</option>
             </select>
           </div>
         </div>
         <div>
-          <select name="localisation" id="" className="border">
+          <select name="localisation" id="" className="bg-white text-gray-700 shadow-md border mb-1">
             <option value="Region">Region</option>
             <option value="Département">Département</option>
             <option value="Ville">Ville</option>
           </select>
         </div>
         <div>
-          <select name="localisation_choise" id="" className="border">
+          <select name="localisation_choise" id="" className="bg-white text-gray-700 shadow-md border mb-1">
             <option value="Choisissez votre région">Choisissez votre région</option>
           </select>
         </div>
         <div>Date et heure de début de l'activité
-          <span><input type="datetime-local" className="border" /></span>
+          <span><input type="datetime-local" className="ml-2 bg-white text-gray-700 shadow-md border mb-1" /></span>
         </div>
         <div>Date et heure de fin de l'activité
-          <span><input type="datetime-local" className="border" /></span>
+          <span><input type="datetime-local" className="ml-2 bg-white text-gray-700 shadow-md border mb-1" /></span>
         </div>
         <div>
-          <button type="submit" className="border">Recherche</button>
+          <button type="submit" className="border bg-blue-500 hover:bg-blue-700 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded mb-9">Recherche</button>
         </div>
-        <div><div className="border-t border-b text-center">Rechercher un membre</div> <div className="flex flex-row"><div><input type="text" name="search" id="" placeholder=" nom d'utilisateur" className="border border-black rounded-md m-1" /></div><button type="submit">Chercher</button></div></div>
+        <div><div className="border-t border-b text-center bg-white text-gray-700 shadow-md p-4 mb-1">Rechercher un membre</div> <div className="flex flex-row"><div><input type="text" name="search" id="" placeholder=" nom d'utilisateur" className="border border-black rounded-md m-1 mt-3" /></div><button type="submit" className="bg-blue-500 hover:bg-blue-700 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded m-1">Chercher</button></div></div>
       </div>
-    </div>
+    </>
 
   );
 }
