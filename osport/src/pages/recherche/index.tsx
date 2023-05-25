@@ -23,10 +23,10 @@ export default function SearchEvent() {
               <option value="Tennis">Tennis</option>
               <option value="Danse">Danse</option>
               <option value="Esports">Esports</option>
-              <option value="Esports">Basketball</option>
-              <option value="Esports">Golf</option>
-              <option value="Esports">Vélo</option>
-              <option value="Esports">Randonnée</option>
+              <option value="Basketball">Basketball</option>
+              <option value="Golf">Golf</option>
+              <option value="Vélo">Vélo</option>
+              <option value="Randonnée">Randonnée</option>
             </select>
           </div>
         </div>
