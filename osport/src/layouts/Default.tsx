@@ -33,9 +33,6 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
           </div>
         </div>
       )}
-      <div className="mt-auto">
-        <Footer />
-      </div>
       <ToastContainer autoClose={1000} />
     </div>
   );

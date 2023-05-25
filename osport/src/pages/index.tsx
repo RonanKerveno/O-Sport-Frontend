@@ -36,7 +36,6 @@ export default function Home() {
             <div>
               <SportSearch />
             </div>
-            <Footer />
           </div>
         ) : (
           <div className="flex flex-row m-2">

@@ -18,8 +18,8 @@ export default function Event() {
         <title>Evénement {id} - osport</title>
       </Head>
       <div className=" mb-1 text-[#b430a6] text-center"><h1>Evénement {id}</h1></div>
-      <div className="border-2">
-        <div className="border-4 mb-1 bg-slate-200 bg-opacity-50">
+      <div>
+        <div className=" mb-1 bg-white text-gray-700 shadow-md ">
           <div className="flex items-center justify-between">
             <span className="flex items-center">
               <HiUserGroup className="text-5xl mr-3" />
@@ -34,7 +34,7 @@ export default function Event() {
             </button>
           </div>
         </div>
-        <div className="border-4 mb-1 p-8 bg-slate-200 bg-opacity-50">
+        <div className=" mb-1 p-8 bg-white text-gray-700 shadow-md">
           <div className="mt-2 mb-2">Ville</div>
           <div className="mt-2 mb-2">Adresse</div>
           <div className="mt-2 mb-2">Date de rendez-vous</div>
@@ -42,7 +42,7 @@ export default function Event() {
           <div className="mt-2 mb-2">Sport</div>
         </div>
 
-        <div className="border-4 mb-1 p-6 bg-slate-200 bg-opacity-50">
+        <div className=" mb-1 p-6 bg-white text-gray-700 shadow-md">
           <span className="text-2xl">Description de l'événement :</span> <br />
           <br />
           Lorem Ipsum is simply dummy text of the printing and
@@ -55,14 +55,14 @@ export default function Event() {
           in the 1960s with the release of Letraset sheets containing
         </div>
 
-        <div className="border-4 mb-1 flex flex-row space-x-4 p-6 bg-slate-200 bg-opacity-50">
+        <div className=" mb-1 flex flex-row space-x-4 p-6 bg-white text-gray-700 shadow-md">
           <span>Participant à l'événement :</span>
           <span className="flex flex-col items-center">
             <HiUserCircle size={30} />
             <span>Jude</span>
           </span>
         </div>
-        <div className="border-4 flex flex-row space-x-4 p-6 bg-slate-200 bg-opacity-50">
+        <div className=" flex flex-row space-x-4 p-6 bg-white text-gray-700 shadow-md">
           <span>Créateur de l'évènement :</span>
           <span className="flex flex-col items-center">
             <HiUserCircle size={30} />
