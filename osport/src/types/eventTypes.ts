@@ -29,4 +29,4 @@ export interface Event {
 }
 
 export type EventData = Event[];
-export type EditEventData = Omit<Event[], 'id' | 'createdAt' | 'updatedAt' | 'creatorId' | 'creator' |'sport' | 'users_join_events'>;
+export type EditEventData = Omit<Event, 'id' | 'createdAt' | 'updatedAt' | 'creatorId' | 'creator' |'sport' | 'users_join_events'>;

@@ -6,29 +6,14 @@
   "parser": "@typescript-eslint/parser",
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
+      "files": ["*.ts", "*.tsx"],
       "parserOptions": {
-        "project": [
-          "./tsconfig.json"
-        ]
+        "project": ["./tsconfig.json"]
       }
     }
   ],
   "rules": {
-    "react/jsx-filename-extension": [
-      2,
-      {
-        "extensions": [
-          ".js",
-          ".jsx",
-          ".ts",
-          ".tsx"
-        ]
-      }
-    ],
+    "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
     "react/jsx-one-expression-per-line": "off",
     "@next/next/no-img-element": "off",
     "import/extensions": [
@@ -40,12 +25,12 @@
         "ts": "never",
         "tsx": "never"
       }
-    ],
-    "react/jsx-props-no-spreading": "off",
-    "settings": {
-      "import/resolver": {
-        "typescript": {}
-      }
+   ], 
+   "react/jsx-props-no-spreading": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
     }
   }
 }
