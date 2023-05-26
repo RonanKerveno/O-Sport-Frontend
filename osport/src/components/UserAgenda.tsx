@@ -1,11 +1,11 @@
 // Composant gérant l'affichage de l'agenda des evenements d'un utilisateur.
 
 import { format } from 'date-fns';
-import { EventListData } from '../types';
+import { EventData } from '../types';
 
 // Typage TypeScript
 interface UserAgendaProps {
-  events: EventListData;
+  events: EventData;
 }
 
 export default function UserAgenda({ events }: UserAgendaProps) {

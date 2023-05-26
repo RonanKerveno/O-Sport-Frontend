@@ -5,16 +5,16 @@ import { HiUserCircle } from 'react-icons/hi2';
 import { GetServerSideProps } from 'next';
 import { format, differenceInYears } from 'date-fns';
 import router from 'next/router';
-import { UserPublicData, EventListData } from '../../../types';
-import UserAgenda from '../../../components/UserAgenda';
-import { useAuth } from '../../../contexts/AuthContext';
-import getProfileServerSideProps from '../../../utils/userServerSide';
+import { UserPublicData, EventData } from '@/types';
+import UserAgenda from '@/components/UserAgenda';
+import { useAuth } from '@/contexts/AuthContext';
+import getProfileServerSideProps from '@/utils/userServerSide';
 
 // Typage TypeScript des données renvoyées par les requêtes sous getServerSideProps.
 interface ProfileProps {
   userData: UserPublicData;
-  userEvents: EventListData;
-  createdEvents: EventListData;
+  userEvents: EventData;
+  createdEvents: EventData;
 }
 
 export default function Profile({
