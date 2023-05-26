@@ -6,10 +6,12 @@ import getSportsServerSideProps from '@/utils/sportsServerSideProps';
 import { SportsListData, UserPrivateData, UserPublicData } from '@/types';
 import { createOneUser } from '@/services/userService';
 import router from 'next/router';
-import { useAuth } from '../../contexts/AuthContext';
-import useLoggedRedirect from '../../hooks/useLoggedRedirect';
-import UserProfileForm from '../../components/UserProfileForm';
+import { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import useLoggedRedirect from '@/hooks/useLoggedRedirect';
+import UserProfileForm from '@/components/UserProfileForm';
 
+// Typage TypeScript
 type FullUserData = UserPublicData & UserPrivateData;
 
 interface DataProfileProps {
@@ -18,6 +20,7 @@ interface DataProfileProps {
 
 export default function Subscribe({ sportsList }: DataProfileProps) {
   const { isLogged } = useAuth();
+  const [errorMessage, setErrorMessage] = useState('');
 
   useLoggedRedirect();
 
@@ -27,7 +30,6 @@ export default function Subscribe({ sportsList }: DataProfileProps) {
   }
 
   const handleCreate = async (fullUserData: FullUserData) => {
-    console.log(fullUserData);
     try {
       // Appel à la fonction modifyOneUser pour mettre à jour les données utilisateur
       const response = await createOneUser(fullUserData);
@@ -35,15 +37,15 @@ export default function Subscribe({ sportsList }: DataProfileProps) {
       if (response.success) {
         // Redirection vers la page de connexion
         router.push('/connexion');
-      } else {
-        // Gestion des erreurs lors de la mise à jour
-        console.log('Une erreur est survenue lors de la mise à jour du profil.');
+      } else if ('error' in response && response.error !== undefined) {
+        setErrorMessage(response.error);
       }
     } catch (error) {
-      console.log('Une erreur est survenue lors de la mise à jour du profil :', error);
+      setErrorMessage('Une erreur est survenue lors de la création du profil :');
     }
   };
 
+  // On initialise les données de profil publiques à blanc
   const nullUserPublicData = {
     id: '',
     userName: '',
@@ -73,11 +75,13 @@ export default function Subscribe({ sportsList }: DataProfileProps) {
           sportsList={sportsList}
           onSubmit={handleCreate} // Fonction de rappel pour traiter les données soumises
         />
+        {errorMessage && <p className="text-red-500 mt-3 ml-4">{errorMessage}</p>}
       </div>
     </>
   );
 }
 
+// Traitement des requête API coté SSR pour récupérer les données publiques.
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const props = await getSportsServerSideProps();

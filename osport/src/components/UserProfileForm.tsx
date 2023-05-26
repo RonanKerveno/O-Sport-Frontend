@@ -1,10 +1,14 @@
+// Composant de formulaire de profil utilisateur
+
 import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { getUserByIdPrivate } from '@/services/userService';
+import UserTextFieldForm from './UserTextFieldForm';
 import {
-  UserPublicData, UserPrivateData, SportsListData, FavoriteSport,
+  UserPublicData, UserPrivateData, SportsListData,
 } from '../types';
-import { getUserByIdPrivate } from '../services/userService';
-import FormTextField from './FormTextField';
+
+// Typages TypeScript
 
 type FormValues = UserPublicData & UserPrivateData & { password: string; confirmPassword: string; };
 
@@ -18,6 +22,7 @@ interface UserProfileFormProps {
   onSubmit: (submittedData: SubmittedData) => void;
 }
 
+// Initialisation par défaut des valeurs des donnes privées
 const nullUserPrivateData = {
   email: '',
   firstName: '',
@@ -34,32 +39,39 @@ export default function UserProfileForm({
   const [changePassword, setChangePassword] = useState(!isEdit);
   const [userPrivateData, setUserPrivateData] = useState<UserPrivateData | null>(null);
   // Etat pour le suivi des sports sélectionnés
-  const [selectedSports, setSelectedSports] = useState<FavoriteSport[]>([]);
   const {
     handleSubmit, control, setValue, setError, formState: { errors }, watch, reset,
   } = useForm<FormValues>({ defaultValues: { ...userData, ...userPrivateData } });
 
+  // Définition des données privées de l'utilisateur lorsque les données sont modifiées
   useEffect(() => {
     const fetchPrivateData = async () => {
       let updatedDefaultValues;
 
+      // Si on est dans une modification (vs création) on recupère les données privées par défaut.
       if (isEdit) {
+        // Appel API pour la récupération des données privées.
         const response = await getUserByIdPrivate(userData.id);
         if (response.success) {
           setUserPrivateData(response.userPrivate);
-          // Update default values
+          // Mise à jour des valeurs par défaut
           updatedDefaultValues = { ...userData, ...response.userPrivate };
+          // Si changePassword est false on vide les champs de mots de passe pour ne pas
+          // qu'il soient enregistrés.
           if (!changePassword) {
-            updatedDefaultValues.password = ''; // Clear the password field if changePassword is false
+            updatedDefaultValues.password = '';
             updatedDefaultValues.confirmPassword = '';
           }
           reset(updatedDefaultValues);
         }
+        // Si on est dans une création de profil on charge les données à blanc
       } else {
         setUserPrivateData(nullUserPrivateData);
         updatedDefaultValues = { ...userData, ...nullUserPrivateData };
+        // Si changePassword est false on vide les champs de mots de passe pour ne pas
+        // qu'il soient enregistrés.
         if (!changePassword) {
-          updatedDefaultValues.password = ''; // Clear the password field if changePassword is false
+          updatedDefaultValues.password = '';
           updatedDefaultValues.confirmPassword = '';
         }
         reset(updatedDefaultValues);
@@ -68,39 +80,41 @@ export default function UserProfileForm({
     fetchPrivateData();
   }, [userData.id, userData, reset, changePassword, isEdit]);
 
+  // On attend que les données privées soient récupérées avant le render
   if (!userPrivateData) {
-    return null; // Or render a loading spinner
+    return null;
   }
   const favoriteSports = watch('favoriteSports');
 
   return (
+    // Formulaire de création ou modificaiton de profil utilisant react-hook-form et le composant
+    // UserTextFieldForm pour les types d'inputs les plus répétés.
     <div className="container mx-auto px-4">
       <form
         onSubmit={handleSubmit((data) => {
           const { confirmPassword, ...submittedData } = data;
-          // vérifier si le nombre de sports sélectionnés est entre 1 et 5
-          if (selectedSports.length < 1 || selectedSports.length > 5) {
-            // si ce n'est pas le cas, définir une erreur personnalisée
+          // On vérifie si le nombre de sports sélectionnés est entre 1 et 5
+          if (favoriteSports.length < 1 || favoriteSports.length > 5) {
             setError('favoriteSports', {
               type: 'manual',
               message: 'Vous devez sélectionner entre 1 et 5 sports',
             });
           } else {
-            // si c'est correct, continuez avec la soumission du formulaire
+            // si c'est correct on envoi la soumission du formulaire
             onSubmit(submittedData as SubmittedData);
           }
         })}
         className="max-w-sm"
       >
 
-        <FormTextField
+        <UserTextFieldForm
           control={control}
           name="userName"
           label="Nom d'utilisateur"
           rules={{ required: 'Nom d\'utilisateur est obligatoire' }}
           error={errors.userName}
         />
-        <FormTextField
+        <UserTextFieldForm
           control={control}
           name="email"
           label="Email"
@@ -108,7 +122,7 @@ export default function UserProfileForm({
           rules={{ required: 'Email est obligatoire' }}
           error={errors.email}
         />
-
+        {/* Vérification du mot de passe par un champ de confirmation */}
         {isEdit && (
           <div className="my-4">
             <label htmlFor="changePassword" className="font-bold block">
@@ -131,7 +145,7 @@ export default function UserProfileForm({
         )}
         {(!isEdit || changePassword) && (
           <>
-            <FormTextField
+            <UserTextFieldForm
               control={control}
               name="password"
               label={isEdit ? 'Nouveau mot de passe' : 'Mot de passe'}
@@ -141,7 +155,7 @@ export default function UserProfileForm({
               }}
               error={errors.password}
             />
-            <FormTextField
+            <UserTextFieldForm
               control={control}
               name="confirmPassword"
               label="Confirmer le mot de passe"
@@ -175,6 +189,7 @@ export default function UserProfileForm({
             {errors.description && <div className="text-red-600">{errors.description.message}</div>}
           </label>
         </div>
+        {/* Définition des sports favoris pas cases à cocher */}
         <div className="my-4">
           <label htmlFor="favoriteSports" className="font-bold block">
             Sports favoris
@@ -193,11 +208,9 @@ export default function UserProfileForm({
                         if (e.target.checked && !isAlreadyAdded) {
                           const updatedSports = [...favoriteSports, sport];
                           setValue('favoriteSports', updatedSports);
-                          setSelectedSports(updatedSports);
                         } else if (!e.target.checked && isAlreadyAdded) {
                           const updatedSports = favoriteSports.filter((fs) => fs.id !== sport.id);
                           setValue('favoriteSports', updatedSports);
-                          setSelectedSports(updatedSports);
                         }
                       }}
                       value={undefined}
@@ -210,20 +223,21 @@ export default function UserProfileForm({
           </label>
           {errors.favoriteSports && <div className="text-red-600">{errors.favoriteSports.message}</div>}
         </div>
-        <FormTextField
+        <UserTextFieldForm
           control={control}
           name="firstName"
           label="Prénom"
           rules={{ required: 'Prénom est obligatoire' }}
           error={errors.firstName}
         />
-        <FormTextField
+        <UserTextFieldForm
           control={control}
           name="lastName"
           label="Nom"
           rules={{ required: 'Nom est obligatoire' }}
           error={errors.lastName}
         />
+        {/* Interface de choix de date pour la date de naissance */}
         <div className="my-4">
           <label htmlFor="dateOfBirth" className="font-bold block">
             Date de naissance
@@ -243,6 +257,7 @@ export default function UserProfileForm({
             {errors.dateOfBirth && <div className="text-red-600">{errors.dateOfBirth.message}</div>}
           </label>
         </div>
+        {/* Liste déroulante pour le genre */}
         <div className="my-4">
           <label htmlFor="gender" className="font-bold block">
             Genre
@@ -265,28 +280,28 @@ export default function UserProfileForm({
             {errors.gender && <div className="text-red-600">{errors.gender.message}</div>}
           </label>
         </div>
-        <FormTextField
+        <UserTextFieldForm
           control={control}
           name="region"
           label="Région"
           rules={{ required: 'Région est obligatoire' }}
           error={errors.region}
         />
-        <FormTextField
+        <UserTextFieldForm
           control={control}
           name="zipCode"
           label="Code postal"
           rules={{ required: 'Code postal est obligatoire' }}
           error={errors.zipCode}
         />
-        <FormTextField
+        <UserTextFieldForm
           control={control}
           name="city"
           label="Ville"
           rules={{ required: 'Ville est obligatoire' }}
           error={errors.city}
         />
-        <FormTextField
+        <UserTextFieldForm
           control={control}
           name="street"
           label="Rue"

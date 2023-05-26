@@ -1,4 +1,4 @@
-// /pages/profil/[id]/modifier.tsx
+// Page de modification du profil
 
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
@@ -8,6 +8,7 @@ import UserProfileForm from '@/components/UserProfileForm';
 import { UserPublicData, UserPrivateData, SportsListData } from '@/types';
 import { useState } from 'react';
 
+// Typage TypeScript
 type FullUserData = UserPublicData & UserPrivateData;
 
 interface EditProfileProps {
@@ -20,6 +21,7 @@ export default function EditProfile({ userData, sportsList }: EditProfileProps) 
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  // Appel API pour traiter la mise à jour du profil avec les données du formulaire.
   const handleUpdate = async (fullUserData: FullUserData): Promise<void> => {
     try {
       // Appel à la fonction modifyOneUser pour mettre à jour les données utilisateur
@@ -35,10 +37,12 @@ export default function EditProfile({ userData, sportsList }: EditProfileProps) 
     }
   };
 
+  // Confirmation demandée avant suppresion du profil
   const handleDelete = async () => {
     setShowConfirmation(true);
   };
 
+  // Appel API pour supprimer le profil
   const confirmDelete = async () => {
     try {
       // Appel à la fonction deleteOneUser pour supprimer les données utilisateur
@@ -97,6 +101,7 @@ export default function EditProfile({ userData, sportsList }: EditProfileProps) 
   );
 }
 
+// Traitement des requête API coté SSR pour récupérer les données publiques.
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const props = await getProfileServerSideProps(context);

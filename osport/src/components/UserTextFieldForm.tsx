@@ -1,9 +1,12 @@
+// Composant gérant les controlleurs de type string de formulaire de profil utilisateur
 /* eslint-disable react/require-default-props */
+
 import {
   Control, Controller, RegisterOptions, FieldError, FieldValues, Path,
 } from 'react-hook-form';
 
-interface TextFieldProps<TFieldValues extends FieldValues> {
+// Typage TypeScript
+interface UserTextFieldProps<TFieldValues extends FieldValues> {
   control: Control<TFieldValues>;
   name: Path<TFieldValues>;
   label: string;
@@ -12,9 +15,10 @@ interface TextFieldProps<TFieldValues extends FieldValues> {
   type?: string;
 }
 
-export default function FormTextField<TFieldValues extends FieldValues>({
+// Définition du composant.
+export default function UserTextFieldForm<TFieldValues extends FieldValues>({
   control, name, label, rules, error, type,
-}: TextFieldProps<TFieldValues>) {
+}: UserTextFieldProps<TFieldValues>) {
   return (
     <div className="my-4">
       <label htmlFor={name} className="font-bold block">

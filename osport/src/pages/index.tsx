@@ -1,12 +1,11 @@
 import Head from 'next/head';
 import { useMediaQuery } from 'usehooks-ts';
 import { useEffect } from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { toast } from 'react-toastify';
 import { useAuth } from '@/contexts/AuthContext';
-import Description from '../components/Description';
-import Cards from '../components/Cards';
-import SportSearch from '../components/SportSearch';
+import Description from '@/components/Description';
+import Cards from '@/components/Cards';
+import SportSearch from '@/components/SportSearch';
 
 export default function Home() {
   const isMobile = useMediaQuery('(max-width: 768px)');
