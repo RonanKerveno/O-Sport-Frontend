@@ -1,11 +1,26 @@
 // Page d'inscription au site
 
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import { useAuth } from '../../contexts/AuthContext';
-import useLoggedRedirect from '../../hooks/useLoggedRedirect';
+import getSportsServerSideProps from '@/utils/sportsServerSideProps';
+import { SportsListData, UserPrivateData, UserPublicData } from '@/types';
+import { createOneUser } from '@/services/userService';
+import router from 'next/router';
+import { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import useLoggedRedirect from '@/hooks/useLoggedRedirect';
+import UserProfileForm from '@/components/UserProfileForm';
 
-export default function Suscribe() {
+// Typage TypeScript
+type FullUserData = UserPublicData & UserPrivateData;
+
+interface DataProfileProps {
+  sportsList: SportsListData;
+}
+
+export default function Subscribe({ sportsList }: DataProfileProps) {
   const { isLogged } = useAuth();
+  const [errorMessage, setErrorMessage] = useState('');
 
   useLoggedRedirect();
 
@@ -13,6 +28,36 @@ export default function Suscribe() {
   if (isLogged) {
     return <p>Vous êtes déjà connecté.</p>;
   }
+
+  const handleCreate = async (fullUserData: FullUserData) => {
+    try {
+      // Appel à la fonction modifyOneUser pour mettre à jour les données utilisateur
+      const response = await createOneUser(fullUserData);
+
+      if (response.success) {
+        // Redirection vers la page de connexion
+        router.push('/connexion');
+      } else if ('error' in response && response.error !== undefined) {
+        setErrorMessage(response.error);
+      }
+    } catch (error) {
+      setErrorMessage('Une erreur est survenue lors de la création du profil :');
+    }
+  };
+
+  // On initialise les données de profil publiques à blanc
+  const nullUserPublicData = {
+    id: '',
+    userName: '',
+    dateOfBirth: '',
+    gender: '',
+    region: '',
+    city: '',
+    createdAt: '',
+    isAdmin: false,
+    description: '',
+    favoriteSports: [],
+  };
 
   return (
     <>
@@ -23,16 +68,25 @@ export default function Suscribe() {
         <div className="text-[#b430a6] text-1xl font-sans font-bold text-center border">
           <h1> Inscription </h1>
         </div>
-        {/* Champs d'inscription */}
-        <div className="mt-5 mb-5">Nom<input className="ml-5 border" type="text" /></div>
-        <div className="mt-5 mb-5">Prenom<input className="ml-5 border" type="text" /></div>
-        <div className="mt-5 mb-5">Date de naissance<input className="ml-5 border" type="date" /></div>
-        <div className="mt-5 mb-5">N°<span className="ml-40">Adresse</span> <br /><input className="border" type="number" /> <input className="border" type="text" /></div>
-        <div className="mt-5 mb-5">Code Postale<input className="ml-5 border" type="number" /></div>
-        <div className="mt-5 mb-5">Ville<input className="ml-5 border" type="texte" /></div>
-        <div className="mt-5 mb-5">Email<input className="ml-5 border" type="mail" /></div>
-        <div className="mt-5 mb-5 text-center"><button className="bg-[#b430a6] text-white font-bold py-2 px-4 rounded" type="submit">Inscription</button></div>
+        {/* Utilisation du composant UserProfileForm */}
+        <UserProfileForm
+          isEdit={false} // Il s'agit d'une création de profil
+          userData={nullUserPublicData}// Pas de données utilisateur à afficher
+          sportsList={sportsList}
+          onSubmit={handleCreate} // Fonction de rappel pour traiter les données soumises
+        />
+        {errorMessage && <p className="text-red-500 mt-3 ml-4">{errorMessage}</p>}
       </div>
     </>
   );
 }
+
+// Traitement des requête API coté SSR pour récupérer les données publiques.
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const props = await getSportsServerSideProps();
+    return { props };
+  } catch (error) {
+    return { notFound: true };
+  }
+};

@@ -8,7 +8,6 @@ export const getAllSports = async () => {
 
     // Récupération des données
     const sportsData = response.data;
-
     return {
       success: true,
       sports: sportsData,

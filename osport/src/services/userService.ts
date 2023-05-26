@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios';
+import { UserPublicData, UserPrivateData } from '@/types';
 import { API_URL } from './apiConfig';
 
 // Typage TypeScript
@@ -33,7 +34,7 @@ export const loginUser = async (email: string, password: string) => {
     }
     return {
       success: false,
-      error: 'An unexpected error occurred',
+      error: 'Erreur serveur inattendue',
     };
   }
 };
@@ -68,7 +69,7 @@ export const getLoggedInUser = async () => {
     }
     return {
       success: false,
-      error: 'An unexpected error occurred',
+      error: 'Erreur serveur inattendue',
     };
   }
 };
@@ -92,13 +93,13 @@ export const logoutUser = async () => {
       if (serverError && serverError.response) {
         return {
           success: false,
-          error: serverError.response.data.error,
+          error: 'La déconnexion a échoué',
         };
       }
     }
     return {
       success: false,
-      error: 'An unexpected error occurred',
+      error: 'Erreur serveur inattendue',
     };
   }
 };
@@ -117,8 +118,18 @@ export const getUserById = async (userId: string) => {
 
     // gestion des erreurs
   } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: 'La récupération des données utilisateur a échoué',
+        };
+      }
+    }
     return {
       success: false,
+      error: 'Erreur serveur inattendue',
     };
   }
 };
@@ -140,8 +151,18 @@ export const getUserByIdPrivate = async (userId: string) => {
 
     // gestion des erreurs
   } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: 'La récupération des données utilisateur a échoué',
+        };
+      }
+    }
     return {
       success: false,
+      error: 'Erreur serveur inattendue',
     };
   }
 };
@@ -161,8 +182,18 @@ export const getAllSportsFromOneUser = async (userId: string) => {
 
     // gestion des erreurs
   } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: 'La récupération de la liste des sports a échoué',
+        };
+      }
+    }
     return {
       success: false,
+      error: 'Erreur serveur inattendue',
     };
   }
 };
@@ -182,8 +213,18 @@ export const getAllEventsFromOneUser = async (userId: string) => {
 
     // gestion des erreurs
   } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: 'La récupération des événements a échoué',
+        };
+      }
+    }
     return {
       success: false,
+      error: 'Erreur serveur inattendue',
     };
   }
 };
@@ -203,8 +244,108 @@ export const getAllEventsCreatedByOneUser = async (userId: string) => {
 
     // gestion des erreurs
   } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: 'La récupération des événements a échoué',
+        };
+      }
+    }
     return {
       success: false,
+      error: 'Erreur serveur inattendue',
+    };
+  }
+};
+
+// Création d'un nouvel utilisateur.
+export const createOneUser = async (userData: UserPublicData & UserPrivateData) => {
+  try {
+    const response = await axios.post(`${API_URL}/users`, userData, {
+      withCredentials: true,
+    });
+
+    return {
+      success: true,
+      user: response.data,
+    };
+
+    // gestion des erreurs
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: 'La céation du profil a échoué',
+        };
+      }
+    }
+    return {
+      success: false,
+      error: 'Erreur serveur inattendue',
+    };
+  }
+};
+
+// Mise à jour des informations de l’utilisateur ayant l’ID spécifié.
+export const updateOneUser = async (userData: UserPublicData & UserPrivateData) => {
+  try {
+    const response = await axios.patch(`${API_URL}/users/${userData.id}`, userData, {
+      withCredentials: true,
+    });
+
+    return {
+      success: true,
+      user: response.data,
+    };
+
+    // gestion des erreurs
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: 'La mise à jour du profil a échoué',
+        };
+      }
+    }
+    return {
+      success: false,
+      error: 'Erreur serveur inattendue',
+    };
+  }
+};
+
+// Supprime un utilisateur ciblé par l’ID.
+export const deleteOneUser = async (userId: string) => {
+  try {
+    const response = await axios.delete(`${API_URL}/users/${userId}`, {
+      withCredentials: true,
+    });
+
+    return {
+      success: true,
+      message: response.data,
+    };
+
+    // Gestion des erreurs
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: 'La suppression du profil a échoué',
+        };
+      }
+    }
+    return {
+      success: false,
+      error: 'Erreur serveur inattendue',
     };
   }
 };
