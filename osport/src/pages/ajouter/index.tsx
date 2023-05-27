@@ -42,13 +42,16 @@ export default function AddEvent({ sportsList }: DataProfileProps) {
   const nullEventData: EditEventData = {
     title: '',
     region: '',
-    zipCode: 0,
+    zipCode: '',
     city: '',
     street: '',
     description: '',
     startingTime: '',
     endingTime: '',
     sportId: '',
+    sport: {
+      name: '',
+    },
     maxNbParticipants: 0,
   };
 
@@ -59,7 +62,7 @@ export default function AddEvent({ sportsList }: DataProfileProps) {
       </Head>
       <div className="flex flex-col space-">
         <div className="text-[#b430a6] text-1xl font-sans font-bold text-center border">
-          <h1> Inscription </h1>
+          <h1> Créez votre événement </h1>
         </div>
 
         <EventEditForm

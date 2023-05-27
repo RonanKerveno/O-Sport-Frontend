@@ -35,7 +35,7 @@ export default function Navbar() {
           <span className="sr-only">{isLogged ? 'Profil' : 'Connexion'}</span>
         </Link>
         <Link
-          href="/ajouter"
+          href={isLogged ? '/ajouter' : '/connexion'}
           passHref
           className=" inline-flex flex-col items-center justify-center px-5 hover:text-sky-600 group cursor-pointer"
         >

@@ -7,6 +7,64 @@ interface ServerError {
   error: string;
 }
 
+export const getAllEvents = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/events`, {
+      withCredentials: true,
+    });
+
+    return {
+      success: true,
+      events: response.data,
+    };
+
+    // Gestion des erreurs
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: 'La récupération des événements a échoué',
+        };
+      }
+    }
+    return {
+      success: false,
+      error: 'Erreur serveur inattendue',
+    };
+  }
+};
+
+export const getOneEvent = async (eventId: string) => {
+  try {
+    const response = await axios.get(`${API_URL}/events/${eventId}`, {
+      withCredentials: true,
+    });
+
+    return {
+      success: true,
+      event: response.data,
+    };
+
+    // Gestion des erreurs
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: "La récupération de l'événement a échoué",
+        };
+      }
+    }
+    return {
+      success: false,
+      error: 'Erreur serveur inattendue',
+    };
+  }
+};
+
 export const createOneEvent = async (userId: string, eventData: EditEventData) => {
   try {
     const response = await axios.post(`${API_URL}/events/${userId}`, eventData, {
@@ -36,9 +94,9 @@ export const createOneEvent = async (userId: string, eventData: EditEventData) =
   }
 };
 
-export const updateEvent = async (eventId: string, eventData: EditEventData) => {
+export const updateOneEvent = async (eventId: string, eventData: EditEventData) => {
   try {
-    const response = await axios.put(`${API_URL}/events/${eventId}`, eventData, {
+    const response = await axios.patch(`${API_URL}/events/${eventId}`, eventData, {
       withCredentials: true,
     });
 

@@ -1,55 +1,68 @@
-// Page de modification d'un événement.
+// Page de modification d'un événement
 
-/* eslint-disable react/no-unescaped-entities */
+import React, { useState } from 'react';
 import Head from 'next/head';
+import getEventServerSideProps from '@/utils/eventServerSideProps';
 import { useRouter } from 'next/router';
-import Footer from '@/components/Footer';
-import { HiUserCircle, HiUserGroup } from 'react-icons/hi2';
-import { MdSportsHandball } from 'react-icons/md';
+import { EditEventData, Event, SportsListData } from '@/types';
+import { updateOneEvent } from '@/services/eventService';
+import EventEditForm from '@/components/EventEditForm';
+import { GetServerSideProps } from 'next';
 
-// Visualisation d'un événement en fonction de son ID
-export default function EventEdit() {
-  // On récupère l'Id dans l'url de la route paramètrée
+interface DataProfileProps {
+  eventData: Event;
+}
+
+export default function EditEvent({ eventData }: DataProfileProps) {
   const router = useRouter();
-  const { id } = router.query;
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleUpdate = async (modifiedEventData: EditEventData) => {
+    const eventId = eventData.id;
+    try {
+      const response = await updateOneEvent(eventId, modifiedEventData);
+
+      if (response.success) {
+        // Redirection vers la page de connexion
+        router.push(`/evenement/${eventId}`);
+      } else if ('error' in response && response.error !== undefined) {
+        setErrorMessage(response.error);
+      }
+    } catch (error) {
+      setErrorMessage('Une erreur est survenue lors de la modification');
+    }
+  };
+
+  const sportsList: SportsListData = [];
 
   return (
     <>
       <Head>
-        <title>Modification evénement</title>
+        <title>Modifiez votre événement</title>
       </Head>
-      <h1>Modification evénement {id}</h1>
-      <div className="border-2 text-[#b430a6] text-center"><h1>Evénement {id}</h1></div>
-      <div className="border-2">
-        <div className="flex flex-row space-x-80">
-          <span className="flex flex-col">5/15 <HiUserGroup /></span>
-          <span><MdSportsHandball size={30} /></span>
-        </div>
-        <div className="text-center">Titre événement : <input type="text" /></div>
-        <div className="border-2">
-          <div>Ville :<input type="text" /></div>
-          <div>Adresse :<input type="text" /></div>
-          <div>Date de rendez-vous : <input type="date" /></div>
-          <div>Heure de rendez-vous :<input type="time" /></div>
-          <div>Sport : <input type="text" /></div>
-
-        </div>
-        <div className="border-2">Description de l'événement :<br />
-          <input type="text" />
+      <div className="flex flex-col space-">
+        <div className="text-[#b430a6] text-1xl font-sans font-bold text-center border">
+          <h1> Modifiez votre événement </h1>
         </div>
 
-        <div className="ml-2 flex flex-row space-x-4">
-          <span>Participant a l'évènement :</span>
-          <span className="flex flex-col">Jude <HiUserCircle size={20} /></span>
-        </div>
-        <div className="ml-2 flex flex-row space-x-4">
-          <span>Créateur de l'évènement :</span>
-          <span className="flex flex-col">Jude <HiUserCircle size={20} /></span>
-        </div>
-        <div className="border text-center"><button type="submit">Enregistrer</button></div>
+        <EventEditForm
+          isEdit
+          eventData={eventData}
+          sportsList={sportsList}
+          onSubmit={handleUpdate}
+        />
+        {errorMessage && <p className="text-red-500 mt-3 ml-4">{errorMessage}</p>}
       </div>
-      <Footer />
     </>
-
   );
 }
+
+// Traitement des requête API coté SSR pour récupérer les données.
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  try {
+    const props = await getEventServerSideProps(context);
+    return { props };
+  } catch (error) {
+    return { notFound: true };
+  }
+};

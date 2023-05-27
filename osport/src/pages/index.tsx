@@ -1,4 +1,8 @@
+// Page Home
+
 import Head from 'next/head';
+import { GetServerSideProps } from 'next';
+import getEventsServerSideProps from '@/utils/eventsServerSideProps';
 import { useMediaQuery } from 'usehooks-ts';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -6,8 +10,13 @@ import { useAuth } from '@/contexts/AuthContext';
 import Description from '@/components/Description';
 import Cards from '@/components/Cards';
 import SportSearch from '@/components/SportSearch';
+import { EventData } from '@/types';
 
-export default function Home() {
+interface EventsDataProps {
+  eventList: EventData;
+}
+
+export default function Home({ eventList }: EventsDataProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const { isLogged, showLoggedStatus, setShowLoggedStatus } = useAuth();
 
@@ -31,14 +40,18 @@ export default function Home() {
         <Description />
         {isMobile ? (
           <div className="">
-            <Cards />
+            <Cards
+              events={eventList}
+            />
             <div>
               <SportSearch />
             </div>
           </div>
         ) : (
           <div className="flex flex-row m-2">
-            <Cards />
+            <Cards
+              events={eventList}
+            />
             <SportSearch />
           </div>
         )}
@@ -47,3 +60,13 @@ export default function Home() {
     </>
   );
 }
+
+// Traitement des requête API coté SSR pour récupérer la liste de événements.
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const props = await getEventsServerSideProps();
+    return { props };
+  } catch (error) {
+    return { notFound: true };
+  }
+};

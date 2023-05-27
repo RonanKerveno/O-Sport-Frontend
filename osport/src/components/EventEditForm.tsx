@@ -1,4 +1,5 @@
 import React from 'react';
+import { format, parseISO } from 'date-fns';
 import { EditEventData, SportsListData } from '@/types';
 import { useForm, Controller } from 'react-hook-form';
 
@@ -15,9 +16,16 @@ interface EventEditFormProps {
 export default function EventEditForm({
   isEdit, eventData, sportsList, onSubmit,
 }: EventEditFormProps) {
+  const defaultValues = {
+    ...eventData,
+    startingTime: eventData.startingTime ? format(parseISO(eventData.startingTime), "yyyy-MM-dd'T'HH:mm") : '',
+    endingTime: eventData.endingTime ? format(parseISO(eventData.endingTime), "yyyy-MM-dd'T'HH:mm") : '',
+  };
   const {
-    handleSubmit, control, formState: { errors },
-  } = useForm<FormValues>({ defaultValues: eventData });
+    handleSubmit, control, formState: { errors }, watch,
+  } = useForm<FormValues>({ defaultValues });
+
+  const watchStartingTime = watch('startingTime', '');
 
   return (
     <div className="container mx-auto px-4">
@@ -47,28 +55,32 @@ export default function EventEditForm({
         <div className="my-4">
           <label htmlFor="sport" className="font-bold block">
             Sport
-            <Controller
-              name="sportId"
-              control={control}
-              render={({ field }) => (
-                <div>
-                  <select
-                    {...field}
-                    id="sport"
-                    className={`w-full px-2 py-1 border ${errors.sportId ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
-                  >
-                    <option value="">--Choisir un sport--</option>
-                    {sportsList.map((sport) => (
-                      <option key={sport.id} value={sport.id}>
-                        {sport.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-              rules={{ required: 'Le choix du sport est obligatoire' }}
-            />
-            {errors.sportId && <div className="text-red-600">{errors.sportId.message}</div>}
+            {!isEdit ? (
+              <Controller
+                name="sportId"
+                control={control}
+                render={({ field }) => (
+                  <div>
+                    <select
+                      {...field}
+                      id="sport"
+                      className={`w-full px-2 py-1 border ${errors.sportId ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
+                    >
+                      <option value="">--Choisir un sport--</option>
+                      {sportsList.map((sport) => (
+                        <option key={sport.id} value={sport.id}>
+                          {sport.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                rules={{ required: 'Le choix du sport est obligatoire' }}
+              />
+            ) : (
+              <div className="ml-2">{eventData.sport.name}</div>
+            )}
+            {errors.sportId && !isEdit && <div className="text-red-600">{errors.sportId.message}</div>}
           </label>
         </div>
 
@@ -215,7 +227,10 @@ export default function EventEditForm({
                   />
                 </div>
               )}
-              rules={{ required: "L'heure de fin est obligatoire" }}
+              rules={{
+                required: "L'heure de fin est obligatoire",
+                validate: (value) => parseISO(value) >= parseISO(watchStartingTime) || "L'heure de fin doit être postérieure à l'heure de début.",
+              }}
             />
             {errors.endingTime && <div className="text-red-600">{errors.endingTime.message}</div>}
           </label>

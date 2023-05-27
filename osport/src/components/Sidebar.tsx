@@ -47,7 +47,7 @@ export default function Sidebar() {
               </li>
               <li className="rounded-sm">
                 <Link
-                  href="/ajouter"
+                  href={isLogged ? '/ajouter' : '/connexion'}
                   className="flex items-center p-2 space-x-3 rounded-md hover:bg-blue-600 hover:text-[#f9fafb]"
                 >
                   <HiPlus size={22} />

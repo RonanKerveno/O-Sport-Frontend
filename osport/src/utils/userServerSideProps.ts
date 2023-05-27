@@ -2,7 +2,7 @@
 // de l'API avant de rendre la page.
 
 import { GetServerSidePropsContext } from 'next';
-import { UserPublicData, EventData } from '../types';
+import { UserPublicData, EventData } from '@/types';
 import { getUserById, getAllEventsFromOneUser, getAllEventsCreatedByOneUser } from '../services/userService';
 
 // Typage des données reçues par l'API

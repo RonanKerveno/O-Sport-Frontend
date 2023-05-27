@@ -8,7 +8,7 @@ import router from 'next/router';
 import { UserPublicData, EventData } from '@/types';
 import UserAgenda from '@/components/UserAgenda';
 import { useAuth } from '@/contexts/AuthContext';
-import getProfileServerSideProps from '@/utils/userServerSide';
+import getProfileServerSideProps from '@/utils/userServerSideProps';
 
 // Typage TypeScript des données renvoyées par les requêtes sous getServerSideProps.
 interface ProfileProps {
