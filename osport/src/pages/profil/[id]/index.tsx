@@ -8,7 +8,7 @@ import router from 'next/router';
 import { UserPublicData, EventData } from '@/types';
 import UserAgenda from '@/components/UserAgenda';
 import { useAuth } from '@/contexts/AuthContext';
-import getProfileServerSideProps from '@/utils/userServerSideProps';
+import getUserServerSideProps from '@/utils/userServerSideProps';
 
 // Typage TypeScript des données renvoyées par les requêtes sous getServerSideProps.
 interface ProfileProps {
@@ -20,7 +20,7 @@ interface ProfileProps {
 export default function Profile({
   userData, userEvents, createdEvents,
 }: ProfileProps) {
-  const { logout, userId: loggedUserId } = useAuth();
+  const { logout, userId: loggedUserId, isAdmin } = useAuth();
   // Calcul de l'âge
   const age = differenceInYears(new Date(), new Date(userData.dateOfBirth));
   // Détermination la lettre du genre (F/H)
@@ -36,7 +36,7 @@ export default function Profile({
         <title>Utilisateur - osport</title>
       </Head>
       <div className="overflow-auto">
-        {loggedUserId === userData.id && (
+        {(loggedUserId === userData.id || isAdmin) && (
           <div className="mb-6">
             <button
               type="button"
@@ -83,7 +83,7 @@ export default function Profile({
 // Elle permet de récupérer les données de l'API avant de rendre la page.
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const props = await getProfileServerSideProps(context);
+    const props = await getUserServerSideProps(context);
     return { props };
     // Si ID mal typé ou introuvable on renvoit vers la page 404.
   } catch (error) {

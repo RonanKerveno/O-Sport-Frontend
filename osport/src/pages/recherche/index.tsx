@@ -1,61 +1,106 @@
-/* eslint-disable react/no-unescaped-entities */
+import { useState } from 'react';
+import { EventData } from '@/types';
+import getEventsServerSideProps from '@/utils/eventsServerSideProps';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import Description from '../../components/Description';
+import Description from '@/components/Description';
+import EventSearchForm from '@/components/EventSearchForm';
+import Cards from '@/components/Cards';
+import KeywordSearch from '@/components/EventKeyWordSearch';
 
-export default function SearchEvent() {
+interface EventsDataProps {
+  eventList: EventData;
+}
+
+export default function SearchEvent({ eventList }: EventsDataProps) {
+  const [form, setForm] = useState({
+    searchType: '',
+    region: '',
+    zipCode: '',
+    city: '',
+    sport: '',
+    startDateTime: '',
+    endDateTime: '',
+  });
+
+  const [filteredEvents, setFilteredEvents] = useState<EventData>(eventList);
+  const [hasSearched, setHasSearched] = useState(false);
+
+  const handleSubmit = (evt: { preventDefault: () => void; }) => {
+    evt.preventDefault();
+    let updatedEvents = [...eventList];
+
+    if (form.searchType) {
+      updatedEvents = updatedEvents.filter((event) => {
+        switch (form.searchType) {
+          case 'region':
+            return event.region === form.region;
+          case 'zipCode':
+            return event.zipCode.toString() === form.zipCode;
+          case 'city':
+            return event.city === form.city;
+          default:
+            return true;
+        }
+      });
+    }
+    if (form.sport) {
+      updatedEvents = updatedEvents.filter(
+        (event) => event.sport.name === form.sport,
+      );
+    }
+    if (form.startDateTime) {
+      updatedEvents = updatedEvents.filter(
+        (event) => new Date(event.startingTime) >= new Date(form.startDateTime),
+      );
+    }
+    if (form.endDateTime) {
+      updatedEvents = updatedEvents.filter(
+        (event) => new Date(event.endingTime) <= new Date(form.endDateTime),
+      );
+    }
+
+    setFilteredEvents(updatedEvents);
+    setHasSearched(true);
+  };
+
   return (
     <>
       <Head>
         <title>Recherche - osport</title>
       </Head>
       <Description />
-      <div className=" w-full h-full bg-white m-2 rounded-md ">
-        <div>
-          <div className="flex flex-row space-x-20 bg-white text-gray-700 shadow-md p-4">
-            <h1 className="p-4">Recherche une sortie</h1>
-            <button className="border bg-black hover:bg-gray-500 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded m-1 text-right" type="submit">Reset</button>
-          </div>
-          <div><input type="text" placeholder="Mot-clé, Organisateur..." className="border mt-2 mb-1 bg-white text-gray-700 shadow-md" /></div>
-          <div>
-            <select name="Tout les sports" id="" className="bg-white text-gray-700 shadow-md mb-1">
-              <option value="">Choissisez un sport</option>
-              <option value="Football">Football</option>
-              <option value="Rugby">Rugby</option>
-              <option value="Handball">Handball</option>
-              <option value="Tennis">Tennis</option>
-              <option value="Danse">Danse</option>
-              <option value="Esports">Esports</option>
-              <option value="Basketball">Basketball</option>
-              <option value="Golf">Golf</option>
-              <option value="Vélo">Vélo</option>
-              <option value="Randonnée">Randonnée</option>
-            </select>
-          </div>
+      <div className="w-full h-full bg-white ml-2 rounded-md">
+        <div className="mb-4">
+          <KeywordSearch
+            eventList={eventList}
+            setFilteredEvents={setFilteredEvents}
+            setHasSearched={setHasSearched}
+          />
         </div>
         <div>
-          <select name="localisation" id="" className="bg-white text-gray-700 shadow-md border mb-1">
-            <option value="Region">Region</option>
-            <option value="Département">Département</option>
-            <option value="Ville">Ville</option>
-          </select>
+          <EventSearchForm
+            eventList={eventList}
+            handleSubmit={handleSubmit}
+            form={form}
+            setForm={setForm}
+            setFilteredEvents={setFilteredEvents}
+            setHasSearched={setHasSearched}
+          />
         </div>
-        <div>
-          <select name="localisation_choise" id="" className="bg-white text-gray-700 shadow-md border mb-1">
-            <option value="Choisissez votre région">Choisissez votre région</option>
-          </select>
-        </div>
-        <div>Date et heure de début de l'activité
-          <span><input type="datetime-local" className="ml-2 bg-white text-gray-700 shadow-md border mb-1" /></span>
-        </div>
-        <div>Date et heure de fin de l'activité
-          <span><input type="datetime-local" className="ml-2 bg-white text-gray-700 shadow-md border mb-1" /></span>
-        </div>
-        <div>
-          <button type="submit" className="border bg-blue-500 hover:bg-blue-700 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded mb-9">Recherche</button>
-        </div>
-        <div><div className="border-t border-b text-center bg-white text-gray-700 shadow-md p-4 mb-1">Rechercher un membre</div> <div className="flex flex-row"><div><input type="text" name="search" id="" placeholder=" nom d'utilisateur" className="border border-black rounded-md m-1 mt-3" /></div><button type="submit" className="bg-blue-500 hover:bg-blue-700 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded m-1">Chercher</button></div></div>
+        {hasSearched && <Cards events={filteredEvents} />}
       </div>
-    </>
 
+    </>
   );
 }
+
+// Traitement des requête API coté SSR pour récupérer la liste de événements.
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const props = await getEventsServerSideProps();
+    return { props };
+  } catch (error) {
+    return { notFound: true };
+  }
+};

@@ -1,5 +1,5 @@
 import React from 'react';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { EditEventData, SportsListData } from '@/types';
 import { useForm, Controller } from 'react-hook-form';
 
@@ -18,14 +18,12 @@ export default function EventEditForm({
 }: EventEditFormProps) {
   const defaultValues = {
     ...eventData,
-    startingTime: eventData.startingTime ? format(parseISO(eventData.startingTime), "yyyy-MM-dd'T'HH:mm") : '',
-    endingTime: eventData.endingTime ? format(parseISO(eventData.endingTime), "yyyy-MM-dd'T'HH:mm") : '',
+    startingTime: eventData.startingTime ? format(new Date(eventData.startingTime), "yyyy-MM-dd'T'HH:mm") : '',
+    endingTime: eventData.endingTime ? format(new Date(eventData.endingTime), "yyyy-MM-dd'T'HH:mm") : '',
   };
   const {
-    handleSubmit, control, formState: { errors }, watch,
+    handleSubmit, control, formState: { errors }, getValues,
   } = useForm<FormValues>({ defaultValues });
-
-  const watchStartingTime = watch('startingTime', '');
 
   return (
     <div className="container mx-auto px-4">
@@ -229,7 +227,7 @@ export default function EventEditForm({
               )}
               rules={{
                 required: "L'heure de fin est obligatoire",
-                validate: (value) => parseISO(value) >= parseISO(watchStartingTime) || "L'heure de fin doit être postérieure à l'heure de début.",
+                validate: (value) => value >= getValues('startingTime') || "L'heure de fin doit être postérieure à l'heure de début.",
               }}
             />
             {errors.endingTime && <div className="text-red-600">{errors.endingTime.message}</div>}

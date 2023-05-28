@@ -13,7 +13,7 @@ interface UserServerSideProps {
 }
 
 // Récupérations des données publiques de l'utilisateur.
-const getProfileServerSideProps = async (context: GetServerSidePropsContext):
+const getUserServerSideProps = async (context: GetServerSidePropsContext):
 Promise<UserServerSideProps> => {
   const userId = context.params?.id;
 
@@ -40,4 +40,4 @@ Promise<UserServerSideProps> => {
   };
 };
 
-export default getProfileServerSideProps;
+export default getUserServerSideProps;
