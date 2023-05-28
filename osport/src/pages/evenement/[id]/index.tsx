@@ -10,6 +10,8 @@ import { GetServerSideProps } from 'next';
 import getEventServerSideProps from '@/utils/eventServerSideProps';
 import { format, parseISO } from 'date-fns';
 import router from 'next/router';
+import { useState } from 'react';
+import { addOneUserToOneEvent, deleteOneUserFromOneEvent } from '@/services/userService';
 
 interface DataProfileProps {
   eventData: Event;
@@ -17,9 +19,83 @@ interface DataProfileProps {
 
 // Visualisation d'un événement en fonction de son ID
 export default function EventDetails({ eventData }: DataProfileProps) {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [actionType, setActionType] = useState<'subscribe' | 'unsubscribe' | null>(null);
   const startingTime = format(parseISO(eventData.startingTime), 'dd/MM/yyyy HH:mm');
   const endingTime = format(parseISO(eventData.endingTime), 'dd/MM/yyyy HH:mm');
   const { userId } = useAuth();
+
+  const handleSubscribe = () => {
+    setActionType('subscribe');
+    setShowConfirmation(true);
+  };
+
+  const handleUnsubscribe = () => {
+    setActionType('unsubscribe');
+    setShowConfirmation(true);
+  };
+
+  const confirmAction = async () => {
+    if (userId === null) {
+      setErrorMessage('Une erreur est survenue');
+      return;
+    }
+    try {
+      let response;
+      if (actionType === 'subscribe') {
+        response = await addOneUserToOneEvent(userId, eventData.id);
+      } else {
+        response = await deleteOneUserFromOneEvent(userId, eventData.id);
+      }
+
+      if (response.success) {
+        window.location.href = `/evenement/${eventData.id}`;
+      } else if ('error' in response && response.error !== undefined) {
+        setErrorMessage(response.error);
+      }
+    } catch (error) {
+      setErrorMessage('Une erreur est survenue');
+    }
+  };
+
+  // Vérifie si l'utilisateur est inscrit à l'événement
+  const isUserRegistered = eventData.eventUsers.find((user) => user.id === userId) !== undefined;
+
+  const renderButton = () => {
+    if (userId === eventData.creatorId) {
+      return (
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1"
+          type="button"
+          onClick={() => router.push(`/evenement/${eventData.id}/modifier`)}
+        >
+          Modifier
+        </button>
+      );
+    } if (isUserRegistered) {
+      return (
+        <button
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-1"
+          type="button"
+          onClick={handleUnsubscribe}
+        >
+          Se désinscrire
+        </button>
+      );
+    } if (userId) {
+      return (
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1"
+          type="button"
+          onClick={handleSubscribe}
+        >
+          S'inscrire
+        </button>
+      );
+    }
+    return null;
+  };
 
   return (
     <>
@@ -37,23 +113,9 @@ export default function EventDetails({ eventData }: DataProfileProps) {
           </div>
           <div className="text-center text-4xl font-bold p-6">{eventData.title}</div>
           <div className="text-left mb-1">
-            {userId === eventData.creatorId ? (
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1"
-                type="button"
-                onClick={() => router.push(`/evenement/${eventData.id}/modifier`)}
-              >
-                Modifier
-              </button>
-            ) : (
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1"
-                type="button"
-              >
-                S'inscrire
-              </button>
-            )}
+            {renderButton()}
           </div>
+          {errorMessage && <p className="text-red-500 mt-3 ml-4">{errorMessage}</p>}
         </div>
         <div className=" mb-1 p-8 bg-white text-gray-700 shadow-md">
           <div className="mt-2 mb-2">{eventData.city}</div>
@@ -86,6 +148,33 @@ export default function EventDetails({ eventData }: DataProfileProps) {
           </div>
         </div>
       </div>
+      {showConfirmation && (
+        <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded">
+            <p className="mb-3">
+              {actionType === 'subscribe'
+                ? 'Êtes-vous sûr de vouloir vous inscrire à cet événement ?'
+                : 'Êtes-vous sûr de vouloir vous désinscrire de cet événement ?'}
+            </p>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                className="bg-gray-200 text-gray-800 px-4 py-2 rounded mr-2"
+                onClick={() => setShowConfirmation(false)}
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                className="bg-red-500 text-white px-4 py-2 rounded"
+                onClick={confirmAction}
+              >
+                Confirmer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
 
   );

@@ -349,3 +349,63 @@ export const deleteOneUser = async (userId: string) => {
     };
   }
 };
+
+// Ajoute un utilisateur identifié par son ID à l’événement identifié par son ID.
+export const addOneUserToOneEvent = async (userId: string, eventId: string) => {
+  try {
+    const response = await axios.post(`${API_URL}/users/${userId}/events/${eventId}`, {}, {
+      withCredentials: true,
+    });
+
+    return {
+      success: true,
+      message: response.data,
+    };
+
+    // gestion des erreurs
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: serverError.response.data.error || "L'ajout de l'utilisateur à l'événement a échoué",
+        };
+      }
+    }
+    return {
+      success: false,
+      error: 'Erreur serveur inattendue',
+    };
+  }
+};
+
+// Ajoute un utilisateur identifié par son ID à l’événement identifié par son ID.
+export const deleteOneUserFromOneEvent = async (userId: string, eventId: string) => {
+  try {
+    const response = await axios.delete(`${API_URL}/users/${userId}/events/${eventId}`, {
+      withCredentials: true,
+    });
+
+    return {
+      success: true,
+      message: response.data,
+    };
+
+    // gestion des erreurs
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: "La suppression de l'utilisateur a échoué",
+        };
+      }
+    }
+    return {
+      success: false,
+      error: 'Erreur serveur inattendue',
+    };
+  }
+};

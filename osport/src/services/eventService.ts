@@ -122,3 +122,31 @@ export const updateOneEvent = async (eventId: string, eventData: EditEventData) 
     };
   }
 };
+
+export const deleteOneEvent = async (eventId: string) => {
+  try {
+    await axios.delete(`${API_URL}/events/${eventId}`, {
+      withCredentials: true,
+    });
+
+    return {
+      success: true,
+    };
+
+    // Gestion des erreurs
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: "La suppression de l'événement a échoué",
+        };
+      }
+    }
+    return {
+      success: false,
+      error: 'Erreur serveur inattendue',
+    };
+  }
+};
