@@ -67,7 +67,7 @@ export const getOneEvent = async (eventId: string) => {
 
 export const createOneEvent = async (userId: string, eventData: EditEventData) => {
   try {
-    const response = await axios.post(`${API_URL}/events/${userId}`, eventData, {
+    const response = await axios.post(`${API_URL}/events`, eventData, {
       withCredentials: true,
     });
 
