@@ -6,7 +6,8 @@ import getProfileServerSideProps from '@/utils/profileServerSideProps';
 import { deleteOneUser, updateOneUser } from '@/services/userService';
 import UserProfileForm from '@/components/UserProfileForm';
 import { UserPublicData, UserPrivateData, SportsListData } from '@/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 
 // Typage TypeScript
 type FullUserData = UserPublicData & UserPrivateData;
@@ -18,8 +19,22 @@ interface EditProfileProps {
 
 export default function EditProfile({ userData, sportsList }: EditProfileProps) {
   const router = useRouter();
+  const { userId, isAdmin } = useAuth();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Vérification de l'égalité des userId
+    if (userId !== userData.id && !isAdmin) {
+      router.push('/');
+      setIsAuthorized(false);
+    } else {
+      setIsAuthorized(true);
+    }
+    setIsLoading(false);
+  }, [userId, userData, router, isAdmin]);
 
   // Appel API pour traiter la mise à jour du profil avec les données du formulaire.
   const handleUpdate = async (fullUserData: FullUserData): Promise<void> => {
@@ -59,9 +74,19 @@ export default function EditProfile({ userData, sportsList }: EditProfileProps) 
     }
   };
 
+  if (isLoading) {
+    // Pendant que nous vérifions l'authentification, nous affichons ce message
+    return <h1>Verification en cours...</h1>;
+  } if (!isAuthorized) {
+    // Si l'utilisateur n'est pas autorisé, nous affichons ce message
+    return <h1>Non autorisé !</h1>;
+  }
+  // Si l'utilisateur est autorisé, nous rendons la page de profil
   return (
     <div className="container mx-auto px-4">
-      <h1 className="text-2xl font-bold my-4">Modifier mon profil</h1>
+      <h1 className={`text-2xl font-bold my-4 ${isAdmin && userId !== userData.id ? 'text-red-500' : ''}`}>
+        {isAdmin && userId !== userData.id ? 'Modification Admin' : 'Modifier mon profil'}
+      </h1>
       <UserProfileForm isEdit userData={userData} sportsList={sportsList} onSubmit={handleUpdate} />
       {errorMessage && <p className="text-red-500 mt-3 ml-4">{errorMessage}</p>}
       <div className="my-10 mx-4">

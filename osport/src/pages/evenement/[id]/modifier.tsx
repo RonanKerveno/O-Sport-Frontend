@@ -1,6 +1,6 @@
 // Page de modification d'un événement
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import getEventServerSideProps from '@/utils/eventServerSideProps';
 import { useRouter } from 'next/router';
@@ -8,6 +8,7 @@ import { EditEventData, Event, SportsListData } from '@/types';
 import { deleteOneEvent, updateOneEvent } from '@/services/eventService';
 import EventEditForm from '@/components/EventEditForm';
 import { GetServerSideProps } from 'next';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface DataProfileProps {
   eventData: Event;
@@ -15,9 +16,23 @@ interface DataProfileProps {
 
 export default function EditEvent({ eventData }: DataProfileProps) {
   const router = useRouter();
+  const { userId, isAdmin } = useAuth();
   const [errorMessage, setErrorMessage] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const eventId = eventData.id;
+
+  useEffect(() => {
+    // Vérification de l'égalité des userId
+    if (userId !== eventData.creatorId && !isAdmin) {
+      router.push('/');
+      setIsAuthorized(false);
+    } else {
+      setIsAuthorized(true);
+    }
+    setIsLoading(false);
+  }, [userId, router, isAdmin, eventData.creatorId]);
 
   const handleUpdate = async (modifiedEventData: EditEventData) => {
     try {
@@ -58,6 +73,13 @@ export default function EditEvent({ eventData }: DataProfileProps) {
 
   const sportsList: SportsListData = [];
 
+  if (isLoading) {
+    // Pendant que nous vérifions l'authentification, nous affichons ce message
+    return <h1>Verification en cours...</h1>;
+  } if (!isAuthorized) {
+    // Si l'utilisateur n'est pas autorisé, nous affichons ce message
+    return <h1>Non autorisé !</h1>;
+  }
   return (
     <>
       <Head>
@@ -65,7 +87,9 @@ export default function EditEvent({ eventData }: DataProfileProps) {
       </Head>
       <div className="flex flex-col space-">
         <div className="text-[#b430a6] text-1xl font-sans font-bold text-center border">
-          <h1> Modifiez votre événement </h1>
+          <h1 className={`text-2xl font-bold my-4 ${isAdmin && userId !== eventData.creatorId ? 'text-red-500' : ''}`}>
+            {isAdmin && userId !== eventData.creatorId ? 'Modification Admin' : 'Modifiez votre événement'}
+          </h1>
         </div>
 
         <EventEditForm

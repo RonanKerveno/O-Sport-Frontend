@@ -24,7 +24,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
   const [actionType, setActionType] = useState<'subscribe' | 'unsubscribe' | null>(null);
   const startingTime = format(parseISO(eventData.startingTime), 'dd/MM/yyyy HH:mm');
   const endingTime = format(parseISO(eventData.endingTime), 'dd/MM/yyyy HH:mm');
-  const { userId } = useAuth();
+  const { userId, isAdmin } = useAuth();
 
   const handleSubscribe = () => {
     setActionType('subscribe');
@@ -115,6 +115,15 @@ export default function EventDetails({ eventData }: DataProfileProps) {
           <div className="text-left mb-1">
             {renderButton()}
           </div>
+          {isAdmin && (userId !== eventData.creatorId) && (
+            <button
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-1"
+              type="button"
+              onClick={() => router.push(`/evenement/${eventData.id}/modifier`)}
+            >
+              Modification Admin
+            </button>
+          )}
           {errorMessage && <p className="text-red-500 mt-3 ml-4">{errorMessage}</p>}
         </div>
         <div className=" mb-1 p-8 bg-white text-gray-700 shadow-md">

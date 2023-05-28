@@ -40,14 +40,16 @@ export default function Profile({
           <div className="mb-6">
             <button
               type="button"
-              onClick={() => router.push(`/profil/${loggedUserId}/modifier`)}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1"
+              onClick={() => router.push(`/profil/${userData.id}/modifier`)}
+              className={`font-bold py-2 px-4 rounded m-1 text-white ${isAdmin && loggedUserId !== userData.id ? 'bg-red-500 hover:bg-red-700' : 'bg-blue-500 hover:bg-blue-700'}`}
             >
-              Modifier mon profil
+              {isAdmin && loggedUserId !== userData.id ? 'Modification admin' : 'Modifier mon profil'}
             </button>
-            <button type="button" onClick={logout} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1">
-              Déconnexion
-            </button>
+            {loggedUserId === userData.id && (
+              <button type="button" onClick={logout} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1">
+                Déconnexion
+              </button>
+            )}
           </div>
         )}
         <div className="flex flex-row mb-4">
