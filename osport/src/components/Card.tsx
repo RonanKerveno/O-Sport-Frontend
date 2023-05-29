@@ -37,6 +37,9 @@ export default function Card({ event }: CardProps) {
               <div>{event.city}</div>
               <div className="font-bold">{startingTime}</div>
             </div>
+            <div className="mt-2 text-slate-500">
+              Sport : <span className="text-slate-700">{event.sport.name}</span>
+            </div>
             <div className="mt-4 mb-2 flex flex-row justify-center">
               <div className="flex justify-center mb-4">
                 <HiUser size={30} color="black" />
@@ -63,6 +66,9 @@ export default function Card({ event }: CardProps) {
             <div className="border-t-2 border-b-2 border-gray-2000 mt-4">
               <div>{event.city}</div>
               <div className="font-bold">{startingTime}</div>
+            </div>
+            <div className="mt-2 text-slate-500">
+              Sport : <span className="text-slate-700">{event.sport.name}</span>
             </div>
             <div className="mt-4 mb-2 flex flex-row justify-center">
               <div className="flex justify-center mb-4">

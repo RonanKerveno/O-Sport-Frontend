@@ -131,8 +131,18 @@ export default function SearchEvent({ eventList }: EventsDataProps) {
 // Traitement des requête API coté SSR pour récupérer la liste de événements.
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const props = await getEventsServerSideProps();
-    return { props };
+    const eventsProps = await getEventsServerSideProps();
+
+    // Trier les événements par date de début, du plus proche au plus lointain
+    const sortedEventList = eventsProps.eventList.sort(
+      (a, b) => new Date(a.startingTime).getTime() - new Date(b.startingTime).getTime(),
+    );
+
+    return {
+      props: {
+        eventList: sortedEventList,
+      },
+    };
   } catch (error) {
     return { notFound: true };
   }

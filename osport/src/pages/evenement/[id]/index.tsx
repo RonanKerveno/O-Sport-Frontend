@@ -12,6 +12,7 @@ import { format, parseISO } from 'date-fns';
 import router from 'next/router';
 import { useState } from 'react';
 import { addOneUserToOneEvent, deleteOneUserFromOneEvent } from '@/services/userService';
+import Link from 'next/link';
 
 interface DataProfileProps {
   eventData: Event;
@@ -143,18 +144,18 @@ export default function EventDetails({ eventData }: DataProfileProps) {
         <div className=" mb-1 flex flex-row space-x-4 p-6 bg-white text-gray-700 shadow-md">
           <span>Participant à l'événement :</span>
           {eventData.eventUsers.map((user) => (
-            <div key={user.id} className="flex flex-col items-center">
+            <Link href={`/profil/${user.id}`} key={user.id} className="flex flex-col items-center hover:scale-105 transition-transform duration-200">
               <HiUserCircle size={30} />
               <span>{user.userName}</span>
-            </div>
+            </Link>
           ))}
         </div>
         <div className=" flex flex-row space-x-4 p-6 bg-white text-gray-700 shadow-md">
           <span>Créateur de l'évènement :</span>
-          <div className="flex flex-col items-center">
+          <Link href={`/profil/${eventData.creatorId}`} className="flex flex-col items-center hover:scale-105 transition-transform duration-200">
             <HiUserCircle size={30} />
             <span>{eventData.creator.userName}</span>
-          </div>
+          </Link>
         </div>
       </div>
       {showConfirmation && (

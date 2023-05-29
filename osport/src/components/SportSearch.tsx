@@ -1,43 +1,52 @@
-import { useMediaQuery } from 'usehooks-ts';
-import {
-  MdSportsBasketball,
-  MdSportsFootball, MdSportsGolf, MdSportsHandball, MdSportsRugby, MdSportsGymnastics,
-  MdSportsEsports, MdSportsTennis,
-} from 'react-icons/md';
+import { SportsListData } from '@/types';
+import sportIconMap from '@/utils/sportIconMap';
+import { sportNameConvert } from '@/utils/sportNameConvert';
 import Link from 'next/link';
+import { useCallback } from 'react';
+import { useMediaQuery } from 'usehooks-ts';
 
-export default function SportSearch() {
+interface SportSearchProps {
+  sports: SportsListData;
+  // eslint-disable-next-line no-unused-vars
+  onSelectSport: (sportId: string) => void;
+}
+
+export default function SportSearch({ sports, onSelectSport }: SportSearchProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
+
+  const onSportClick = useCallback((sportId: string) => () => {
+    onSelectSport(sportId);
+  }, [onSelectSport]);
+
   return (
-    <div>{isMobile ? (
-
-      <div className="overflow-auto flex flex-row justify-center border-t-2 border-b-2 border-{#0a248f} space-x-4 mt-6 pb-4 pt-4 mb-0 ">
-        <Link href="/"><MdSportsBasketball size={50} color="#black" /></Link>
-        <Link href="/"><MdSportsFootball size={50} color="#black" /></Link>
-        <Link href="/"><MdSportsGolf size={50} color="#black" /></Link>
-        <Link href="/"><MdSportsHandball size={50} color="#black" /></Link>
-        <Link href="/"><MdSportsRugby size={50} color="#black" /></Link>
-        <Link href="/"><MdSportsGymnastics size={50} color="#black" /></Link>
-        <Link href="/"><MdSportsEsports size={50} color="#black" /></Link>
-        <Link href="/"><MdSportsTennis size={50} color="#black" /></Link>
-
-      </div>
-
-    ) : (
-
-      <div className="overflow-auto flex flex-col justify-center border-b-2 border-{#0a248f} space-y-4 mt-6 pb-4 pt-4 mb-0 ml-4">
-        <Link href="/"><MdSportsBasketball size={50} color="black" /></Link>
-        <Link href="/"><MdSportsFootball size={50} color="#black" /></Link>
-        <Link href="/"><MdSportsGolf size={50} color="#black" /></Link>
-        <Link href="/"><MdSportsHandball size={50} color="#black" /></Link>
-        <Link href="/"><MdSportsRugby size={50} color="#black" /></Link>
-        <Link href="/"><MdSportsGymnastics size={50} color="#black" /></Link>
-        <Link href="/"><MdSportsEsports size={50} color="#black" /></Link>
-        <Link href="/"><MdSportsTennis size={50} color="#black" /></Link>
-
-      </div>
-
-    )}
+    <div>
+      {isMobile ? (
+        <div className="overflow-auto flex flex-row justify-center border-t-2 border-b-2 border-{#0a248f} space-x-4 mt-6 pb-4 pt-4 mb-0 ">
+          {sports.map((sport) => {
+            const SportIcon = sportIconMap[sportNameConvert(sport.name)] || sportIconMap.Sports;
+            return (
+              <Link key={sport.id} onClick={onSportClick(sport.id)} href="/">
+                <SportIcon size={50} color="black" />
+              </Link>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="overflow-auto flex flex-col justify-center border-b-2 border-{#0a248f} space-y-4 mt-6 pb-4 pt-4 mb-0 ml-4">
+          {sports.map((sport) => {
+            const SportIcon = sportIconMap[sportNameConvert(sport.name)] || sportIconMap.Sports;
+            return (
+              <Link
+                key={sport.id}
+                onClick={onSportClick(sport.id)}
+                href="/"
+              >
+                <SportIcon size={50} color="black" />
+              </Link>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
