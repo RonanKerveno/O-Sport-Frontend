@@ -76,7 +76,7 @@ export default function EventEditForm({
                 rules={{ required: 'Le choix du sport est obligatoire' }}
               />
             ) : (
-              <div className="ml-2">{eventData.sport.name}</div>
+              <div className="ml-2">{eventData.sport && eventData.sport.name ? eventData.sport.name : 'sport inconnu' }</div>
             )}
             {errors.sportId && !isEdit && <div className="text-red-600">{errors.sportId.message}</div>}
           </label>

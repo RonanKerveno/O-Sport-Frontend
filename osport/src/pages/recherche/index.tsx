@@ -38,7 +38,7 @@ export default function SearchEvent({ eventList }: EventsDataProps) {
           case 'region':
             return event.region === form.region;
           case 'zipCode':
-            return event.zipCode.toString() === form.zipCode;
+            return event.zipCode === form.zipCode;
           case 'city':
             return event.city === form.city;
           default:

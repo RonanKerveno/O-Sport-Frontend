@@ -11,6 +11,7 @@ import Description from '@/components/Description';
 import Cards from '@/components/Cards';
 import SportSearch from '@/components/SportSearch';
 import { EventData } from '@/types';
+import Link from 'next/link';
 
 interface EventsDataProps {
   eventList: EventData;
@@ -18,7 +19,9 @@ interface EventsDataProps {
 
 export default function Home({ eventList }: EventsDataProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const { isLogged, showLoggedStatus, setShowLoggedStatus } = useAuth();
+  const {
+    isAdmin, isLogged, showLoggedStatus, setShowLoggedStatus,
+  } = useAuth();
 
   // On affiche un message juste après la redirection depuis une page de connexion/déconnexion.
   useEffect(() => {
@@ -38,6 +41,12 @@ export default function Home({ eventList }: EventsDataProps) {
       </Head>
       <div className="flex flex-col flex-wrap bg-slate-100 w-full h-full justify-center items-center">
         <Description />
+        {isAdmin
+          && (
+            <div className="my-7">
+              Admin : <Link href="/sports" className=" text-red-500 font-semibold">modification des sports</Link>
+            </div>
+          )}
         {isMobile ? (
           <div className="">
             <Cards

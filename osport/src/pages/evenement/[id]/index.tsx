@@ -131,7 +131,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
           <div className="mt-2 mb-2">{eventData.street}</div>
           <div className="mt-2 mb-2">{startingTime}</div>
           <div className="mt-2 mb-2">{endingTime}</div>
-          <div className="mt-2 mb-2">{eventData.sport.name}</div>
+          <div className="mt-2 mb-2">{eventData.sport && eventData.sport.name ? eventData.sport.name : 'sport inconnu' }</div>
         </div>
 
         <div className=" mb-1 p-6 bg-white text-gray-700 shadow-md">
