@@ -111,7 +111,7 @@ export default function SearchUser({ usersData }: EventsDataProps) {
             setForm={setForm}
           />
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           {hasSearched && filteredUsers.map((user) => (
             <Link key={user.id} href={`/profil/${user.id}`} className="w-3/12 hover:scale-105 transition-transform duration-200">
               <UserCard userData={user} />

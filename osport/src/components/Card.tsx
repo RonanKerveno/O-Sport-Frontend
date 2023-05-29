@@ -1,9 +1,10 @@
 import { HiUser, HiUserGroup } from 'react-icons/hi2';
-import { MdSportsBasketball } from 'react-icons/md';
 import Link from 'next/link';
 import { useMediaQuery } from 'usehooks-ts';
 import { format, parseISO } from 'date-fns';
 import { Event } from '@/types';
+import sportIconMap from '@/utils/sportIconMap';
+import { sportNameConvert } from '@/utils/sportNameConvert';
 
 interface CardProps {
   event: Event;
@@ -14,6 +15,8 @@ export default function Card({ event }: CardProps) {
 
   // Formatage date et l'heure.
   const startingTime = format(parseISO(event.startingTime), 'dd/MM/yyyy HH:mm');
+
+  const SportIcon = sportIconMap[sportNameConvert(event.sport.name)] || sportIconMap.Sports;
 
   return (
     <Link href={`/evenement/${event.id}`}>
@@ -26,7 +29,7 @@ export default function Card({ event }: CardProps) {
             </div>
           </div>
           <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-red-600 to-blue-400 text-white shadow-blue-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
-            <MdSportsBasketball />
+            <SportIcon size={24} />
           </div>
           <div className="ml-5 mr-5">
             {event.title}
@@ -53,7 +56,7 @@ export default function Card({ event }: CardProps) {
             </div>
           </div>
           <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-red-600 to-blue-400 text-white shadow-blue-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
-            <MdSportsBasketball />
+            <SportIcon size={24} />
           </div>
           <div className="ml-5 mr-5">
             {event.title}
