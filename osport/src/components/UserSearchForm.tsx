@@ -1,37 +1,37 @@
 import React, { FormEvent } from 'react';
-import { EventData } from '@/types';
+import { UserPublicData } from '@/types';
 
-interface EventSearchFormProps {
-  eventList: EventData;
+interface UserSearchFormProps {
+  usersData: UserPublicData[];
   // eslint-disable-next-line no-unused-vars
   handleSubmit: (evt: FormEvent<HTMLFormElement>) => void;
   form: {
     searchType: string;
     region: string;
-    zipCode: string;
     city: string;
-    sport: string;
-    startDateTime: string;
-    endDateTime: string;
+    gender: string;
+    favoriteSport: string;
   };
   setForm: React.Dispatch<React.SetStateAction<{
     searchType: string;
     region: string;
-    zipCode: string;
     city: string;
-    sport: string;
-    startDateTime: string;
-    endDateTime: string;
+    gender: string;
+    favoriteSport: string;
   }>>;
 }
 
-export default function EventSearchForm({
-  eventList, handleSubmit, form, setForm,
-}: EventSearchFormProps) {
-  const regions = Array.from(new Set(eventList.map((event) => event.region)));
-  const cities = Array.from(new Set(eventList.map((event) => event.city)));
-  const zipCodes = Array.from(new Set(eventList.map((event) => event.zipCode)));
-  const sports = Array.from(new Set(eventList.map((event) => event.sport.name)));
+export default function UserSearchForm({
+  usersData, handleSubmit, form, setForm,
+}: UserSearchFormProps) {
+  const regions = Array.from(new Set(usersData.map((user) => user.region)));
+  const cities = Array.from(new Set(usersData.map((user) => user.city)));
+  const genders = Array.from(new Set(usersData.map((user) => user.gender)));
+
+  // Concatenate favorite sports from all users and remove duplicates
+  const favoriteSports = Array.from(
+    new Set(usersData.flatMap((user) => user.favoriteSports.map((sport) => sport.name))),
+  );
 
   return (
     <form onSubmit={handleSubmit} className="p-4">
@@ -44,12 +44,11 @@ export default function EventSearchForm({
             className="bg-white text-gray-700 shadow-md border"
             value={form.searchType}
             onChange={(e) => setForm({
-              ...form, searchType: e.target.value, region: '', zipCode: '', city: '',
+              ...form, searchType: e.target.value, region: '', city: '',
             })}
           >
             <option value="">Sélectionnez un type de recherche</option>
             <option value="region">Région</option>
-            <option value="zipCode">Code Postal</option>
             <option value="city">Ville</option>
           </select>
         </label>
@@ -69,27 +68,6 @@ export default function EventSearchForm({
               {regions.map((region) => (
                 <option key={region} value={region}>
                   {region}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-      )}
-
-      {form.searchType === 'zipCode' && (
-        <div>
-          <label htmlFor="zipCode" className="mt-2 mb-1">
-            Code Postal
-            <select
-              id="zipCode"
-              className="bg-white text-gray-700 shadow-md border"
-              value={form.zipCode}
-              onChange={(e) => setForm({ ...form, zipCode: e.target.value })}
-            >
-              <option value="">Sélectionnez un code postal</option>
-              {zipCodes.map((zipCode) => (
-                <option key={zipCode} value={zipCode}>
-                  {zipCode}
                 </option>
               ))}
             </select>
@@ -119,42 +97,35 @@ export default function EventSearchForm({
       )}
 
       <div className="my-2">
-        <label htmlFor="startDateTime" className="mt-2 mb-1">
-          Date et heure de début
-          <input
-            type="datetime-local"
-            id="startDateTime"
+        <label htmlFor="gender" className="mt-2 mb-1">
+          Genre
+          <select
+            id="gender"
             className="bg-white text-gray-700 shadow-md border"
-            value={form.startDateTime}
-            onChange={(e) => setForm({ ...form, startDateTime: e.target.value })}
-          />
-        </label>
-      </div>
-
-      <div>
-        <label htmlFor="endDateTime" className="mt-2 mb-1">
-          Date et heure de fin
-          <input
-            type="datetime-local"
-            id="endDateTime"
-            className="bg-white text-gray-700 shadow-md border"
-            value={form.endDateTime}
-            onChange={(e) => setForm({ ...form, endDateTime: e.target.value })}
-          />
+            value={form.gender}
+            onChange={(e) => setForm({ ...form, gender: e.target.value })}
+          >
+            <option value="">Sélectionnez un genre</option>
+            {genders.map((gender) => (
+              <option key={gender} value={gender}>
+                {gender}
+              </option>
+            ))}
+          </select>
         </label>
       </div>
 
       <div className="my-2">
-        <label htmlFor="sport" className="mt-2 mb-1">
-          Sport
+        <label htmlFor="favoriteSport" className="mt-2 mb-1">
+          Sport Favori
           <select
-            id="sport"
+            id="favoriteSport"
             className="bg-white text-gray-700 shadow-md border"
-            value={form.sport}
-            onChange={(e) => setForm({ ...form, sport: e.target.value })}
+            value={form.favoriteSport}
+            onChange={(e) => setForm({ ...form, favoriteSport: e.target.value })}
           >
             <option value="">Sélectionnez un sport</option>
-            {sports.map((sport) => (
+            {favoriteSports.map((sport) => (
               <option key={sport} value={sport}>
                 {sport}
               </option>

@@ -3,7 +3,7 @@
 
 import { GetServerSidePropsContext } from 'next';
 import { UserPublicData, EventData } from '@/types';
-import { getUserById, getAllEventsFromOneUser, getAllEventsCreatedByOneUser } from '../services/userService';
+import { getOneUser, getAllEventsFromOneUser, getAllEventsCreatedByOneUser } from '../services/userService';
 
 // Typage des données reçues par l'API
 interface UserServerSideProps {
@@ -23,7 +23,7 @@ Promise<UserServerSideProps> => {
   }
 
   // On lance les requêtes API.
-  const userResponse = await getUserById(userId);
+  const userResponse = await getOneUser(userId);
   const userEventsResponse = await getAllEventsFromOneUser(userId);
   const createdEventsResponse = await getAllEventsCreatedByOneUser(userId);
 

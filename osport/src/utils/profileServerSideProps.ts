@@ -3,7 +3,7 @@
 
 import { GetServerSidePropsContext } from 'next';
 import { UserPublicData, SportsListData } from '../types';
-import { getUserById } from '../services/userService';
+import { getOneUser } from '../services/userService';
 import { getAllSports } from '../services/sportService';
 
 // Typage des données reçues par l'API
@@ -22,7 +22,7 @@ const getProfileServerSideProps = async (context: GetServerSidePropsContext):
   }
 
   // On lance la requête API.
-  const userResponse = await getUserById(userId);
+  const userResponse = await getOneUser(userId);
   const sportsResponse = await getAllSports();
 
   // Si l'ID n'est pas trouvé on redirige vers la page 404

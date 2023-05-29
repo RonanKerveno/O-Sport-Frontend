@@ -1,68 +1,60 @@
 import { useState } from 'react';
-import { EventData } from '@/types';
-import getEventsServerSideProps from '@/utils/eventsServerSideProps';
+import { UserPublicData } from '@/types';
+import getUsersServerSideProps from '@/utils/usersServerSideProps';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Description from '@/components/Description';
-import EventSearchForm from '@/components/EventSearchForm';
-import Cards from '@/components/Cards';
-import EventKeywordSearch from '@/components/EventKeyWordSearch';
+import UserSearchForm from '@/components/UserSearchForm';
 import router from 'next/router';
+import UserKeywordSearch from '@/components/UserKeyWordSearch';
+import UserCard from '@/components/UserCard';
+import Link from 'next/link';
 
 interface EventsDataProps {
-  eventList: EventData;
+  usersData: UserPublicData[];
 }
 
-export default function SearchEvent({ eventList }: EventsDataProps) {
+export default function SearchUser({ usersData }: EventsDataProps) {
   const [form, setForm] = useState({
     searchType: '',
     region: '',
-    zipCode: '',
     city: '',
-    sport: '',
-    startDateTime: '',
-    endDateTime: '',
+    gender: '',
+    favoriteSport: '',
   });
 
-  const [filteredEvents, setFilteredEvents] = useState<EventData>(eventList);
+  const [filteredUsers, setFilteredUsers] = useState<UserPublicData[]>(usersData);
   const [hasSearched, setHasSearched] = useState(false);
   const [keyword, setKeyword] = useState('');
 
   const handleSubmit = (evt: { preventDefault: () => void; }) => {
     evt.preventDefault();
-    let updatedEvents = [...eventList];
+    let updatedUsers = [...usersData];
 
     if (form.searchType) {
-      updatedEvents = updatedEvents.filter((event) => {
+      updatedUsers = updatedUsers.filter((user) => {
         switch (form.searchType) {
           case 'region':
-            return event.region === form.region;
-          case 'zipCode':
-            return event.zipCode.toString() === form.zipCode;
+            return user.region === form.region;
           case 'city':
-            return event.city === form.city;
+            return user.city === form.city;
           default:
             return true;
         }
       });
     }
-    if (form.sport) {
-      updatedEvents = updatedEvents.filter(
-        (event) => event.sport.name === form.sport,
+    if (form.gender) {
+      updatedUsers = updatedUsers.filter(
+        (user) => user.gender === form.gender,
       );
     }
-    if (form.startDateTime) {
-      updatedEvents = updatedEvents.filter(
-        (event) => new Date(event.startingTime) >= new Date(form.startDateTime),
-      );
-    }
-    if (form.endDateTime) {
-      updatedEvents = updatedEvents.filter(
-        (event) => new Date(event.endingTime) <= new Date(form.endDateTime),
+    if (form.favoriteSport) {
+      updatedUsers = updatedUsers.filter(
+        (user) => user.favoriteSports.some((sport) => sport.name === form.favoriteSport),
       );
     }
 
-    setFilteredEvents(updatedEvents);
+    setFilteredUsers(updatedUsers);
     setHasSearched(true);
   };
 
@@ -70,14 +62,12 @@ export default function SearchEvent({ eventList }: EventsDataProps) {
     setForm({
       searchType: '',
       region: '',
-      zipCode: '',
       city: '',
-      sport: '',
-      startDateTime: '',
-      endDateTime: '',
+      gender: '',
+      favoriteSport: '',
     });
     setKeyword('');
-    setFilteredEvents(eventList);
+    setFilteredUsers(usersData);
     setHasSearched(false);
   };
 
@@ -90,11 +80,11 @@ export default function SearchEvent({ eventList }: EventsDataProps) {
       <button
         type="button"
         className="ml-4 border text-xs bg-blue-700 hover:bg-blue-900 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
-        onClick={() => router.push('/recherche/utilisateurs')}
+        onClick={() => router.push('/recherche')}
       >
-        Aller sur recherche utilisateurs
+        Aller sur recherche événements
       </button>
-      <h1 className="font-bold text-xl mx-4 my-5">Recherche d&#39;événements</h1>
+      <h1 className="font-bold text-xl mx-4 my-5">Recherche d&#39;utilisateurs</h1>
       <div className="w-full h-full bg-white ml-2 rounded-md">
         <button
           type="button"
@@ -105,23 +95,30 @@ export default function SearchEvent({ eventList }: EventsDataProps) {
         </button>
 
         <div className="my-4">
-          <EventKeywordSearch
-            eventList={eventList}
-            setFilteredEvents={setFilteredEvents}
+          <UserKeywordSearch
+            usersData={usersData}
+            setFilteredUsers={setFilteredUsers}
             setHasSearched={setHasSearched}
             keyword={keyword}
             setKeyword={setKeyword}
           />
         </div>
         <div>
-          <EventSearchForm
-            eventList={eventList}
+          <UserSearchForm
+            usersData={usersData}
             handleSubmit={handleSubmit}
             form={form}
             setForm={setForm}
           />
         </div>
-        {hasSearched && <Cards events={filteredEvents} />}
+        <div className="flex gap-3">
+          {hasSearched && filteredUsers.map((user) => (
+            <Link key={user.id} href={`/profil/${user.id}`} className="w-3/12 hover:scale-105 transition-transform duration-200">
+              <UserCard userData={user} />
+            </Link>
+          ))}
+        </div>
+
       </div>
 
     </>
@@ -131,7 +128,7 @@ export default function SearchEvent({ eventList }: EventsDataProps) {
 // Traitement des requête API coté SSR pour récupérer la liste de événements.
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const props = await getEventsServerSideProps();
+    const props = await getUsersServerSideProps();
     return { props };
   } catch (error) {
     return { notFound: true };

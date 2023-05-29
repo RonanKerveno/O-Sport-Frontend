@@ -105,7 +105,7 @@ export const logoutUser = async () => {
 };
 
 // Recupération des données d'un utilisateur via son ID.
-export const getUserById = async (userId: string) => {
+export const getOneUser = async (userId: string) => {
   try {
     const response = await axios.get(`${API_URL}/users/${userId}`);
     // Recupération des données de l'utilisateur
@@ -124,6 +124,36 @@ export const getUserById = async (userId: string) => {
         return {
           success: false,
           error: 'La récupération des données utilisateur a échoué',
+        };
+      }
+    }
+    return {
+      success: false,
+      error: 'Erreur serveur inattendue',
+    };
+  }
+};
+
+// Recupération des données d'un utilisateur via son ID.
+export const getAllUsers = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/users/`);
+    // Recupération des données de l'utilisateur
+    const usersData = response.data;
+
+    return {
+      success: true,
+      user: usersData,
+    };
+
+    // gestion des erreurs
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: 'La récupération des données utilisateurs a échoué',
         };
       }
     }

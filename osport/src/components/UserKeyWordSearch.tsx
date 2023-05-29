@@ -1,31 +1,33 @@
 import React from 'react';
-import { EventData } from '@/types';
+import { UserPublicData } from '@/types';
 
 interface KeywordSearchProps {
-  eventList: EventData;
-  setFilteredEvents: React.Dispatch<React.SetStateAction<EventData>>;
+  usersData: UserPublicData[];
+  setFilteredUsers: React.Dispatch<React.SetStateAction<UserPublicData[]>>;
   setHasSearched: React.Dispatch<React.SetStateAction<boolean>>;
   keyword: string;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function EventKeywordSearch(
+export default function UserKeywordSearch(
   {
-    eventList, setFilteredEvents, setHasSearched, keyword, setKeyword,
+    usersData, setFilteredUsers, setHasSearched, keyword, setKeyword,
   }: KeywordSearchProps,
 ) {
   const handleSubmit = (evt: React.FormEvent) => {
     evt.preventDefault();
 
-    const filteredEvents = eventList.filter((event) => {
+    const filteredUsers = usersData.filter((user) => {
       const {
-        title, description, city, region, zipCode, creator,
-      } = event;
-      const keywords = [title, description, city, region, zipCode, creator.userName].join(' ').toLowerCase();
+        userName, region, city,
+      } = user;
+      // Assuming favoriteSports is an array of strings here for simplicity
+      const favoriteSports = user.favoriteSports.map((sport) => sport.name).join(' ');
+      const keywords = [userName, region, city, favoriteSports].join(' ').toLowerCase();
       return keywords.includes(keyword.toLowerCase());
     });
 
-    setFilteredEvents(filteredEvents);
+    setFilteredUsers(filteredUsers);
     setHasSearched(true);
   };
 
@@ -39,7 +41,7 @@ export default function EventKeywordSearch(
             id="keyword"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            placeholder="mot-clé : titre, auteur..."
+            placeholder="mot-clé : nom d'utilisateur, région, ville, sport favori..."
             className="bg-white text-gray-700 shadow-md border"
           />
         </label>

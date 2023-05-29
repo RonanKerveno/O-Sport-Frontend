@@ -1,14 +1,13 @@
 // Page d'affichage du profil d'un utilisateur
 
 import Head from 'next/head';
-import { HiUserCircle } from 'react-icons/hi2';
 import { GetServerSideProps } from 'next';
-import { format, differenceInYears } from 'date-fns';
 import router from 'next/router';
 import { UserPublicData, EventData } from '@/types';
 import UserAgenda from '@/components/UserAgenda';
 import { useAuth } from '@/contexts/AuthContext';
 import getUserServerSideProps from '@/utils/userServerSideProps';
+import UserCard from '@/components/UserCard';
 
 // Typage TypeScript des données renvoyées par les requêtes sous getServerSideProps.
 interface ProfileProps {
@@ -21,14 +20,6 @@ export default function Profile({
   userData, userEvents, createdEvents,
 }: ProfileProps) {
   const { logout, userId: loggedUserId, isAdmin } = useAuth();
-  // Calcul de l'âge
-  const age = differenceInYears(new Date(), new Date(userData.dateOfBirth));
-  // Détermination la lettre du genre (F/H)
-  const genderSymbol = userData.gender === 'féminin' ? 'F' : 'H';
-  // Détermination de l'écriture genrée de admin
-  const admin = userData.gender === 'féminin' ? 'Administratrice' : 'Administrateur';
-  // Formatage de la date d'inscription
-  const registrationDate = format(new Date(userData.createdAt), 'dd/MM/yyyy');
 
   return (
     <>
@@ -52,19 +43,7 @@ export default function Profile({
             )}
           </div>
         )}
-        <div className="flex flex-row mb-4">
-          <span>
-            <HiUserCircle size={100} />
-          </span>
-          <span>
-            <div>
-              <h2 className="text-lg font-bold">{`${userData.userName}${userData.isAdmin ? ` (${admin})` : ''}`}</h2>
-            </div>
-            <div>{`${age}/${genderSymbol} - ${userData.city}`}</div>
-            <div>Date d&#39;inscription</div>
-            <div>{registrationDate}</div>
-          </span>
-        </div>
+        <UserCard userData={userData} />
         <div className="mb-4">{userData.description}</div>
         <div className="mb-4">
           <h3 className="font-bold">Sports favoris :</h3>
