@@ -11,7 +11,7 @@ interface CardProps {
 }
 
 export default function Card({ event }: CardProps) {
-  const isMobile = useMediaQuery('(max-width: 320px)');
+  const isMobile = useMediaQuery('(max-width: 720px)');
 
   // Formatage date et l'heure.
   const startingTime = format(parseISO(event.startingTime), 'dd/MM/yyyy HH:mm');
@@ -21,7 +21,7 @@ export default function Card({ event }: CardProps) {
   return (
     <Link href={`/evenement/${event.id}`}>
       {isMobile ? (
-        <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
+        <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md m-5 h-64">
           <div className="flex justify-end p-4">
             <div className="flex flex-col">
               <HiUserGroup size={30} />
@@ -33,7 +33,7 @@ export default function Card({ event }: CardProps) {
           </div>
           <div className="ml-5 mr-5">
             {event.title}
-            <div className="border-t-2 border-b-2 border-gray-2000 mt-4">
+            <div className="border-t-2 border-b-2 border-gray-2000 mt-2">
               <div>{event.city}</div>
               <div className="font-bold">{startingTime}</div>
             </div>

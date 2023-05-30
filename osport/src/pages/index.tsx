@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 // Page Home
 
 import Head from 'next/head';
@@ -10,6 +11,7 @@ import {
 import { toast } from 'react-toastify';
 import { useAuth } from '@/contexts/AuthContext';
 import Description from '@/components/Description';
+import Footer from '@/components/Footer';
 import Cards from '@/components/Cards';
 import SportSearch from '@/components/SportSearch';
 import { EventData, SportsListData } from '@/types';
@@ -90,6 +92,7 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
             <div>
               <SportSearch sports={sportsList} onSelectSport={onSelectSport} />
             </div>
+            <Footer />
           </div>
         ) : (
           <div className="flex flex-row m-2">
