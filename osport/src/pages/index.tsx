@@ -68,7 +68,7 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
               Admin : <Link href="/sports" className=" text-red-500 font-semibold">modification des sports</Link>
             </div>
           )}
-        <div className="font-bold text-slate-700 text-2xl m-10">
+        <div className="font-bold text-slate-700 text-2xl m-8">
           <h2>Les événements sportifs {selectedSportName && `[${selectedSportName}]`}</h2>
           {selectedSportName && (
             <div className="text-center">

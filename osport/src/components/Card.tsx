@@ -51,7 +51,7 @@ export default function Card({ event }: CardProps) {
           </div>
         </div>
       ) : (
-        <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md transform motion-safe:hover:scale-110 duration-300">
+        <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md transform motion-safe:hover:scale-110 duration-300 h-72">
           <div className="flex justify-end p-4">
             <div className="flex flex-col">
               <HiUserGroup size={30} />
