@@ -29,9 +29,13 @@ export default function EventSearchForm({
   eventList, handleSubmit, form, setForm,
 }: EventSearchFormProps) {
   const regions = Array.from(new Set(eventList.map((event) => event.region)));
+  const sortedRegions = regions.sort();
   const cities = Array.from(new Set(eventList.map((event) => event.city)));
+  const sortedCities = cities.sort();
   const zipCodes = Array.from(new Set(eventList.map((event) => event.zipCode)));
+  const sortedZipCodes = zipCodes.sort();
   const sports = Array.from(new Set(eventList.map((event) => event.sport.name)));
+  const sortedSports = sports.sort();
 
   return (
     <form onSubmit={handleSubmit} className="p-4">
@@ -66,7 +70,7 @@ export default function EventSearchForm({
               onChange={(e) => setForm({ ...form, region: e.target.value })}
             >
               <option value="">Sélectionnez une région</option>
-              {regions.map((region) => (
+              {sortedRegions.map((region) => (
                 <option key={region} value={region}>
                   {region}
                 </option>
@@ -87,7 +91,7 @@ export default function EventSearchForm({
               onChange={(e) => setForm({ ...form, zipCode: e.target.value })}
             >
               <option value="">Sélectionnez un code postal</option>
-              {zipCodes.map((zipCode) => (
+              {sortedZipCodes.map((zipCode) => (
                 <option key={zipCode} value={zipCode}>
                   {zipCode}
                 </option>
@@ -108,7 +112,7 @@ export default function EventSearchForm({
               onChange={(e) => setForm({ ...form, city: e.target.value })}
             >
               <option value="">Sélectionnez une ville</option>
-              {cities.map((city) => (
+              {sortedCities.map((city) => (
                 <option key={city} value={city}>
                   {city}
                 </option>
@@ -154,7 +158,7 @@ export default function EventSearchForm({
             onChange={(e) => setForm({ ...form, sport: e.target.value })}
           >
             <option value="">Sélectionnez un sport</option>
-            {sports.map((sport) => (
+            {sortedSports.map((sport) => (
               <option key={sport} value={sport}>
                 {sport}
               </option>

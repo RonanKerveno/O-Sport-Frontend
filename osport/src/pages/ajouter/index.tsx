@@ -9,6 +9,7 @@ import { createOneEvent } from '@/services/eventService';
 import { useAuth } from '@/contexts/AuthContext';
 import EventEditForm from '@/components/EventEditForm';
 import { GetServerSideProps } from 'next';
+import { useToast } from '@/contexts/ToastContext';
 
 interface DataProfileProps {
   sportsList: SportsListData;
@@ -19,6 +20,8 @@ export default function AddEvent({ sportsList }: DataProfileProps) {
   const [errorMessage, setErrorMessage] = useState('');
   const { userId } = useAuth();
 
+  const { setToastMessage, setToastDuration } = useToast();
+
   const handleCreate = async (eventData: EditEventData) => {
     if (userId === null) {
       setErrorMessage('User ID is null');
@@ -28,13 +31,15 @@ export default function AddEvent({ sportsList }: DataProfileProps) {
       const response = await createOneEvent(userId, eventData);
 
       if (response.success) {
-        // Redirection vers la page de connexion
-        router.push('/connexion');
+        setToastMessage('Évènement Créé !');
+        setToastDuration(1000);
+        router.push(`/evenement/${response.event.eventId}`);
+        // Redirection
       } else if ('error' in response && response.error !== undefined) {
         setErrorMessage(response.error);
       }
     } catch (error) {
-      setErrorMessage('Une erreur est survenue lors de la création du profil :');
+      setErrorMessage("Une erreur est survenue lors de la création de l'évènement");
     }
   };
 

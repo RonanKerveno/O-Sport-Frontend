@@ -25,7 +25,9 @@ export default function UserSearchForm({
   usersData, handleSubmit, form, setForm,
 }: UserSearchFormProps) {
   const regions = Array.from(new Set(usersData.map((user) => user.region)));
+  const sortedRegions = regions.sort();
   const cities = Array.from(new Set(usersData.map((user) => user.city)));
+  const sortedCities = cities.sort();
   const genders = Array.from(new Set(usersData.map((user) => user.gender)));
 
   // Concatenate favorite sports from all users and remove duplicates
@@ -65,7 +67,7 @@ export default function UserSearchForm({
               onChange={(e) => setForm({ ...form, region: e.target.value })}
             >
               <option value="">Sélectionnez une région</option>
-              {regions.map((region) => (
+              {sortedRegions.map((region) => (
                 <option key={region} value={region}>
                   {region}
                 </option>
@@ -86,7 +88,7 @@ export default function UserSearchForm({
               onChange={(e) => setForm({ ...form, city: e.target.value })}
             >
               <option value="">Sélectionnez une ville</option>
-              {cities.map((city) => (
+              {sortedCities.map((city) => (
                 <option key={city} value={city}>
                   {city}
                 </option>

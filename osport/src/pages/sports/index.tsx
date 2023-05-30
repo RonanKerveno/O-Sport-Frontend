@@ -157,14 +157,17 @@ export default function AddEvent() {
         </div>
         {errorMessage
           && (
-          <p className={errorMessage.includes('succès') ? 'text-green-600 mt-3 ml-7' : 'text-red-500 mt-3 ml-4'}>
-            {errorMessage}
-          </p>
+            <p className={errorMessage.includes('succès') ? 'text-green-600 mt-3 ml-7' : 'text-red-500 mt-3 ml-4'}>
+              {errorMessage}
+            </p>
           )}
       </div>
       <div>
         <div className="m-8">
-          <select onChange={(e) => handleSelectSport(e.target.value)}>
+          <select
+            value={selectedSport ? selectedSport.id : ''}
+            onChange={(e) => handleSelectSport(e.target.value)}
+          >
             <option value="" className="border-2">Sélectionner un sport</option>
             {sportsList.map((sport) => (
               <option key={sport.id} value={sport.id}>

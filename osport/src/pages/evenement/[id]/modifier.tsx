@@ -9,6 +9,7 @@ import { deleteOneEvent, updateOneEvent } from '@/services/eventService';
 import EventEditForm from '@/components/EventEditForm';
 import { GetServerSideProps } from 'next';
 import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/contexts/ToastContext';
 
 interface DataProfileProps {
   eventData: Event;
@@ -34,12 +35,16 @@ export default function EditEvent({ eventData }: DataProfileProps) {
     setIsLoading(false);
   }, [userId, router, isAdmin, eventData.creatorId]);
 
+  const { setToastMessage, setToastDuration } = useToast();
+
   const handleUpdate = async (modifiedEventData: EditEventData) => {
     try {
       const response = await updateOneEvent(eventId, modifiedEventData);
 
       if (response.success) {
-        // Redirection vers la page de connexion
+        // Redirection vers la page d'event'
+        setToastMessage('Évènement modifié');
+        setToastDuration(1000);
         router.push(`/evenement/${eventId}`);
       } else if ('error' in response && response.error !== undefined) {
         setErrorMessage(response.error);
@@ -62,7 +67,9 @@ export default function EditEvent({ eventData }: DataProfileProps) {
       const response = await deleteOneEvent(eventId);
 
       if (response.success) {
-        window.location.href = '/';
+        setToastMessage('Évènement supprimé !');
+        setToastDuration(1000);
+        router.push('/');
       } else if ('error' in response && response.error !== undefined) {
         setErrorMessage(response.error);
       }

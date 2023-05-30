@@ -8,6 +8,7 @@ import UserProfileForm from '@/components/UserProfileForm';
 import { UserPublicData, UserPrivateData, SportsListData } from '@/types';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/contexts/ToastContext';
 
 // Typage TypeScript
 type FullUserData = UserPublicData & UserPrivateData;
@@ -24,6 +25,7 @@ export default function EditProfile({ userData, sportsList }: EditProfileProps) 
   const [errorMessage, setErrorMessage] = useState('');
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const { setToastMessage, setToastDuration } = useToast();
 
   useEffect(() => {
     // Vérification de l'égalité des userId
@@ -43,6 +45,8 @@ export default function EditProfile({ userData, sportsList }: EditProfileProps) 
       const response = await updateOneUser(fullUserData);
 
       if (response.success) {
+        setToastMessage('Profil modifié');
+        setToastDuration(1000);
         router.push(`/profil/${userData.id}`);
       } else if ('error' in response && response.error !== undefined) {
         setErrorMessage(response.error);
@@ -59,18 +63,22 @@ export default function EditProfile({ userData, sportsList }: EditProfileProps) 
 
   // Appel API pour supprimer le profil
   const confirmDelete = async () => {
-    try {
-      // Appel à la fonction deleteOneUser pour supprimer les données utilisateur
-      // et son cookie d'anthentification.
-      const response = await deleteOneUser(userData.id);
+    if (userId === null) {
+      setErrorMessage('Erreur : votre identifiant est inconnu.');
+    } else {
+      try {
+        // Appel à la fonction deleteOneUser pour supprimer les données utilisateur
+        // et son cookie d'authentification.
+        const response = await deleteOneUser(userData.id, userId, isAdmin);
 
-      if (response.success) {
-        window.location.href = '/';
-      } else if ('error' in response && response.error !== undefined) {
-        setErrorMessage(response.error);
+        if (response.success) {
+          window.location.href = '/';
+        } else if ('error' in response && response.error !== undefined) {
+          setErrorMessage(response.error);
+        }
+      } catch (error) {
+        setErrorMessage('Une erreur est survenue lors de la suppression du profil :');
       }
-    } catch (error) {
-      setErrorMessage('Une erreur est survenue lors de la suppression du profil :');
     }
   };
 

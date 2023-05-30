@@ -133,14 +133,11 @@ export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const eventsProps = await getEventsServerSideProps();
 
-    // Trier les événements par date de début, du plus proche au plus lointain
-    const sortedEventList = eventsProps.eventList.sort(
-      (a, b) => new Date(a.startingTime).getTime() - new Date(b.startingTime).getTime(),
-    );
+    // Pas besoin de trier ici car déjà trié par getAllEvents
 
     return {
       props: {
-        eventList: sortedEventList,
+        eventList: eventsProps.eventList,
       },
     };
   } catch (error) {

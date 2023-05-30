@@ -19,9 +19,9 @@ export default function EventKeywordSearch(
 
     const filteredEvents = eventList.filter((event) => {
       const {
-        title, description, city, region, zipCode, creator,
+        title, description, city, region, zipCode, creator, sport,
       } = event;
-      const keywords = [title, description, city, region, zipCode, creator.userName].join(' ').toLowerCase();
+      const keywords = [title, description, city, region, zipCode, creator.userName, sport.name].join(' ').toLowerCase();
       return keywords.includes(keyword.toLowerCase());
     });
 

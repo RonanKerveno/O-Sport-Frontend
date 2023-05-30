@@ -1,8 +1,10 @@
 // Page de connexion
 
+import { useToast } from '@/contexts/ToastContext';
+import { toast, ToastContainer } from 'react-toastify';
 import Head from 'next/head';
 import router from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import useLoggedRedirect from '../../hooks/useLoggedRedirect';
 
@@ -19,6 +21,15 @@ export default function Login() {
     event.preventDefault();
     await login(email, password);
   };
+  const { setToastMessage, toastMessage, toastDuration } = useToast();
+
+  useEffect(() => {
+    if (toastMessage) {
+      toast(toastMessage);
+      // Réinitialisation du message après l'affichage du toast
+      setToastMessage('');
+    }
+  }, [toastMessage, setToastMessage]);
 
   // Si l'utilisateur est déjà connecté on lui indique un message. Utile en complément
   // de la redirection car la page apparait juste avant la redirection.
@@ -82,6 +93,7 @@ export default function Login() {
           </div>
         </div>
       </div>
+      <ToastContainer autoClose={toastDuration} />
     </>
   );
 }

@@ -351,9 +351,10 @@ export const updateOneUser = async (userData: UserPublicData & UserPrivateData) 
 };
 
 // Supprime un utilisateur ciblé par l’ID.
-export const deleteOneUser = async (userId: string) => {
+export const deleteOneUser = async (userId: string, currentUserId: string, isAdmin: boolean) => {
   try {
-    const response = await axios.delete(`${API_URL}/users/${userId}`, {
+    const url = (currentUserId !== userId && isAdmin) ? `${API_URL}/users/${userId}/from-admin` : `${API_URL}/users/${userId}`;
+    const response = await axios.delete(url, {
       withCredentials: true,
     });
 

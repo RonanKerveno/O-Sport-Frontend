@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import useLoggedRedirect from '@/hooks/useLoggedRedirect';
 import UserProfileForm from '@/components/UserProfileForm';
+import { useToast } from '@/contexts/ToastContext';
 
 // Typage TypeScript
 type FullUserData = UserPublicData & UserPrivateData;
@@ -21,6 +22,7 @@ interface DataProfileProps {
 export default function Subscribe({ sportsList }: DataProfileProps) {
   const { isLogged } = useAuth();
   const [errorMessage, setErrorMessage] = useState('');
+  const { setToastMessage, setToastDuration } = useToast();
 
   useLoggedRedirect();
 
@@ -35,7 +37,8 @@ export default function Subscribe({ sportsList }: DataProfileProps) {
       const response = await createOneUser(fullUserData);
 
       if (response.success) {
-        // Redirection vers la page de connexion
+        setToastMessage(`Bienvenue ${fullUserData.userName}, vous pouvez vous connecter avec vos identifants`);
+        setToastDuration(7000);
         router.push('/connexion');
       } else if ('error' in response && response.error !== undefined) {
         setErrorMessage(response.error);

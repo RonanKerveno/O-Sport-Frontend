@@ -13,9 +13,16 @@ export const getAllEvents = async () => {
       withCredentials: true,
     });
 
+    // Trier les événements par date de début
+    const sortedEvents = response.data.sort((a: {
+      startingTime: string | number | Date;
+    }, b: { startingTime: string | number | Date; }) => new Date(
+      a.startingTime,
+    ).getTime() - new Date(b.startingTime).getTime());
+
     return {
       success: true,
-      events: response.data,
+      events: sortedEvents,
     };
 
     // Gestion des erreurs

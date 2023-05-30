@@ -3,7 +3,6 @@
 import React, { ReactNode } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from '../components/Header';
 import Navbar from '../components/Navbar';
@@ -34,7 +33,6 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
           </div>
         </div>
       )}
-      <ToastContainer autoClose={1000} />
     </div>
   );
 }

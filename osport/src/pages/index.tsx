@@ -7,7 +7,8 @@ import { useMediaQuery } from 'usehooks-ts';
 import {
   SetStateAction, useCallback, useEffect, useState,
 } from 'react';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import { useToast } from '@/contexts/ToastContext';
 import { useAuth } from '@/contexts/AuthContext';
 import Description from '@/components/Description';
 import Cards from '@/components/Cards';
@@ -29,15 +30,30 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
   const [selectedSportName, setSelectedSportName] = useState<string | null>(null);
 
   // On affiche un message juste après la redirection depuis une page de connexion/déconnexion.
+  const {
+    toastMessage, toastDuration, setToastMessage, setToastDuration,
+  } = useToast();
+
   useEffect(() => {
     if (showLoggedStatus) {
       const message = isLogged ? 'Vous êtes connecté' : 'Vous êtes déconnecté';
-      toast(message);
-
+      setToastMessage(message);
       // Réinitialisation de l'état après l'affichage du message
       setShowLoggedStatus(false);
+      setToastDuration(1000);
+    } else if (toastMessage) {
+      toast(toastMessage);
+      // Réinitialisation du message après l'affichage du toast
+      setToastMessage('');
     }
-  }, [isLogged, setShowLoggedStatus, showLoggedStatus]);
+  }, [
+    isLogged,
+    setShowLoggedStatus,
+    showLoggedStatus,
+    toastMessage,
+    setToastMessage,
+    setToastDuration,
+  ]);
 
   const onSelectSport = useCallback((sportId: SetStateAction<string | null>) => {
     setSelectedSportId(sportId);
@@ -101,6 +117,7 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
         )}
 
       </div>
+      <ToastContainer autoClose={toastDuration} />
     </>
   );
 }
@@ -110,13 +127,11 @@ export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const eventsProps = await getEventsServerSideProps();
 
-    // Trier les événements par date de début
-    const sortedEventList = eventsProps.eventList.sort((a, b) => new Date(
-      a.startingTime,
-    ).getTime() - new Date(b.startingTime).getTime());
+    // Pas besoin de trier ici car déjà trié par getAllEvents
 
     // Récupérer uniquement les sports (avec id et name) associés à un événement
-    const sports = sortedEventList.map((event) => ({ id: event.sportId, name: event.sport.name }));
+    const sports = eventsProps.eventList.map((event) => (
+      { id: event.sportId, name: event.sport.name }));
 
     // Créer un Set à partir de ces noms pour éliminer les doublons
     const uniqueSports = Array.from(new Set(sports.map((sport) => sport.name)))
@@ -124,7 +139,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
     return {
       props: {
-        eventList: sortedEventList,
+        eventList: eventsProps.eventList,
         sportsList: uniqueSports,
       },
     };

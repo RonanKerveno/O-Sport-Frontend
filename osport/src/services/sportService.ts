@@ -14,9 +14,15 @@ export const getAllSports = async () => {
 
     // Récupération des données
     const sportsData = response.data;
+
+    // Trier les sports par ordre alphabétique
+    const sortedSportsData = sportsData.sort(
+      (a: { name: string; }, b: { name: any; }) => a.name.localeCompare(b.name),
+    );
+
     return {
       success: true,
-      sports: sportsData,
+      sports: sortedSportsData,
     };
   } catch (error) {
     return {

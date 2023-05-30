@@ -8,6 +8,9 @@ import UserAgenda from '@/components/UserAgenda';
 import { useAuth } from '@/contexts/AuthContext';
 import getUserServerSideProps from '@/utils/userServerSideProps';
 import UserCard from '@/components/UserCard';
+import { toast, ToastContainer } from 'react-toastify';
+import { useToast } from '@/contexts/ToastContext';
+import { useEffect } from 'react';
 
 // Typage TypeScript des données renvoyées par les requêtes sous getServerSideProps.
 interface ProfileProps {
@@ -20,6 +23,16 @@ export default function Profile({
   userData, userEvents, createdEvents,
 }: ProfileProps) {
   const { logout, userId: loggedUserId, isAdmin } = useAuth();
+
+  const { setToastMessage, toastMessage, toastDuration } = useToast();
+
+  useEffect(() => {
+    if (toastMessage) {
+      toast(toastMessage);
+      // Réinitialisation du message après l'affichage du toast
+      setToastMessage('');
+    }
+  }, [toastMessage, setToastMessage]);
 
   return (
     <>
@@ -56,6 +69,7 @@ export default function Profile({
         <div className="mb-3">Participe à {userEvents.length} evenements dont {createdEvents.length} créés</div>
       </div>
       <UserAgenda events={userEvents} />
+      <ToastContainer autoClose={toastDuration} />
     </>
   );
 }

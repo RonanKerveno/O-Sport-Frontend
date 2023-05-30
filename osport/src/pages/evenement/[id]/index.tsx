@@ -10,9 +10,11 @@ import { GetServerSideProps } from 'next';
 import getEventServerSideProps from '@/utils/eventServerSideProps';
 import { format, parseISO } from 'date-fns';
 import router from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { addOneUserToOneEvent, deleteOneUserFromOneEvent } from '@/services/userService';
 import Link from 'next/link';
+import { useToast } from '@/contexts/ToastContext';
+import { toast, ToastContainer } from 'react-toastify';
 
 interface DataProfileProps {
   eventData: Event;
@@ -84,6 +86,16 @@ export default function EventDetails({ eventData }: DataProfileProps) {
           Se désinscrire
         </button>
       );
+    } if (userId && eventData.eventUsers.length >= eventData.maxNbParticipants) {
+      return (
+        <button
+          className="bg-orange-500 text-white font-bold py-2 px-4 rounded m-1"
+          type="button"
+          disabled
+        >
+          Complet
+        </button>
+      );
     } if (userId) {
       return (
         <button
@@ -97,6 +109,16 @@ export default function EventDetails({ eventData }: DataProfileProps) {
     }
     return null;
   };
+
+  const { setToastMessage, toastMessage, toastDuration } = useToast();
+
+  useEffect(() => {
+    if (toastMessage) {
+      toast(toastMessage);
+      // Réinitialisation du message après l'affichage du toast
+      setToastMessage('');
+    }
+  }, [toastMessage, setToastMessage]);
 
   return (
     <>
@@ -185,6 +207,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
           </div>
         </div>
       )}
+      <ToastContainer autoClose={toastDuration} />
     </>
 
   );
