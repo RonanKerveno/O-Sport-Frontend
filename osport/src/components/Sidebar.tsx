@@ -13,7 +13,7 @@ export default function Sidebar() {
       <div className="flex flex-col h-screen p-3 shadow w-60">
         <div className="space-y-3">
           <div className="flex items-center ml-2 text-gray-100">
-            <h2 className="text-xl font-bold flex flex-row"><IoIosFootball color="white" size={28} />O&#39;Sport</h2>
+            <IoIosFootball color="white" size={32} /><h2 className="ml-2 text-2xl font-bold flex flex-row">O&#39;Sport</h2>
           </div>
           <div className="flex-1">
             <ul className="pt-2 pb-4 space-y-1 text-sm text-gray-100">

@@ -67,18 +67,20 @@ export default function Subscribe({ sportsList }: DataProfileProps) {
       <Head>
         <title>Inscription - osport</title>
       </Head>
-      <div className="flex flex-col space-">
-        <div className="text-[#b430a6] text-1xl font-sans font-bold text-center border">
+      <div className="flex flex-col space- w-screen">
+        <div className="text-2xl font-sans font-bold ml-24 border mt-7">
           <h1> Inscription </h1>
         </div>
         {/* Utilisation du composant UserProfileForm */}
-        <UserProfileForm
-          isEdit={false} // Il s'agit d'une création de profil
-          userData={nullUserPublicData}// Pas de données utilisateur à afficher
-          sportsList={sportsList}
-          onSubmit={handleCreate} // Fonction de rappel pour traiter les données soumises
-        />
-        {errorMessage && <p className="text-red-500 mt-3 ml-4">{errorMessage}</p>}
+        <div className=" max-w-md mt-6">
+          <UserProfileForm
+            isEdit={false} // Il s'agit d'une création de profil
+            userData={nullUserPublicData}// Pas de données utilisateur à afficher
+            sportsList={sportsList}
+            onSubmit={handleCreate} // Fonction de rappel pour traiter les données soumises
+          />
+          {errorMessage && <p className="text-red-500 mt-3 ml-4">{errorMessage}</p>}
+        </div>
       </div>
     </>
   );

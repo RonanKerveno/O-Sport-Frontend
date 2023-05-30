@@ -11,6 +11,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { useToast } from '@/contexts/ToastContext';
 import { useAuth } from '@/contexts/AuthContext';
 import Description from '@/components/Description';
+import Footer from '@/components/Footer';
 import Cards from '@/components/Cards';
 import SportSearch from '@/components/SportSearch';
 import { EventData, SportsListData } from '@/types';
@@ -76,15 +77,15 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
       <Head>
         <title>Accueil - osport</title>
       </Head>
-      <div className="flex flex-col flex-wrap bg-slate-100 w-full h-full justify-center items-center">
+      <div className="bg-slate-100 w-">
         <Description />
         {isAdmin
           && (
-            <div className="my-7">
+            <div className="my-4 ml-7">
               Admin : <Link href="/sports" className=" text-red-500 font-semibold">modification des sports</Link>
             </div>
           )}
-        <div className="font-bold text-slate-700 text-2xl m-10">
+        <div className="font-bold text-slate-700 text-2xl m-8 text-center">
           <h2>Les événements sportifs {selectedSportName && `[${selectedSportName}]`}</h2>
           {selectedSportName && (
             <div className="text-center">
@@ -106,9 +107,10 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
             <div>
               <SportSearch sports={sportsList} onSelectSport={onSelectSport} />
             </div>
+            <Footer />
           </div>
         ) : (
-          <div className="flex flex-row m-2">
+          <div className="flex m-2">
             <Cards
               events={filteredEventList}
             />

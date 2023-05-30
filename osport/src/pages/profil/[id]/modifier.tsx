@@ -91,8 +91,8 @@ export default function EditProfile({ userData, sportsList }: EditProfileProps) 
   }
   // Si l'utilisateur est autorisé, nous rendons la page de profil
   return (
-    <div className="container mx-auto px-4">
-      <h1 className={`text-2xl font-bold my-4 ${isAdmin && userId !== userData.id ? 'text-red-500' : ''}`}>
+    <div className="container mx-auto px-4 w-screen">
+      <h1 className={`text-2xl font-bold my-4 ml-7 ${isAdmin && userId !== userData.id ? 'text-red-500' : ''}`}>
         {isAdmin && userId !== userData.id ? 'Modification Admin' : 'Modifier mon profil'}
       </h1>
       <UserProfileForm isEdit userData={userData} sportsList={sportsList} onSubmit={handleUpdate} />
@@ -101,7 +101,7 @@ export default function EditProfile({ userData, sportsList }: EditProfileProps) 
         <p className="mb-3">Vous souhaitez nous quitter ?</p>
         <button
           type="button"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
           onClick={handleDelete}
         >
           Se désinscrire

@@ -39,7 +39,7 @@ export default function Profile({
       <Head>
         <title>Utilisateur - osport</title>
       </Head>
-      <div className="overflow-auto">
+      <div className="overflow-auto text-center w-full">
         {(loggedUserId === userData.id || isAdmin) && (
           <div className="mb-6">
             <button
@@ -56,9 +56,11 @@ export default function Profile({
             )}
           </div>
         )}
-        <UserCard userData={userData} />
-        <div className="mb-4">{userData.description}</div>
-        <div className="mb-4">
+        <div className="m-4">
+          <UserCard userData={userData} />
+        </div>
+        <div className="mb-4 rounded-xl bg-white text-gray-700 shadow-md p-4 m-4">{userData.description}</div>
+        <div className="mb-4 rounded-xl bg-white text-gray-700 shadow-md p-4 m-4">
           <h3 className="font-bold">Sports favoris :</h3>
           <ul>
             {userData.favoriteSports.map((sport) => (
@@ -66,7 +68,7 @@ export default function Profile({
             ))}
           </ul>
         </div>
-        <div className="mb-3">Participe à {userEvents.length} evenements dont {createdEvents.length} créés</div>
+        <div className="mb-3 rounded-xl bg-white text-gray-700 shadow-md p-4 m-4">Participe à {userEvents.length} evenements dont {createdEvents.length} créés</div>
       </div>
       <UserAgenda events={userEvents} />
       <ToastContainer autoClose={toastDuration} />

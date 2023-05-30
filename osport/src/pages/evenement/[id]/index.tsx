@@ -2,7 +2,6 @@
 
 /* eslint-disable react/no-unescaped-entities */
 import { HiUserCircle, HiUserGroup } from 'react-icons/hi2';
-import { MdSportsHandball } from 'react-icons/md';
 import Head from 'next/head';
 import { Event } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
@@ -15,6 +14,8 @@ import { addOneUserToOneEvent, deleteOneUserFromOneEvent } from '@/services/user
 import Link from 'next/link';
 import { useToast } from '@/contexts/ToastContext';
 import { toast, ToastContainer } from 'react-toastify';
+import sportIconMap from '@/utils/sportIconMap';
+import { sportNameConvert } from '@/utils/sportNameConvert';
 
 interface DataProfileProps {
   eventData: Event;
@@ -28,7 +29,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
   const startingTime = format(parseISO(eventData.startingTime), 'dd/MM/yyyy HH:mm');
   const endingTime = format(parseISO(eventData.endingTime), 'dd/MM/yyyy HH:mm');
   const { userId, isAdmin } = useAuth();
-
+  const SportIcon = sportIconMap[sportNameConvert(eventData.sport.name)] || sportIconMap.Sports;
   const handleSubscribe = () => {
     setActionType('subscribe');
     setShowConfirmation(true);
@@ -125,14 +126,14 @@ export default function EventDetails({ eventData }: DataProfileProps) {
       <Head>
         <title>{eventData.title} - osport</title>
       </Head>
-      <div>
+      <div className="ml-6 min-[1540px]:w-[1200px] min-[1650px]:w-[1280px] mt-2 shadow-md rounded-md border border-gray-400">
         <div className=" mb-1 bg-white text-gray-700 shadow-md ">
           <div className="flex items-center justify-between">
             <span className="flex items-center">
               <HiUserGroup className="text-5xl mr-3" />
               <span className="text-xl">{`${eventData.eventUsers.length}/${eventData.maxNbParticipants}`}</span>
             </span>
-            <span className="text-right"><MdSportsHandball size={50} /></span>
+            <span className="text-right m-1"><SportIcon size={50} /></span>
           </div>
           <div className="text-center text-4xl font-bold p-6">{eventData.title}</div>
           <div className="text-left mb-1">

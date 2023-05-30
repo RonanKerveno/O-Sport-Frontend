@@ -95,7 +95,7 @@ export default function SearchEvent({ eventList }: EventsDataProps) {
         Aller sur recherche utilisateurs
       </button>
       <h1 className="font-bold text-xl mx-4 my-5">Recherche d&#39;événements</h1>
-      <div className="w-full h-full bg-white ml-2 rounded-md">
+      <div className="w-full h-full bg-white ml-2 rounded-md pr-4">
         <button
           type="button"
           className="ml-4 border text-sm bg-black hover:bg-gray-500 transition-colors duration-1000 text-white font-bold py-2 px-4 my-2 rounded"

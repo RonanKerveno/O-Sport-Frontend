@@ -85,7 +85,7 @@ export default function SearchUser({ usersData }: EventsDataProps) {
         Aller sur recherche événements
       </button>
       <h1 className="font-bold text-xl mx-4 my-5">Recherche d&#39;utilisateurs</h1>
-      <div className="w-full h-full bg-white ml-2 rounded-md">
+      <div className="bg-white mx-4 rounded-md p-7">
         <button
           type="button"
           className="ml-4 border text-sm bg-black hover:bg-gray-500 transition-colors duration-1000 text-white font-bold py-2 px-4 my-2 rounded"
@@ -111,9 +111,9 @@ export default function SearchUser({ usersData }: EventsDataProps) {
             setForm={setForm}
           />
         </div>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-4">
           {hasSearched && filteredUsers.map((user) => (
-            <Link key={user.id} href={`/profil/${user.id}`} className="w-3/12 hover:scale-105 transition-transform duration-200">
+            <Link key={user.id} href={`/profil/${user.id}`} className="hover:scale-105 transition-transform duration-200">
               <UserCard userData={user} />
             </Link>
           ))}

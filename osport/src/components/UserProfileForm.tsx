@@ -89,7 +89,7 @@ export default function UserProfileForm({
   return (
     // Formulaire de création ou modificaiton de profil utilisant react-hook-form et le composant
     // UserTextFieldForm pour les types d'inputs les plus répétés.
-    <div className="container mx-auto px-4">
+    <div className="flex flex-col min-h-screen justify-center container mx-auto px-4 w-screen p-10">
       <form
         onSubmit={handleSubmit((data) => {
           const { confirmPassword, ...submittedData } = data;
@@ -178,7 +178,7 @@ export default function UserProfileForm({
                 <textarea
                   {...field}
                   id="description"
-                  className={`w-full px-2 py-1 border ${errors.description ? 'border-red-600' : 'border-gray-300'} rounded mt-1 resize-y font-normal`}
+                  className={`w-full h-40 px-2 py-1 border ${errors.description ? 'border-red-600' : 'border-gray-300'} rounded mt-1 resize-y font-normal`}
                 />
               )}
               rules={{
@@ -190,7 +190,7 @@ export default function UserProfileForm({
           </label>
         </div>
         {/* Définition des sports favoris pas cases à cocher */}
-        <div className="my-4">
+        <div className="my-4 overflow-y-auto max-h-64">
           <label htmlFor="favoriteSports" className="font-bold block">
             Sports favoris
             {sportsList.map((sport) => (

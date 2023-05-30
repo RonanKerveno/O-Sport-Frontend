@@ -2,7 +2,6 @@
 
 import React, { ReactNode } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import 'react-toastify/dist/ReactToastify.css';
 import Header from '../components/Header';
 import Navbar from '../components/Navbar';
@@ -17,18 +16,19 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const isTablet = useMediaQuery('(min-width: 320px, max-width: 768px)');
   return (
-    <div className="flex flex-row w-screen h-screen bg-slate-100">
+    <div>
       {isMobile || isTablet ? (
-        <div>
+        <div className="flex flex-col min-h-screen">
           <Header />
-          <main>{children}</main>
-          <Navbar />
+          <main className="flex-grow">{children}</main>
           <Footer />
+          <Navbar />
         </div>
       ) : (
-        <div className="flex flex-row w-screen h-screen bg-slate-100">
+        <div className="flex bg-slate-100">
           <Sidebar />
-          <div className="flex flex-col"><main>{children}</main>
+          <div className="flex flex-col">
+            <main className="flex-grow align h-full">{children}</main>
             <Footer />
           </div>
         </div>
