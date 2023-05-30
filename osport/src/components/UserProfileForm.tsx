@@ -89,7 +89,7 @@ export default function UserProfileForm({
   return (
     // Formulaire de création ou modificaiton de profil utilisant react-hook-form et le composant
     // UserTextFieldForm pour les types d'inputs les plus répétés.
-    <div className="container mx-auto px-4">
+    <div className="flex flex-col min-h-screen items-center justify-center container mx-auto px-4 w-screen p-10">
       <form
         onSubmit={handleSubmit((data) => {
           const { confirmPassword, ...submittedData } = data;

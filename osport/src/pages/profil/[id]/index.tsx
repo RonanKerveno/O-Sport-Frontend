@@ -26,53 +26,36 @@ export default function Profile({
       <Head>
         <title>Utilisateur - osport</title>
       </Head>
-      <div className="flex flex-col min-h-screen items-center justify-center max-w-screen-md">
-        <div className="flex-grow">
-          <div className="mx-auto w-full">
-            {(loggedUserId === userData.id || isAdmin) && (
-              <div className="mb-6 text-center">
-                <button
-                  type="button"
-                  onClick={() => router.push(`/profil/${userData.id}/modifier`)}
-                  className={`font-bold py-2 px-4 rounded m-1 text-white ${isAdmin && loggedUserId !== userData.id ? 'bg-red-500 hover:bg-red-700' : 'bg-blue-500 hover:bg-blue-700'
-                  }`}
-                >
-                  {isAdmin && loggedUserId !== userData.id ? 'Modification admin' : 'Modifier mon profil'}
-                </button>
-                {loggedUserId === userData.id && (
-                  <button
-                    type="button"
-                    onClick={logout}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1"
-                  >
-                    Déconnexion
-                  </button>
-                )}
-              </div>
+      <div className="overflow-auto text-center w-full">
+        {(loggedUserId === userData.id || isAdmin) && (
+          <div className="mb-6">
+            <button
+              type="button"
+              onClick={() => router.push(`/profil/${userData.id}/modifier`)}
+              className={`font-bold py-2 px-4 rounded m-1 text-white ${isAdmin && loggedUserId !== userData.id ? 'bg-red-500 hover:bg-red-700' : 'bg-blue-500 hover:bg-blue-700'}`}
+            >
+              {isAdmin && loggedUserId !== userData.id ? 'Modification admin' : 'Modifier mon profil'}
+            </button>
+            {loggedUserId === userData.id && (
+              <button type="button" onClick={logout} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1">
+                Déconnexion
+              </button>
             )}
-            <UserCard userData={userData} />
-            <div className="flex items-center justify-center h-full">
-              <div className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3 mb-4 ml-4 rounded-xl bg-white text-gray-700 shadow-md p-4">
-                {userData.description}
-              </div>
-            </div>
-            <div className="flex justify-center items-center">
-              <div className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3 max-w-lg mx-auto bg-clip-border rounded-xl bg-white text-gray-700 shadow-md  p-6  mb-5 text-center">
-                <h3 className="font-bold">Sports favoris :</h3>
-                <ul>
-                  {userData.favoriteSports.map((sport) => (
-                    <li key={sport.id}>{sport.name}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <div className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3 max-w-lg mx-auto bg-clip-border rounded-xl bg-white text-gray-700 shadow-md  p-6 pl-20 pr-20 mb-5 text-center">
-              Participe à {userEvents.length} événements dont {createdEvents.length} créés
-            </div>
           </div>
+        )}
+        <UserCard userData={userData} />
+        <div className="mb-4 rounded-xl bg-white text-gray-700 shadow-md p-4 m-4">{userData.description}</div>
+        <div className="mb-4 mb-4 rounded-xl bg-white text-gray-700 shadow-md p-4 m-4">
+          <h3 className="font-bold">Sports favoris :</h3>
+          <ul>
+            {userData.favoriteSports.map((sport) => (
+              <li key={sport.id}>{sport.name}</li>
+            ))}
+          </ul>
         </div>
-        <UserAgenda events={userEvents} />
+        <div className="mb-3 mb-4 rounded-xl bg-white text-gray-700 shadow-md p-4 m-4">Participe à {userEvents.length} evenements dont {createdEvents.length} créés</div>
       </div>
+      <UserAgenda events={userEvents} />
     </>
   );
 }

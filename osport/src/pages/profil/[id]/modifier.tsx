@@ -83,8 +83,8 @@ export default function EditProfile({ userData, sportsList }: EditProfileProps) 
   }
   // Si l'utilisateur est autorisé, nous rendons la page de profil
   return (
-    <div className="container mx-auto px-4">
-      <h1 className={`text-2xl font-bold my-4 ${isAdmin && userId !== userData.id ? 'text-red-500' : ''}`}>
+    <div className="container mx-auto px-4 w-screen">
+      <h1 className={`text-2xl font-bold my-4 text-center ${isAdmin && userId !== userData.id ? 'text-red-500' : ''}`}>
         {isAdmin && userId !== userData.id ? 'Modification Admin' : 'Modifier mon profil'}
       </h1>
       <UserProfileForm isEdit userData={userData} sportsList={sportsList} onSubmit={handleUpdate} />
