@@ -9,6 +9,8 @@ import { createOneEvent } from '@/services/eventService';
 import { useAuth } from '@/contexts/AuthContext';
 import EventEditForm from '@/components/EventEditForm';
 import { GetServerSideProps } from 'next';
+import Description from '@/components/Description';
+import { title } from 'process';
 
 interface DataProfileProps {
   sportsList: SportsListData;
@@ -60,6 +62,7 @@ export default function AddEvent({ sportsList }: DataProfileProps) {
       <Head>
         <title>Créez votre événement</title>
       </Head>
+      <Description />
       <div className="flex flex-col space-">
         <div className="text-[#b430a6] text-1xl font-sans font-bold text-center border">
           <h1> Créez votre événement </h1>

@@ -24,13 +24,15 @@ export default function UserAgenda({ events }: UserAgendaProps) {
 
   return (
     <div>
-      <h2 className="font-bold mb-2">Agenda :</h2>
+      <h2 className="font-bold mb-2 rounded-xl bg-white text-gray-700 shadow-md p-4 ml-4 text-center">Agenda :</h2>
       {/* On retourne chaque évenement en reprenant les données de events */}
-      {sortedEvents.map((event) => (
-        <div key={event.id} className="my-7 w-3/6">
-          <Card event={event} />
-        </div>
-      ))}
+      <div className="flex flex-wrap">
+        {sortedEvents.map((event) => (
+          <div key={event.id} className="my-7 mx-auto w-full sm:w-1/2 md:w-1/3 text-center">
+            <Card event={event} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
