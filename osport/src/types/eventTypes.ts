@@ -1,4 +1,5 @@
-export interface User {
+interface User {
+  id: string;
   userName: string;
 }
 
@@ -7,10 +8,10 @@ export interface EventSport {
 }
 
 export interface Event {
-  id: number;
+  id: string;
   title: string;
   region: string;
-  zipCode: number;
+  zipCode: string;
   city: string;
   street: string;
   description: string;
@@ -18,13 +19,13 @@ export interface Event {
   endingTime: string;
   createdAt: string;
   updatedAt: string | null;
-  creatorId: number;
-  sportId: number;
+  creatorId: string;
+  sportId: string;
   creator: User;
+  maxNbParticipants: number;
   sport: EventSport;
-  users_join_events: {
-    userId: number;
-  };
+  eventUsers: User[];
 }
 
-export type EventListData = Event[];
+export type EventData = Event[];
+export type EditEventData = Omit<Event, 'id' | 'createdAt' | 'updatedAt' | 'creatorId' | 'creator' | 'eventUsers'>;

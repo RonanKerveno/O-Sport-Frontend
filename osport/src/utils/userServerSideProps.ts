@@ -2,18 +2,18 @@
 // de l'API avant de rendre la page.
 
 import { GetServerSidePropsContext } from 'next';
-import { UserPublicData, EventListData } from '../types';
-import { getUserById, getAllEventsFromOneUser, getAllEventsCreatedByOneUser } from '../services/userService';
+import { UserPublicData, EventData } from '@/types';
+import { getOneUser, getAllEventsFromOneUser, getAllEventsCreatedByOneUser } from '../services/userService';
 
 // Typage des données reçues par l'API
 interface UserServerSideProps {
   userData: UserPublicData;
-  userEvents: EventListData;
-  createdEvents: EventListData;
+  userEvents: EventData;
+  createdEvents: EventData;
 }
 
 // Récupérations des données publiques de l'utilisateur.
-const getProfileServerSideProps = async (context: GetServerSidePropsContext):
+const getUserServerSideProps = async (context: GetServerSidePropsContext):
 Promise<UserServerSideProps> => {
   const userId = context.params?.id;
 
@@ -23,7 +23,7 @@ Promise<UserServerSideProps> => {
   }
 
   // On lance les requêtes API.
-  const userResponse = await getUserById(userId);
+  const userResponse = await getOneUser(userId);
   const userEventsResponse = await getAllEventsFromOneUser(userId);
   const createdEventsResponse = await getAllEventsCreatedByOneUser(userId);
 
@@ -40,4 +40,4 @@ Promise<UserServerSideProps> => {
   };
 };
 
-export default getProfileServerSideProps;
+export default getUserServerSideProps;

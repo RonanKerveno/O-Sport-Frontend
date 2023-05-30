@@ -1,6 +1,7 @@
 // Page de connexion
 
 import Head from 'next/head';
+import router from 'next/router';
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import useLoggedRedirect from '../../hooks/useLoggedRedirect';
@@ -51,7 +52,7 @@ export default function Login() {
                 type="password"
                 id="PasswordInput"
                 name="password"
-                minLength={5}
+                minLength={3}
                 required
                 className="border w-44 m-2"
                 value={password}
@@ -67,6 +68,18 @@ export default function Login() {
             {/* Affichage de l'erreur en cas d'échec de la connexion */}
             {error && <p>{error}</p>}
           </form>
+        </div>
+        <div className="bg-white border border-black m-4 rounded-md p-4 h-1/4">
+          <div className="w-full text-center">
+            <p className="mb-3">Pas encore parmis nous ?</p>
+            <button
+              type="button"
+              className="text-center border p-2  rounded-md hover:bg-blue-600 hover:text-[#f9fafb]"
+              onClick={() => router.push('/inscription')}
+            >
+              Inscription
+            </button>
+          </div>
         </div>
       </div>
     </>

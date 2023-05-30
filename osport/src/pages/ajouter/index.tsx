@@ -1,59 +1,88 @@
 // Page de création d'un événement
 
-/* eslint-disable react/no-unescaped-entities */
+import React, { useState } from 'react';
+import Head from 'next/head';
+import getSportsServerSideProps from '@/utils/sportsServerSideProps';
 import { useRouter } from 'next/router';
-import { HiUserGroup, HiUserCircle } from 'react-icons/hi2';
-import { MdSportsHandball } from 'react-icons/md';
+import { EditEventData, SportsListData } from '@/types';
+import { createOneEvent } from '@/services/eventService';
+import { useAuth } from '@/contexts/AuthContext';
+import EventEditForm from '@/components/EventEditForm';
+import { GetServerSideProps } from 'next';
 
-export default function AddEvent() {
+interface DataProfileProps {
+  sportsList: SportsListData;
+}
+
+export default function AddEvent({ sportsList }: DataProfileProps) {
   const router = useRouter();
-  const { id } = router.query;
+  const [errorMessage, setErrorMessage] = useState('');
+  const { userId } = useAuth();
+
+  const handleCreate = async (eventData: EditEventData) => {
+    if (userId === null) {
+      setErrorMessage('User ID is null');
+      return;
+    }
+    try {
+      const response = await createOneEvent(userId, eventData);
+
+      if (response.success) {
+        // Redirection vers la page de connexion
+        router.push('/connexion');
+      } else if ('error' in response && response.error !== undefined) {
+        setErrorMessage(response.error);
+      }
+    } catch (error) {
+      setErrorMessage('Une erreur est survenue lors de la création du profil :');
+    }
+  };
+
+  // On initialise les données de profil publiques à blanc
+  const nullEventData: EditEventData = {
+    title: '',
+    region: '',
+    zipCode: '',
+    city: '',
+    street: '',
+    description: '',
+    startingTime: '',
+    endingTime: '',
+    sportId: '',
+    sport: {
+      name: '',
+    },
+    maxNbParticipants: 0,
+  };
 
   return (
-    <div className="w-max h-full flex flex-col justify-center items-center bg-[#e0e1dd]">
-      <div className="bg-white border border-gray-400 rounded-md">
-        <div className="text-[#b430a6] text-center">
-          <h1>Evénement {id}</h1>
+    <>
+      <Head>
+        <title>Créez votre événement</title>
+      </Head>
+      <div className="flex flex-col space-">
+        <div className="text-[#b430a6] text-1xl font-sans font-bold text-center border">
+          <h1> Créez votre événement </h1>
         </div>
-        <div className="border-2 p-4 border-gray-400 rounded-md m-2">
-          <div className="flex flex-row justify-between">
-            <span className="flex flex-row space-x-2 items-center">
-              <input type="number" max={35} min={1} name="numberofuser" className="border-2 border-gray-400 rounded-md" />
-              <HiUserGroup size={30} />
-            </span>
-            <span>
-              <MdSportsHandball size={30} />
-            </span>
-          </div>
-          <div className="w-full">
-            <div className="text-center">
-              Titre événement: <br /><input type="text" className="border border-gray-500 rounded-md " />
-            </div>
-          </div>
-          <div className="border-2 p-4 border-gray-600 rounded-md m-2 space-y-4">
-            <div>Ville :<input type="text" className="border-b ml-2 border-black" /></div>
-            <div>Adresse :<input type="text" className="border-b ml-2 border-black" /></div>
-            <div>Date de rendez-vous: <input type="date" className="border ml-2 border-black rounded-md p-1" /></div>
-            <div>Heure de rendez-vous :<input type="time" className="border ml-2 border-black rounded-md p-1" /></div>
-            <div>Sport: <input type="text" className="border-b ml-2 border-black" /></div>
-          </div>
-          <div className="border-2 p-2 border-gray-600 rounded-md">
-            Description de l'événement :<br />
-            <input type="text" />
-          </div>
-          <div className="flex flex-row space-x-4 border-b m-2 p-2">
-            <span>Participant à l'évènement :</span>
-            <span className="flex flex-col">Jude <HiUserCircle size={30} /></span>
-          </div>
-          <div className="flex flex-row space-x-4 m-2 p-2">
-            <span>Créateur de l'évènement :</span>
-            <span className="flex flex-col">Jude <HiUserCircle size={30} /></span>
-          </div>
-          <div className="border text-center mt-4 border-black rounded-md hover:bg-blue-600 hover:text-[#f9fafb]">
-            <button type="submit">Enregistrer</button>
-          </div>
-        </div>
+
+        <EventEditForm
+          isEdit={false}
+          eventData={nullEventData}
+          sportsList={sportsList}
+          onSubmit={handleCreate}
+        />
+        {errorMessage && <p className="text-red-500 mt-3 ml-4">{errorMessage}</p>}
       </div>
-    </div>
+    </>
   );
 }
+
+// Traitement des requête API coté SSR pour récupérer les données publiques.
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const props = await getSportsServerSideProps();
+    return { props };
+  } catch (error) {
+    return { notFound: true };
+  }
+};

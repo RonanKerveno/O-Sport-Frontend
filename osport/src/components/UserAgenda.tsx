@@ -1,16 +1,22 @@
 // Composant gérant l'affichage de l'agenda des evenements d'un utilisateur.
 
-import { format } from 'date-fns';
-import { EventListData } from '../types';
+import { EventData } from '@/types';
+import Card from './Card';
 
 // Typage TypeScript
 interface UserAgendaProps {
-  events: EventListData;
+  events: EventData;
 }
 
 export default function UserAgenda({ events }: UserAgendaProps) {
+  // Filtrage des événements dont la date/heure de fin est passée
+  const upcomingEvents = events.filter((event) => {
+    const endingTime = new Date(event.endingTime).getTime();
+    return endingTime > Date.now();
+  });
+
   // Tri des événements par ordre de date de début
-  const sortedEvents = events.sort((a, b) => {
+  const sortedEvents = upcomingEvents.sort((a, b) => {
     const aTime = new Date(a.startingTime).getTime();
     const bTime = new Date(b.startingTime).getTime();
     return aTime - bTime;
@@ -20,20 +26,11 @@ export default function UserAgenda({ events }: UserAgendaProps) {
     <div>
       <h2 className="font-bold mb-2">Agenda :</h2>
       {/* On retourne chaque évenement en reprenant les données de events */}
-      {sortedEvents.map((event) => {
-        const startingDate = format(new Date(event.startingTime), 'dd/MM/yyyy HH:mm');
-        const endingDate = format(new Date(event.endingTime), 'dd/MM/yyyy HH:mm');
-
-        return (
-          <div key={event.id} className="mb-3">
-            <h3 className="font-medium">{`${startingDate} à ${endingDate}`}</h3>
-            <p className="font-medium">{event.title}</p>
-            <p>Sport : {event.sport.name}</p>
-            <p>Ville : {event.city}</p>
-            <p>Créé par : {event.creator.userName}</p>
-          </div>
-        );
-      })}
+      {sortedEvents.map((event) => (
+        <div key={event.id} className="my-7 w-3/6">
+          <Card event={event} />
+        </div>
+      ))}
     </div>
   );
 }

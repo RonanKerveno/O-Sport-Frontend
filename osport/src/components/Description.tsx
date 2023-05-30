@@ -1,13 +1,9 @@
 export default function Description() {
   return (
     <div className="overflow-auto bg-white font-sans md:w-auto p-1 rounded-md shadow-md m-4" id="description">
-      div Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-      Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,
-      when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-      It has survived not only five centuries, but also the leap into electronic typesetting,
-      remaining essentially unchanged.
-      It was popularised in the 1960s with the release of
-      Letraset sheets containing Lorem Ipsum passages,
+      O&#39;sport, le site qui met en relation des sportifs !
+      Besoin de compagnons de sport ? Créez un événement ! Vous cherchez une idée d&#39;activité ?
+      Trouvez l&#39;événement qui vous convient et inscrivez vous !
     </div>
   );
 }

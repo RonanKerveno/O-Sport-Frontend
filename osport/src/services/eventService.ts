@@ -1,52 +1,73 @@
-import { Sport } from '@/types';
 import axios, { AxiosError } from 'axios';
 import { API_URL } from './apiConfig';
+import { EditEventData } from '../types';
 
 // Typage TypeScript
 interface ServerError {
   error: string;
 }
 
-// Récupération de la liste de tous les sports
-export const getAllSports = async () => {
+export const getAllEvents = async () => {
   try {
-    const response = await axios.get(`${API_URL}/sports`);
+    const response = await axios.get(`${API_URL}/events`, {
+      withCredentials: true,
+    });
 
-    // Récupération des données
-    const sportsData = response.data;
     return {
       success: true,
-      sports: sportsData,
+      events: response.data,
     };
+
+    // Gestion des erreurs
   } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: 'La récupération des événements a échoué',
+        };
+      }
+    }
     return {
       success: false,
+      error: 'Erreur serveur inattendue',
     };
   }
 };
 
-// Récupération d'un sport ciblé par l'ID
-export const getOneSport = async (sportId: string) => {
+export const getOneEvent = async (eventId: string) => {
   try {
-    const response = await axios.get(`${API_URL}/sports/${sportId}`);
-
-    // Récupération des données
-    const sportData = response.data;
+    const response = await axios.get(`${API_URL}/events/${eventId}`, {
+      withCredentials: true,
+    });
 
     return {
       success: true,
-      sport: sportData,
+      event: response.data,
     };
+
+    // Gestion des erreurs
   } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError<ServerError>;
+      if (serverError && serverError.response) {
+        return {
+          success: false,
+          error: "La récupération de l'événement a échoué",
+        };
+      }
+    }
     return {
       success: false,
+      error: 'Erreur serveur inattendue',
     };
   }
 };
 
-export const createOneSport = async (sportData: Sport) => {
+export const createOneEvent = async (userId: string, eventData: EditEventData) => {
   try {
-    const response = await axios.post(`${API_URL}/sports`, sportData, {
+    const response = await axios.post(`${API_URL}/events`, eventData, {
       withCredentials: true,
     });
 
@@ -62,7 +83,7 @@ export const createOneSport = async (sportData: Sport) => {
       if (serverError && serverError.response) {
         return {
           success: false,
-          error: 'La création du sport a échoué',
+          error: 'La création de l\'événement a échoué',
         };
       }
     }
@@ -73,9 +94,9 @@ export const createOneSport = async (sportData: Sport) => {
   }
 };
 
-export const updateOneSport = async (sportId: string, sportData: Sport) => {
+export const updateOneEvent = async (eventId: string, eventData: EditEventData) => {
   try {
-    const response = await axios.patch(`${API_URL}/sports/${sportId}`, sportData, {
+    const response = await axios.patch(`${API_URL}/events/${eventId}`, eventData, {
       withCredentials: true,
     });
 
@@ -91,7 +112,7 @@ export const updateOneSport = async (sportId: string, sportData: Sport) => {
       if (serverError && serverError.response) {
         return {
           success: false,
-          error: 'La mise à jour du sport a échoué',
+          error: 'La mise à jour de l\'événement a échoué',
         };
       }
     }
@@ -102,9 +123,9 @@ export const updateOneSport = async (sportId: string, sportData: Sport) => {
   }
 };
 
-export const deleteOneSport = async (sportId: string) => {
+export const deleteOneEvent = async (eventId: string) => {
   try {
-    await axios.delete(`${API_URL}/sports/${sportId}`, {
+    await axios.delete(`${API_URL}/events/${eventId}`, {
       withCredentials: true,
     });
 
@@ -119,7 +140,7 @@ export const deleteOneSport = async (sportId: string) => {
       if (serverError && serverError.response) {
         return {
           success: false,
-          error: 'La suppression du sport a échoué',
+          error: "La suppression de l'événement a échoué",
         };
       }
     }

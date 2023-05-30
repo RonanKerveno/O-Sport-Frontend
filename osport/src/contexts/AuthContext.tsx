@@ -11,6 +11,8 @@ import { loginUser, getLoggedInUser, logoutUser } from '../services/userService'
 type authContextType = {
   // L'utilisateur est connecté ou non
   isLogged: boolean;
+  // L'utilisateur est administrateur ou non
+  isAdmin: boolean;
   // Fonction de connexion
   // eslint-disable-next-line no-unused-vars
   login: (email: string, password: string) => Promise<void>;
@@ -30,6 +32,7 @@ type authContextType = {
 // Valeurs par défaut du contexte d'authentification
 const authContextDefaultValues: authContextType = {
   isLogged: false,
+  isAdmin: false,
   login: async () => { },
   logout: () => { },
   userId: null,
@@ -59,6 +62,7 @@ export function AuthProvider({ children }: Props) {
   // Nouvel état pour ne pas rendre le composant pendant l'appel API.
   const [isLoading, setLoading] = useState(true);
   const [isLogged, setLogState] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [showLoggedStatus, setShowLoggedStatus] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -72,6 +76,7 @@ export function AuthProvider({ children }: Props) {
       if (response.success) {
         setLogState(true);
         setUserId(response.userId);
+        setIsAdmin(response.isAdmin);
       }
       setLoading(false);
     };
@@ -89,6 +94,7 @@ export function AuthProvider({ children }: Props) {
       if (userResponse.success) {
         setLogState(true);
         setUserId(userResponse.userId);
+        setIsAdmin(userResponse.isAdmin);
         setError('');
         setShowLoggedStatus(true);
         // Redirection vers la page d'accueil après la connexion
@@ -106,6 +112,7 @@ export function AuthProvider({ children }: Props) {
     if (response.success) {
       setLogState(false);
       setUserId(null);
+      setIsAdmin(false);
       setShowLoggedStatus(true);
       // Redirection vers la page d'accueil après la déconnexion
       router.push('/');
@@ -118,13 +125,14 @@ export function AuthProvider({ children }: Props) {
   // de la valeur du contexte en la mémorisant tant qu'une dépendance ne change pas (optimisation).
   const value = useMemo(() => ({
     isLogged,
+    isAdmin,
     login,
     logout,
     userId,
     showLoggedStatus,
     setShowLoggedStatus,
     error,
-  }), [error, isLogged, login, logout, showLoggedStatus, userId]); // Dépendances
+  }), [error, isAdmin, isLogged, login, logout, showLoggedStatus, userId]); // Dépendances
 
   // Si l'état est en chargement on ne rend pas le composant
   if (isLoading) {
