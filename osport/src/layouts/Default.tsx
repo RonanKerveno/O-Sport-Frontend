@@ -23,13 +23,13 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
         <div>
           <Header />
           <main>{children}</main>
-          <Navbar />
           <Footer />
+          <Navbar />
         </div>
       ) : (
         <div className="flex flex-row w-screen h-screen bg-slate-100">
           <Sidebar />
-          <div className="flex flex-col"><main>{children}</main>
+          <div className="flex flex-col overflow-auto"><main>{children}</main>
             <Footer />
           </div>
         </div>

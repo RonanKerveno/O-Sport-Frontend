@@ -16,13 +16,13 @@ export default function Cards({ events }: CardsProps) {
   return (
     <div>
       {isMobile ? (
-        <div className="mb-5 mt-5 grid gap-y-10 gap-x-6 md:grid-cols-2">
+        <div className="mb-5 mt-5 grid gap-y-10 gap-x-6 md:grid-cols-2 h-72 overflow-auto ">
           {events.map((event) => (
             <Card key={event.id} event={event} />
           ))}
         </div>
       ) : (
-        <div className="mt-4 grid gap-y-10 gap-x-6 grid-cols-4">
+        <div className="mt-2 grid gap-y-10 gap-x-6 grid-cols-4 h-96 p-8 overflow-auto shadow-md rounded-md border border-gray-400">
           {events.map((event) => (
             <Card key={event.id} event={event} />
           ))}
