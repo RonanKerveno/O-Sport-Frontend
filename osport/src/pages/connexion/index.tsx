@@ -34,7 +34,7 @@ export default function Login() {
   // Si l'utilisateur est déjà connecté on lui indique un message. Utile en complément
   // de la redirection car la page apparait juste avant la redirection.
   if (isLogged) {
-    return <p>Vous êtes déjà connecté.</p>;
+    return <p>Vous êtes connecté.</p>;
   }
 
   return (

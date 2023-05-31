@@ -28,7 +28,7 @@ export default function Subscribe({ sportsList }: DataProfileProps) {
 
   // Si l'utilisateur est déjà inscrit on lui indique un message
   if (isLogged) {
-    return <p>Vous êtes déjà connecté.</p>;
+    return <p>Vous êtes connecté.</p>;
   }
 
   const handleCreate = async (fullUserData: FullUserData) => {
