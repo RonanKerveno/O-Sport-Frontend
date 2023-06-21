@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { format } from 'date-fns';
-import { EditEventData, SportsListData } from '@/types';
+import { EditEventData, SportsListData, AddressApi } from '@/types';
 import { useForm, Controller } from 'react-hook-form';
+import useAddressSearch from '@/hooks/useAddressSearch';
+import AddressSearchModal from './AdressSearchModal';
 
 type FormValues = EditEventData
 
@@ -22,8 +24,35 @@ export default function EventEditForm({
     endingTime: eventData.endingTime ? format(new Date(eventData.endingTime), "yyyy-MM-dd'T'HH:mm") : '',
   };
   const {
-    handleSubmit, control, formState: { errors }, getValues,
+    handleSubmit, control, setValue, formState: { errors }, getValues,
   } = useForm<FormValues>({ defaultValues });
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const { loading, addresses, errorAddress } = useAddressSearch(searchQuery);
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  const extractRegionFromContext = (context: string) => {
+    // Sépare le contexte en utilisant la virgule comme séparateur
+    const contextParts = context.split(',');
+    return contextParts[contextParts.length - 1].trim();
+  };
+
+  const selectAddress = (address: AddressApi) => {
+    // Mise à jour des valeurs de formulaire pour chaque champ d'adresse
+    setValue('street', address.properties.name);
+    setValue('zipCode', address.properties.postcode);
+    setValue('city', address.properties.city);
+    const region = extractRegionFromContext(address.properties.context);
+    setValue('region', region);
+    closeModal();
+  };
 
   return (
     <div className="container mx-auto px-4">
@@ -76,7 +105,7 @@ export default function EventEditForm({
                 rules={{ required: 'Le choix du sport est obligatoire' }}
               />
             ) : (
-              <div className="ml-2">{eventData.sport && eventData.sport.name ? eventData.sport.name : 'sport inconnu' }</div>
+              <div className="ml-2">{eventData.sport && eventData.sport.name ? eventData.sport.name : 'sport inconnu'}</div>
             )}
             {errors.sportId && !isEdit && <div className="text-red-600">{errors.sportId.message}</div>}
           </label>
@@ -103,6 +132,8 @@ export default function EventEditForm({
           </label>
         </div>
 
+        <button type="button" onClick={openModal}>Rechercher une adresse</button>
+
         <div className="my-4">
           <label htmlFor="region" className="font-bold block">
             Région
@@ -115,6 +146,7 @@ export default function EventEditForm({
                     {...field}
                     id="region"
                     className={`w-full px-2 py-1 border ${errors.region ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
+                    disabled={!errorAddress}
                   />
                 </div>
               )}
@@ -136,6 +168,7 @@ export default function EventEditForm({
                     {...field}
                     id="zipCode"
                     className={`w-full px-2 py-1 border ${errors.zipCode ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
+                    disabled={!errorAddress}
                   />
                 </div>
               )}
@@ -157,6 +190,7 @@ export default function EventEditForm({
                     {...field}
                     id="city"
                     className={`w-full px-2 py-1 border ${errors.city ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
+                    disabled={!errorAddress}
                   />
                 </div>
               )}
@@ -178,6 +212,7 @@ export default function EventEditForm({
                     {...field}
                     id="street"
                     className={`w-full px-2 py-1 border ${errors.street ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
+                    disabled={!errorAddress}
                   />
                 </div>
               )}
@@ -267,6 +302,15 @@ export default function EventEditForm({
         </button>
 
       </form>
+      <AddressSearchModal
+        modalIsOpen={modalIsOpen}
+        closeModal={closeModal}
+        setSearchQuery={setSearchQuery}
+        loading={loading}
+        addresses={addresses}
+        selectAddress={selectAddress}
+        errorAddress={errorAddress}
+      />
     </div>
   );
 }
