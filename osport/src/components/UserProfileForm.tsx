@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { getUserByIdPrivate } from '@/services/userService';
+import useAddressSearch from '../hooks/useAddressSearch';
 import UserTextFieldForm from './UserTextFieldForm';
+import AddressSearchModal from './AdressSearchModal';
 import {
-  UserPublicData, UserPrivateData, SportsListData,
+  UserPublicData, UserPrivateData, SportsListData, AddressApi,
 } from '../types';
 
 // Typages TypeScript
@@ -22,7 +24,7 @@ interface UserProfileFormProps {
   onSubmit: (submittedData: SubmittedData) => void;
 }
 
-// Initialisation par défaut des valeurs des donnes privées
+// Initialisation par défaut des valeurs des données privées
 const nullUserPrivateData = {
   email: '',
   firstName: '',
@@ -42,6 +44,33 @@ export default function UserProfileForm({
   const {
     handleSubmit, control, setValue, setError, formState: { errors }, watch, reset,
   } = useForm<FormValues>({ defaultValues: { ...userData, ...userPrivateData } });
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const { loading, addresses, errorAddress } = useAddressSearch(searchQuery);
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  const extractRegionFromContext = (context: string) => {
+    // Sépare le contexte en utilisant la virgule comme séparateur
+    const contextParts = context.split(',');
+    return contextParts[contextParts.length - 1].trim();
+  };
+
+  const selectAddress = (address: AddressApi) => {
+    // Mise à jour des valeurs de formulaire pour chaque champ d'adresse
+    setValue('street', address.properties.name);
+    setValue('zipCode', address.properties.postcode);
+    setValue('city', address.properties.city);
+    const region = extractRegionFromContext(address.properties.context);
+    setValue('region', region);
+    closeModal();
+  };
 
   // Définition des données privées de l'utilisateur lorsque les données sont modifiées
   useEffect(() => {
@@ -189,7 +218,7 @@ export default function UserProfileForm({
             {errors.description && <div className="text-red-600">{errors.description.message}</div>}
           </label>
         </div>
-        {/* Définition des sports favoris pas cases à cocher */}
+        {/* Définition des sports favoris par cases à cocher */}
         <div className="my-4 overflow-y-auto max-h-64">
           <label htmlFor="favoriteSports" className="font-bold block">
             Sports favoris
@@ -280,12 +309,16 @@ export default function UserProfileForm({
             {errors.gender && <div className="text-red-600">{errors.gender.message}</div>}
           </label>
         </div>
+
+        <button type="button" onClick={openModal}>Rechercher une adresse</button>
+
         <UserTextFieldForm
           control={control}
           name="region"
           label="Région"
           rules={{ required: 'Région est obligatoire' }}
           error={errors.region}
+          disabled={!errorAddress}
         />
         <UserTextFieldForm
           control={control}
@@ -293,6 +326,7 @@ export default function UserProfileForm({
           label="Code postal"
           rules={{ required: 'Code postal est obligatoire' }}
           error={errors.zipCode}
+          disabled={!errorAddress}
         />
         <UserTextFieldForm
           control={control}
@@ -300,6 +334,7 @@ export default function UserProfileForm({
           label="Ville"
           rules={{ required: 'Ville est obligatoire' }}
           error={errors.city}
+          disabled={!errorAddress}
         />
         <UserTextFieldForm
           control={control}
@@ -307,6 +342,7 @@ export default function UserProfileForm({
           label="Rue"
           rules={{ required: 'Rue est obligatoire' }}
           error={errors.street}
+          disabled={!errorAddress}
         />
         <button
           type="submit"
@@ -315,6 +351,15 @@ export default function UserProfileForm({
           Valider
         </button>
       </form>
+      <AddressSearchModal
+        modalIsOpen={modalIsOpen}
+        closeModal={closeModal}
+        setSearchQuery={setSearchQuery}
+        loading={loading}
+        addresses={addresses}
+        selectAddress={selectAddress}
+        errorAddress={errorAddress}
+      />
     </div>
   );
 }

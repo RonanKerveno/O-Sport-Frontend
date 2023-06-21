@@ -3,15 +3,13 @@
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import getEventsServerSideProps from '@/utils/eventsServerSideProps';
-import { useMediaQuery } from 'usehooks-ts';
 import {
   SetStateAction, useCallback, useEffect, useState,
 } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import { useToast } from '@/contexts/ToastContext';
 import { useAuth } from '@/contexts/AuthContext';
-import Description from '@/components/Description';
-import Footer from '@/components/Footer';
+import InfoPanel from '@/components/InfoPanel';
 import Cards from '@/components/Cards';
 import SportSearch from '@/components/SportSearch';
 import { EventData, SportsListData } from '@/types';
@@ -23,7 +21,6 @@ interface EventsDataProps {
 }
 
 export default function Home({ eventList, sportsList }: EventsDataProps) {
-  const isMobile = useMediaQuery('(max-width: 768px)');
   const {
     isAdmin, isLogged, showLoggedStatus, setShowLoggedStatus,
   } = useAuth();
@@ -77,16 +74,16 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
       <Head>
         <title>Accueil - osport</title>
       </Head>
-      <div className="bg-slate-100 w-">
-        <Description />
+      <div>
+        <InfoPanel />
         {isAdmin
           && (
             <div className="my-4 ml-7">
               Admin : <Link href="/sports" className=" text-red-500 font-semibold">modification des sports</Link>
             </div>
           )}
-        <div className="font-bold text-slate-700 text-2xl m-8 text-center">
-          <h2>Les événements sportifs {selectedSportName && `[${selectedSportName}]`}</h2>
+        <div className="font-bold text-center">
+          <h2 className="text-xl mb-14 uppercase">Les événements sportifs {selectedSportName && `[${selectedSportName}]`}</h2>
           {selectedSportName && (
             <div className="text-center">
               <button
@@ -99,24 +96,12 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
             </div>
           )}
         </div>
-        {isMobile ? (
-          <div className="">
-            <Cards
-              events={filteredEventList}
-            />
-            <div>
-              <SportSearch sports={sportsList} onSelectSport={onSelectSport} />
-            </div>
-            <Footer />
-          </div>
-        ) : (
-          <div className="flex m-2">
-            <Cards
-              events={filteredEventList}
-            />
-            <SportSearch sports={sportsList} onSelectSport={onSelectSport} />
-          </div>
-        )}
+        <div>
+          <Cards
+            events={filteredEventList}
+          />
+          <SportSearch sports={sportsList} onSelectSport={onSelectSport} />
+        </div>
 
       </div>
       <ToastContainer autoClose={toastDuration} />

@@ -3,7 +3,7 @@ import { EventData } from '@/types';
 import getEventsServerSideProps from '@/utils/eventsServerSideProps';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import Description from '@/components/Description';
+import InfoPanel from '@/components/InfoPanel';
 import EventSearchForm from '@/components/EventSearchForm';
 import Cards from '@/components/Cards';
 import EventKeywordSearch from '@/components/EventKeyWordSearch';
@@ -86,7 +86,7 @@ export default function SearchEvent({ eventList }: EventsDataProps) {
       <Head>
         <title>Recherche - osport</title>
       </Head>
-      <Description />
+      <InfoPanel />
       <button
         type="button"
         className="ml-4 border text-xs bg-blue-700 hover:bg-blue-900 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"

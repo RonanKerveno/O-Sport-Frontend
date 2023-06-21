@@ -10,7 +10,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import EventEditForm from '@/components/EventEditForm';
 import { GetServerSideProps } from 'next';
 import { useToast } from '@/contexts/ToastContext';
-import Description from '@/components/Description';
+import InfoPanel from '@/components/InfoPanel';
 
 interface DataProfileProps {
   sportsList: SportsListData;
@@ -67,7 +67,7 @@ export default function AddEvent({ sportsList }: DataProfileProps) {
         <title>Créez votre événement</title>
       </Head>
       <div className="flex flex-col mb-7">
-        <Description />
+        <InfoPanel />
         <div className="text-xl font-sans font-bold ml-20 border my-7">
           <h1> Créez votre événement </h1>
         </div>

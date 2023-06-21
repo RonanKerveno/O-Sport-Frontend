@@ -13,11 +13,12 @@ interface UserTextFieldProps<TFieldValues extends FieldValues> {
   rules: RegisterOptions<TFieldValues>;
   error?: FieldError;
   type?: string;
+  disabled?: boolean;
 }
 
 // Définition du composant.
 export default function UserTextFieldForm<TFieldValues extends FieldValues>({
-  control, name, label, rules, error, type,
+  control, name, label, rules, error, type, disabled,
 }: UserTextFieldProps<TFieldValues>) {
   return (
     <div className="my-4">
@@ -32,6 +33,7 @@ export default function UserTextFieldForm<TFieldValues extends FieldValues>({
               id={name}
               type={type}
               className={`w-full px-2 py-1 border ${error ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
+              disabled={disabled}
             />
           )}
           rules={rules}

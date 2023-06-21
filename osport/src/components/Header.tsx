@@ -5,10 +5,8 @@ import { MdSportsSoccer } from 'react-icons/md';
 
 export default function Header() {
   return (
-    <div>
-      <div className="text-gradient-to-tr from-red-600 to-blue-400 text-2xl font-sans font-bold text-center p-3 bg-slate-100 flex flex-row justify-center items-center">
-        <MdSportsSoccer size={30} /><div>'Sport</div>
-      </div>
-    </div>
+    <header className=" bg-slate-900 text-white font-bold text-2xl py-7 pl-4 mb-10 flex items-center">
+      <MdSportsSoccer size={30} /><div>'Sport</div>
+    </header>
   );
 }
