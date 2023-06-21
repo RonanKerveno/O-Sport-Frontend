@@ -1,8 +1,7 @@
 // components/UserCard.tsx
-
-import { HiUserCircle } from 'react-icons/hi2';
 import { format, differenceInYears } from 'date-fns';
 import { UserPublicData } from '@/types';
+import Avvvatars from 'avvvatars-react';
 
 interface UserCardProps {
   userData: UserPublicData;
@@ -24,7 +23,7 @@ export default function UserCard({
     <div className="flex justify-center items-center">
       <div className="mx-auto rounded-xl bg-slate-300 text-gray-700 shadow-md flex px-20 py-10">
         <span>
-          <HiUserCircle size={100} />
+          <Avvvatars value={userData.userName} size={128} />
         </span>
         <span>
           <div>

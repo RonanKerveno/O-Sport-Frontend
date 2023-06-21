@@ -1,7 +1,7 @@
 // Page affichant un événement
 
 /* eslint-disable react/no-unescaped-entities */
-import { HiUserCircle, HiUserGroup } from 'react-icons/hi2';
+import { HiUserGroup } from 'react-icons/hi2';
 import Head from 'next/head';
 import { Event } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
@@ -16,6 +16,7 @@ import { useToast } from '@/contexts/ToastContext';
 import { toast, ToastContainer } from 'react-toastify';
 import sportIconMap from '@/utils/sportIconMap';
 import { sportNameConvert } from '@/utils/sportNameConvert';
+import Avvvatars from 'avvvatars-react';
 
 interface DataProfileProps {
   eventData: Event;
@@ -155,7 +156,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
           <div className="mt-2 mb-2">{eventData.street}</div>
           <div className="mt-2 mb-2">{startingTime}</div>
           <div className="mt-2 mb-2">{endingTime}</div>
-          <div className="mt-2 mb-2">{eventData.sport && eventData.sport.name ? eventData.sport.name : 'sport inconnu' }</div>
+          <div className="mt-2 mb-2">{eventData.sport && eventData.sport.name ? eventData.sport.name : 'sport inconnu'}</div>
         </div>
 
         <div className=" mb-1 p-6 bg-white text-gray-700 shadow-md">
@@ -168,7 +169,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
           <span>Participant à l'événement :</span>
           {eventData.eventUsers.map((user) => (
             <Link href={`/profil/${user.id}`} key={user.id} className="flex flex-col items-center hover:scale-105 transition-transform duration-200">
-              <HiUserCircle size={30} />
+              <Avvvatars value={user.userName} />
               <span>{user.userName}</span>
             </Link>
           ))}
@@ -176,7 +177,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
         <div className=" flex flex-row space-x-4 p-6 bg-white text-gray-700 shadow-md">
           <span>Créateur de l'évènement :</span>
           <Link href={`/profil/${eventData.creatorId}`} className="flex flex-col items-center hover:scale-105 transition-transform duration-200">
-            <HiUserCircle size={30} />
+            <Avvvatars value={eventData.creator.userName} />
             <span>{eventData.creator.userName}</span>
           </Link>
         </div>

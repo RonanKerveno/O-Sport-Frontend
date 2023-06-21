@@ -1,9 +1,10 @@
-import { HiUser, HiUserGroup } from 'react-icons/hi2';
+import { HiUserGroup } from 'react-icons/hi2';
 import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
 import { Event } from '@/types';
 import sportIconMap from '@/utils/sportIconMap';
 import { sportNameConvert } from '@/utils/sportNameConvert';
+import Avvvatars from 'avvvatars-react';
 
 interface CardProps {
   event: Event;
@@ -38,7 +39,7 @@ export default function Card({ event }: CardProps) {
           </div>
           <div className="mt-7 flex justify-center">
             <div className="flex justify-center mb-4">
-              <HiUser size={30} color="black" />
+              <Avvvatars value={event.creator.userName} />
             </div>
             <div className="ml-2 flex justify-center">
               {event.creator.userName}
