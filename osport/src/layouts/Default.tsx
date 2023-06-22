@@ -14,7 +14,7 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
     <>
       <Header />
-      <main className="m-4 mb-20">{children}</main>
+      <main className="mb-20">{children}</main>
       <Navbar />
       <Footer />
     </>

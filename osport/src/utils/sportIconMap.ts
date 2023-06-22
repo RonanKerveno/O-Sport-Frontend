@@ -64,7 +64,7 @@ const sportIconMap: Record<string, IconType> = {
   Natation: FaSwimmer,
   Parapente: MdParagliding,
   PatinageSurGlace: MdIceSkating,
-  RandonnéePédestre: MdHiking,
+  RandonneePedestre: MdHiking,
   Roller: MdRollerSkating,
   Rugby: MdSportsRugby,
   Running: FaRunning,

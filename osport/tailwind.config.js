@@ -11,5 +11,18 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    function addNoScrollbarUtilities({ addUtilities }) {
+      const newUtilities = {
+        '.no-scrollbar-sports::-webkit-scrollbar': {
+          display: 'none',
+        },
+        '.no-scrollbar-sports': {
+          '-ms-overflow-style': 'none',
+          'scrollbar-width': 'none',
+        },
+      };
+      addUtilities(newUtilities);
+    },
+  ],
 };

@@ -12,20 +12,31 @@ import { useAuth } from '@/contexts/AuthContext';
 import InfoPanel from '@/components/InfoPanel';
 import Cards from '@/components/Cards';
 import SportSearch from '@/components/SportSearch';
-import { EventData, SportsListData } from '@/types';
+import { EventData } from '@/types';
 import Link from 'next/link';
+import { CgScrollH } from 'react-icons/cg';
 
 interface EventsDataProps {
   eventList: EventData;
-  sportsList: SportsListData;
+  sportsList: {
+    id: string;
+    name: string;
+    count?: number;
+  }[];
 }
 
 export default function Home({ eventList, sportsList }: EventsDataProps) {
+  const eventsPerPage = 2;
+  const [displayedEventsCount, setDisplayedEventsCount] = useState(eventsPerPage);
   const {
     isAdmin, isLogged, showLoggedStatus, setShowLoggedStatus,
   } = useAuth();
   const [selectedSportId, setSelectedSportId] = useState<string | null>(null);
   const [selectedSportName, setSelectedSportName] = useState<string | null>(null);
+
+  const increaseDisplayedEventsCount = () => {
+    setDisplayedEventsCount((prevCount) => prevCount + eventsPerPage);
+  };
 
   // On affiche un message juste après la redirection depuis une page de connexion/déconnexion.
   const {
@@ -64,9 +75,19 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
   )
     : eventList;
 
-  const resetFilter = useCallback(() => {
+  // Utilisez displayedEventsCount pour limiter les événements affichés
+  const displayedEvents = filteredEventList.slice(0, displayedEventsCount);
+
+  const resetDisplayedEventsCount = () => {
+    setDisplayedEventsCount(eventsPerPage);
+  };
+
+  const [resetFilter, setResetFilter] = useState(false);
+
+  const resetFilterCallback = useCallback(() => {
     setSelectedSportId(null);
     setSelectedSportName(null);
+    setResetFilter(true);
   }, []);
 
   return (
@@ -74,7 +95,7 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
       <Head>
         <title>Accueil - osport</title>
       </Head>
-      <div>
+      <div className="mx-4 mt-14">
         <InfoPanel />
         {isAdmin
           && (
@@ -83,27 +104,59 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
             </div>
           )}
         <div className="font-bold text-center">
-          <h2 className="text-xl mb-14 uppercase">Les événements sportifs {selectedSportName && `[${selectedSportName}]`}</h2>
-          {selectedSportName && (
-            <div className="text-center">
-              <button
-                type="button"
-                onClick={resetFilter}
-                className="mt-4 border text-sm bg-blue-700 hover:bg-blue-900 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
-              >
-                Réinitialiser le filtre
-              </button>
-            </div>
+          <h2 className="text-xl mb-7 uppercase text-slate-900">Les événements sportifs</h2>
+        </div>
+      </div>
+      <p className="text-center font-semibold text-slate-800">Sports proposés</p>
+      <div className="flex justify-center"><CgScrollH size={32} /></div>
+      <SportSearch
+        sports={sportsList}
+        onSelectSport={onSelectSport}
+        resetFilter={resetFilter}
+        setResetFilter={setResetFilter}
+      />
+      <div className="m-4">
+        <div className=" text-center font-bold text-[#264b81] text-xl uppercase">
+          {selectedSportName || 'Tous les sports'}
+        </div>
+        {selectedSportName && (
+          <div className="text-center">
+            <button
+              type="button"
+              onClick={resetFilterCallback}
+              className="mt-5 border text-sm bg-[#264b81] hover:bg-[#3b9dbb] transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
+            >
+              Réinitialiser le filtre
+            </button>
+          </div>
+        )}
+        <div className="mt-12">
+          <Cards
+            events={displayedEvents}
+          />
+        </div>
+        <div className="flex justify-around">
+          {displayedEventsCount < filteredEventList.length && (
+            <button
+              type="button"
+              onClick={increaseDisplayedEventsCount}
+              className="bg-[#264b81] hover:bg-[#07252e] text-sm text-white py-2 px-4 rounded mt-14"
+            >
+              Voir plus
+            </button>
+          )}
+          {displayedEventsCount > eventsPerPage && (
+            <button
+              type="button"
+              onClick={resetDisplayedEventsCount}
+              className="bg-[#264b81] hover:bg-[#07252e] text-sm text-white py-2 px-4 rounded mt-14"
+            >
+              Réinitialiser l&#39;affichage
+            </button>
           )}
         </div>
-        <div>
-          <Cards
-            events={filteredEventList}
-          />
-          <SportSearch sports={sportsList} onSelectSport={onSelectSport} />
-        </div>
-
       </div>
+
       <ToastContainer autoClose={toastDuration} />
     </>
   );
@@ -114,20 +167,27 @@ export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const eventsProps = await getEventsServerSideProps();
 
-    // Pas besoin de trier ici car déjà trié par getAllEvents
-
     // Récupérer uniquement les sports (avec id et name) associés à un événement
     const sports = eventsProps.eventList.map((event) => (
       { id: event.sportId, name: event.sport.name }));
 
-    // Créer un Set à partir de ces noms pour éliminer les doublons
-    const uniqueSports = Array.from(new Set(sports.map((sport) => sport.name)))
-      .map((name) => sports.find((sport) => sport.name === name));
+    // Compter le nombre d'événements par sport
+    const sportsWithCounts = sports.reduce((acc: {
+      id: string, name: string, count: number
+    }[], sport) => {
+      const existingSport = acc.find((s) => s.id === sport.id);
+      if (existingSport) {
+        existingSport.count += 1;
+      } else {
+        acc.push({ ...sport, count: 1 });
+      }
+      return acc;
+    }, []);
 
     return {
       props: {
         eventList: eventsProps.eventList,
-        sportsList: uniqueSports,
+        sportsList: sportsWithCounts,
       },
     };
   } catch (error) {
