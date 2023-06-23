@@ -1,3 +1,5 @@
+// Requêtes vers l'API sur les routes events.
+
 import axios, { AxiosError } from 'axios';
 import { API_URL } from './apiConfig';
 import { EditEventData } from '../types';
@@ -7,13 +9,12 @@ interface ServerError {
   error: string;
 }
 
+// Récupération des données concernant tous les événements
 export const getAllEvents = async () => {
   try {
-    const response = await axios.get(`${API_URL}/events`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${API_URL}/events`);
 
-    // Trier les événements par date de début
+    // Tri des événements par date de début
     const sortedEvents = response.data.sort((a: {
       startingTime: string | number | Date;
     }, b: { startingTime: string | number | Date; }) => new Date(
@@ -43,11 +44,10 @@ export const getAllEvents = async () => {
   }
 };
 
+// Récupération des données d'un événement identifié par son ID.
 export const getOneEvent = async (eventId: string) => {
   try {
-    const response = await axios.get(`${API_URL}/events/${eventId}`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${API_URL}/events/${eventId}`);
 
     return {
       success: true,
@@ -72,10 +72,11 @@ export const getOneEvent = async (eventId: string) => {
   }
 };
 
+// Création d'un événement.
 export const createOneEvent = async (userId: string, eventData: EditEventData) => {
   try {
     const response = await axios.post(`${API_URL}/events`, eventData, {
-      withCredentials: true,
+      withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
 
     return {
@@ -101,10 +102,11 @@ export const createOneEvent = async (userId: string, eventData: EditEventData) =
   }
 };
 
+// Modification d'un événement.
 export const updateOneEvent = async (eventId: string, eventData: EditEventData) => {
   try {
     const response = await axios.patch(`${API_URL}/events/${eventId}`, eventData, {
-      withCredentials: true,
+      withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
 
     return {
@@ -130,10 +132,11 @@ export const updateOneEvent = async (eventId: string, eventData: EditEventData) 
   }
 };
 
+// Suppression d'un événement.
 export const deleteOneEvent = async (eventId: string) => {
   try {
     await axios.delete(`${API_URL}/events/${eventId}`, {
-      withCredentials: true,
+      withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
 
     return {

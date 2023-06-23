@@ -1,12 +1,17 @@
+// Typage des données événements.
+
+// Participants
 interface User {
   id: string;
   userName: string;
 }
 
+// Nom du sport
 export interface EventSport {
   name: string;
 }
 
+// Données de l'événement
 export interface Event {
   id: string;
   title: string;

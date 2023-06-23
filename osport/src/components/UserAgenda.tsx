@@ -1,7 +1,7 @@
 // Composant gérant l'affichage de l'agenda des evenements d'un utilisateur.
 
 import { EventData } from '@/types';
-import Card from './Card';
+import EventCard from './EventCard';
 
 // Typage TypeScript
 interface UserAgendaProps {
@@ -29,7 +29,7 @@ export default function UserAgenda({ events }: UserAgendaProps) {
       <div className="flex flex-wrap justify-around gap-7 mx-4 mt-10">
         {sortedEvents.map((event) => (
           <div key={event.id} className="sm:w-1/2 md:w-60 text-center">
-            <Card event={event} />
+            <EventCard event={event} />
           </div>
         ))}
       </div>

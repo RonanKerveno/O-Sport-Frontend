@@ -1,3 +1,5 @@
+// Requêtes vers l'API sur les routes users.
+
 import axios, { AxiosError } from 'axios';
 import { UserPublicData, UserPrivateData } from '@/types';
 import { API_URL } from './apiConfig';
@@ -14,14 +16,14 @@ export const loginUser = async (email: string, password: string) => {
       email,
       password,
     }, {
-      withCredentials: true,
+      withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
 
     return {
       success: true,
     };
 
-    // gestion des erreurs
+    // Gestion des erreurs
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;
@@ -46,17 +48,18 @@ export const getLoggedInUser = async () => {
     const response = await axios.get(`${API_URL}/users/login-info`, {
       withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
-
-    // Récupération des données de l'utilisateur.
-    const { success, userId, isAdmin } = response.data;
+    const {
+      success, userId, userName, isAdmin,
+    } = response.data;
 
     return {
       success,
       userId,
+      userName,
       isAdmin,
     };
 
-    // gestion des erreurs
+    // Gestion des erreurs
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;
@@ -79,14 +82,14 @@ export const getLoggedInUser = async () => {
 export const logoutUser = async () => {
   try {
     await axios.post(`${API_URL}/users/logout`, {}, {
-      withCredentials: true,
+      withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
 
     return {
       success: true,
     };
 
-    // gestion des erreurs
+    // Gestion des erreurs
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;
@@ -108,7 +111,6 @@ export const logoutUser = async () => {
 export const getOneUser = async (userId: string) => {
   try {
     const response = await axios.get(`${API_URL}/users/${userId}`);
-    // Recupération des données de l'utilisateur
     const userData = response.data;
 
     return {
@@ -116,7 +118,7 @@ export const getOneUser = async (userId: string) => {
       user: userData,
     };
 
-    // gestion des erreurs
+    // Gestion des erreurs
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;
@@ -134,11 +136,10 @@ export const getOneUser = async (userId: string) => {
   }
 };
 
-// Recupération des données d'un utilisateur via son ID.
+// Recupération des données de tous les utilisateurs.
 export const getAllUsers = async () => {
   try {
     const response = await axios.get(`${API_URL}/users/`);
-    // Recupération des données de l'utilisateur
     const usersData = response.data;
 
     return {
@@ -146,7 +147,7 @@ export const getAllUsers = async () => {
       user: usersData,
     };
 
-    // gestion des erreurs
+    // Gestion des erreurs
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;
@@ -165,13 +166,11 @@ export const getAllUsers = async () => {
 };
 
 // Recupération des données privées d'un utilisateur via son ID.
-// Le cookie a été récupéré depuis le rendu SSR.
 export const getUserByIdPrivate = async (userId: string) => {
   try {
     const response = await axios.get(`${API_URL}/users/${userId}/private`, {
       withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
-    // Recupération des données de l'utilisateur
     const userPrivateData = response.data;
 
     return {
@@ -179,7 +178,7 @@ export const getUserByIdPrivate = async (userId: string) => {
       userPrivate: userPrivateData,
     };
 
-    // gestion des erreurs
+    // Gestion des erreurs
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;
@@ -201,8 +200,6 @@ export const getUserByIdPrivate = async (userId: string) => {
 export const getAllSportsFromOneUser = async (userId: string) => {
   try {
     const response = await axios.get(`${API_URL}/users/${userId}/sports`);
-
-    // Récupération des données
     const userSportsData = response.data;
 
     return {
@@ -210,7 +207,7 @@ export const getAllSportsFromOneUser = async (userId: string) => {
       sports: userSportsData,
     };
 
-    // gestion des erreurs
+    // Gestion des erreurs
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;
@@ -232,8 +229,6 @@ export const getAllSportsFromOneUser = async (userId: string) => {
 export const getAllEventsFromOneUser = async (userId: string) => {
   try {
     const response = await axios.get(`${API_URL}/users/${userId}/events`);
-
-    // Récupération des données
     const userEventsData = response.data;
 
     return {
@@ -241,7 +236,7 @@ export const getAllEventsFromOneUser = async (userId: string) => {
       events: userEventsData,
     };
 
-    // gestion des erreurs
+    // Gestion des erreurs
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;
@@ -263,8 +258,6 @@ export const getAllEventsFromOneUser = async (userId: string) => {
 export const getAllEventsCreatedByOneUser = async (userId: string) => {
   try {
     const response = await axios.get(`${API_URL}/users/${userId}/created-events`);
-
-    // Récupération des données
     const createdEventsData = response.data;
 
     return {
@@ -272,7 +265,7 @@ export const getAllEventsCreatedByOneUser = async (userId: string) => {
       createdEvents: createdEventsData,
     };
 
-    // gestion des erreurs
+    // Gestion des erreurs
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;
@@ -294,7 +287,7 @@ export const getAllEventsCreatedByOneUser = async (userId: string) => {
 export const createOneUser = async (userData: UserPublicData & UserPrivateData) => {
   try {
     const response = await axios.post(`${API_URL}/users`, userData, {
-      withCredentials: true,
+      withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
 
     return {
@@ -302,7 +295,7 @@ export const createOneUser = async (userData: UserPublicData & UserPrivateData) 
       user: response.data,
     };
 
-    // gestion des erreurs
+    // Gestion des erreurs
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;
@@ -324,7 +317,7 @@ export const createOneUser = async (userData: UserPublicData & UserPrivateData) 
 export const updateOneUser = async (userData: UserPublicData & UserPrivateData) => {
   try {
     const response = await axios.patch(`${API_URL}/users/${userData.id}`, userData, {
-      withCredentials: true,
+      withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
 
     return {
@@ -332,7 +325,7 @@ export const updateOneUser = async (userData: UserPublicData & UserPrivateData) 
       user: response.data,
     };
 
-    // gestion des erreurs
+    // Gestion des erreurs
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;
@@ -355,7 +348,7 @@ export const deleteOneUser = async (userId: string, currentUserId: string, isAdm
   try {
     const url = (currentUserId !== userId && isAdmin) ? `${API_URL}/users/${userId}/from-admin` : `${API_URL}/users/${userId}`;
     const response = await axios.delete(url, {
-      withCredentials: true,
+      withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
 
     return {
@@ -385,7 +378,7 @@ export const deleteOneUser = async (userId: string, currentUserId: string, isAdm
 export const addOneUserToOneEvent = async (userId: string, eventId: string) => {
   try {
     const response = await axios.post(`${API_URL}/users/${userId}/events/${eventId}`, {}, {
-      withCredentials: true,
+      withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
 
     return {
@@ -393,7 +386,7 @@ export const addOneUserToOneEvent = async (userId: string, eventId: string) => {
       message: response.data,
     };
 
-    // gestion des erreurs
+    // Gestion des erreurs
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;
@@ -415,7 +408,7 @@ export const addOneUserToOneEvent = async (userId: string, eventId: string) => {
 export const deleteOneUserFromOneEvent = async (userId: string, eventId: string) => {
   try {
     const response = await axios.delete(`${API_URL}/users/${userId}/events/${eventId}`, {
-      withCredentials: true,
+      withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
 
     return {
@@ -423,7 +416,7 @@ export const deleteOneUserFromOneEvent = async (userId: string, eventId: string)
       message: response.data,
     };
 
-    // gestion des erreurs
+    // Gestion des erreurs
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;

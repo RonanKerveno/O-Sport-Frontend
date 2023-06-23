@@ -1,8 +1,11 @@
+// Context du toaster.
+// Vise à déclencher un toaster avec un message associé, d'un composant à un autre.
+
 import React, {
   createContext, ReactNode, useContext, useMemo, useState,
 } from 'react';
 
-// Création du type pour le contexte du toaster
+// Création du type pour le Context du toaster
 type ToastContextType = {
   toastMessage: string;
   toastDuration: number;
@@ -10,12 +13,12 @@ type ToastContextType = {
   setToastDuration: React.Dispatch<React.SetStateAction<number>>;
 };
 
-// Valeurs par défaut du contexte
+// Valeurs par défaut du Context
 const ToastContextDefaultValues: ToastContextType = {
   toastMessage: '',
   toastDuration: 7000,
-  setToastMessage: () => {},
-  setToastDuration: () => {},
+  setToastMessage: () => { },
+  setToastDuration: () => { },
 };
 
 // Création du contexte
@@ -34,11 +37,10 @@ type Props = {
 };
 
 // Composant ToastProvider fournisseur (Provider) du contexte du toaster
+// On fournit le contenu du message, sa durée d'affichage et les méthodes de modification.
 export function ToastProvider({ children }: Props) {
   const [toastMessage, setToastMessage] = useState<string>('');
   const [toastDuration, setToastDuration] = useState<number>(7000);
-
-  // On fournit la valeur du message et la méthode pour le modifier
 
   const value = useMemo(() => ({
     toastMessage,
@@ -47,6 +49,8 @@ export function ToastProvider({ children }: Props) {
     setToastDuration,
   }), [toastDuration, toastMessage]);
 
+  // Rendu du composant, à encapsuler à un niveau suffisamment général pour que tous
+  // les composants visés y aient accès.
   return (
     <ToastContext.Provider value={value}>
       {children}

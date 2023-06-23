@@ -1,6 +1,7 @@
 // Fichier racine qui va structurer toutes nos pages.
 
 import '../styles/globals.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { Inter } from 'next/font/google';
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react';

@@ -1,3 +1,5 @@
+// Utilitaire pour associer une icône React à un nom de sport en PascalCase.
+
 import {
   MdDirectionsBike,
   MdFitnessCenter,

@@ -25,4 +25,7 @@ module.exports = {
       addUtilities(newUtilities);
     },
   ],
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
 };

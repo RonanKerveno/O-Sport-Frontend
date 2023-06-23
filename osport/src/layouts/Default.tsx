@@ -1,7 +1,6 @@
 // Structure générale/squelette des pages du site
 
 import React, { ReactNode } from 'react';
-import 'react-toastify/dist/ReactToastify.css';
 import Header from '@/components/Header';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';

@@ -1,4 +1,4 @@
-// Contexte d'authentification. Gère l'état de connexion d'un visiteur
+// Context d'authentification. Gère l'état de connexion d'un visiteur
 // et les états et fonctions liées.
 
 import {
@@ -20,6 +20,8 @@ type authContextType = {
   logout: () => void;
   // ID de l'utilisateur connecté
   userId: string | null;
+  // Nom de l'utilisateur connecté
+  userName: string | null;
   // Affichage ou non de l'état de connexion (notifications)
   showLoggedStatus: boolean;
   // Fonction pour modifier showLoggedStatus (le passer sur true ou false)
@@ -36,6 +38,7 @@ const authContextDefaultValues: authContextType = {
   login: async () => { },
   logout: () => { },
   userId: null,
+  userName: null,
   showLoggedStatus: false,
   setShowLoggedStatus: () => { },
   error: '',
@@ -64,6 +67,7 @@ export function AuthProvider({ children }: Props) {
   const [isLogged, setLogState] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
   const [showLoggedStatus, setShowLoggedStatus] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
@@ -76,6 +80,7 @@ export function AuthProvider({ children }: Props) {
       if (response.success) {
         setLogState(true);
         setUserId(response.userId);
+        setUserName(response.userName);
         setIsAdmin(response.isAdmin);
       }
       setLoading(false);
@@ -94,6 +99,7 @@ export function AuthProvider({ children }: Props) {
       if (userResponse.success) {
         setLogState(true);
         setUserId(userResponse.userId);
+        setUserName(userResponse.userName);
         setIsAdmin(userResponse.isAdmin);
         setError('');
         setShowLoggedStatus(true);
@@ -129,10 +135,11 @@ export function AuthProvider({ children }: Props) {
     login,
     logout,
     userId,
+    userName,
     showLoggedStatus,
     setShowLoggedStatus,
     error,
-  }), [error, isAdmin, isLogged, login, logout, showLoggedStatus, userId]); // Dépendances
+  }), [error, isAdmin, isLogged, login, logout, showLoggedStatus, userId, userName]); // Dépendances
 
   // Si l'état est en chargement on ne rend pas le composant
   if (isLoading) {

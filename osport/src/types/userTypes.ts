@@ -1,8 +1,12 @@
+// Typage des données utilisateurs
+
+// Sports favoris
 export interface FavoriteSport {
   id: string;
   name: string;
 }
 
+// Données publiques
 export interface UserPublicData {
   id: string;
   userName: string;
@@ -16,6 +20,7 @@ export interface UserPublicData {
   favoriteSports: FavoriteSport[];
 }
 
+// Données privées
 export interface UserPrivateData {
   email: string;
   firstName: string;

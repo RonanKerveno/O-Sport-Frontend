@@ -1,3 +1,5 @@
+// Composant gérant l'affichage d'une carte d'événement.
+
 import { HiUserGroup } from 'react-icons/hi2';
 import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
@@ -6,17 +8,19 @@ import sportIconMap from '@/utils/sportIconMap';
 import { sportNameConvert } from '@/utils/sportNameConvert';
 import Avvvatars from 'avvvatars-react';
 
-interface CardProps {
+// Typage des props
+interface EventCardProps {
   event: Event;
 }
 
-export default function Card({ event }: CardProps) {
+export default function EventCard({ event }: EventCardProps) {
   // Formatage date et l'heure.
   const startingTime = format(parseISO(event.startingTime), 'dd/MM/yyyy HH:mm');
-
+  // Recupération de l'icône correspondant au sport de l'événement.
   const SportIcon = sportIconMap[sportNameConvert(event.sport.name)] || sportIconMap.Sports;
 
   return (
+    // La carte est encapsulée dans un lien pointant vers l'événement.
     <Link href={`/evenement/${event.id}`}>
       <div className="flex flex-col bg-clip-border rounded-xl bg-slate-200 text-gray-900 shadow-md transform motion-safe:hover:scale-110 duration-300">
         <div className="flex justify-end p-4">
@@ -37,8 +41,9 @@ export default function Card({ event }: CardProps) {
           <div className="mt-2 text-slate-500">
             Sport : <span className="text-slate-700">{event.sport.name}</span>
           </div>
-          <div className="mt-7 flex justify-center">
+          <div className="mt-7 flex justify-center items-baseline">
             <div className="flex justify-center mb-4">
+              {/* génération automatique d'un avatar à partir du nom d'utilisateur */}
               <Avvvatars value={event.creator.userName} />
             </div>
             <div className="ml-2 flex justify-center">

@@ -1,3 +1,5 @@
+/* Définition du CSS global. Le projet utilise des classes Tailwind */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

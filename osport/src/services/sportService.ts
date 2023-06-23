@@ -1,3 +1,5 @@
+// Requêtes vers l'API sur les routes sports.
+
 import { Sport } from '@/types';
 import axios, { AxiosError } from 'axios';
 import { API_URL } from './apiConfig';
@@ -11,11 +13,9 @@ interface ServerError {
 export const getAllSports = async () => {
   try {
     const response = await axios.get(`${API_URL}/sports`);
-
-    // Récupération des données
     const sportsData = response.data;
 
-    // Trier les sports par ordre alphabétique
+    // Tri des sports par ordre alphabétique
     const sortedSportsData = sportsData.sort(
       (a: { name: string; }, b: { name: any; }) => a.name.localeCompare(b.name),
     );
@@ -24,6 +24,8 @@ export const getAllSports = async () => {
       success: true,
       sports: sortedSportsData,
     };
+
+    // Gestion des erreurs
   } catch (error) {
     return {
       success: false,
@@ -35,14 +37,14 @@ export const getAllSports = async () => {
 export const getOneSport = async (sportId: string) => {
   try {
     const response = await axios.get(`${API_URL}/sports/${sportId}`);
-
-    // Récupération des données
     const sportData = response.data;
 
     return {
       success: true,
       sport: sportData,
     };
+
+    // Gestion des erreurs
   } catch (error) {
     return {
       success: false,
@@ -50,10 +52,11 @@ export const getOneSport = async (sportId: string) => {
   }
 };
 
+// Création d'un sport (admin)
 export const createOneSport = async (sportData: Sport) => {
   try {
     const response = await axios.post(`${API_URL}/sports`, sportData, {
-      withCredentials: true,
+      withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
 
     return {
@@ -61,7 +64,7 @@ export const createOneSport = async (sportData: Sport) => {
       event: response.data,
     };
 
-    // gestion des erreurs
+    // Gestion des erreurs
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<ServerError>;
@@ -79,6 +82,7 @@ export const createOneSport = async (sportData: Sport) => {
   }
 };
 
+// Modification d'un sport (admin)
 export const updateOneSport = async (sportId: string, sportData: Sport) => {
   try {
     const response = await axios.patch(`${API_URL}/sports/${sportId}`, sportData, {
@@ -108,10 +112,11 @@ export const updateOneSport = async (sportId: string, sportData: Sport) => {
   }
 };
 
+// Suppression d'un sport (admin)
 export const deleteOneSport = async (sportId: string) => {
   try {
     await axios.delete(`${API_URL}/sports/${sportId}`, {
-      withCredentials: true,
+      withCredentials: true, // Permet l'envoi du cookie dans la requête
     });
 
     return {

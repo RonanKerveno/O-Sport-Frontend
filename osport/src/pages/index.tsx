@@ -10,12 +10,15 @@ import { toast, ToastContainer } from 'react-toastify';
 import { useToast } from '@/contexts/ToastContext';
 import { useAuth } from '@/contexts/AuthContext';
 import InfoPanel from '@/components/InfoPanel';
-import Cards from '@/components/Cards';
-import SportSearch from '@/components/SportSearch';
+import EventCards from '@/components/EventCards';
+import SportFilter from '@/components/SportFilter';
 import { EventData } from '@/types';
 import Link from 'next/link';
 import { CgScrollH } from 'react-icons/cg';
+import sportIconMap from '@/utils/sportIconMap';
+import { sportNameConvert } from '@/utils/sportNameConvert';
 
+// Typage des données reccueillies en SSR
 interface EventsDataProps {
   eventList: EventData;
   sportsList: {
@@ -26,23 +29,16 @@ interface EventsDataProps {
 }
 
 export default function Home({ eventList, sportsList }: EventsDataProps) {
-  const eventsPerPage = 2;
-  const [displayedEventsCount, setDisplayedEventsCount] = useState(eventsPerPage);
+  // Gestion des messages toaster
+
+  // Récupération du statut de l'utilisateur connecté via Context
   const {
     isAdmin, isLogged, showLoggedStatus, setShowLoggedStatus,
   } = useAuth();
-  const [selectedSportId, setSelectedSportId] = useState<string | null>(null);
-  const [selectedSportName, setSelectedSportName] = useState<string | null>(null);
-
-  const increaseDisplayedEventsCount = () => {
-    setDisplayedEventsCount((prevCount) => prevCount + eventsPerPage);
-  };
-
-  // On affiche un message juste après la redirection depuis une page de connexion/déconnexion.
   const {
     toastMessage, toastDuration, setToastMessage, setToastDuration,
   } = useToast();
-
+  // useEffect gérant les actions d'affichage des messages toaster.
   useEffect(() => {
     if (showLoggedStatus) {
       const message = isLogged ? 'Vous êtes connecté' : 'Vous êtes déconnecté';
@@ -64,31 +60,63 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
     setToastDuration,
   ]);
 
+  // Gestion des filtres par sport
+
+  // States gérant l'ID et le nom du sport séléctionné
+  const [selectedSportId, setSelectedSportId] = useState<string | null>(null);
+  const [selectedSportName, setSelectedSportName] = useState<string | null>(null);
+
+  // Fonction liée à la sélection d'un sport.
   const onSelectSport = useCallback((sportId: SetStateAction<string | null>) => {
     setSelectedSportId(sportId);
+    // On cherche les données du sport séléctionné dans la liste de sportList
     const selectedSport = sportsList.find((sport) => sport.id === sportId);
     setSelectedSportName(selectedSport ? selectedSport.name : null);
   }, [sportsList]);
 
+  // On filtre dans la liste des événements ceux dont l'ID du sport associé
+  // correspond à l'ID sport séléctionné.
   const filteredEventList = selectedSportId ? eventList.filter(
     (event) => event.sportId === selectedSportId,
   )
     : eventList;
 
-  // Utilisez displayedEventsCount pour limiter les événements affichés
-  const displayedEvents = filteredEventList.slice(0, displayedEventsCount);
-
-  const resetDisplayedEventsCount = () => {
-    setDisplayedEventsCount(eventsPerPage);
+  // On récupère l'icône à afficher à coté du titre du sport séléctionné.
+  const getSportIcon = (sportName: string | null) => {
+    // On définit notre composant d'icône par rapport au sport séléctionné.
+    const IconComponent = sportName ? sportIconMap[sportNameConvert(sportName)]
+      || sportIconMap.Sports : sportIconMap.Sports;
+    return <IconComponent size={32} />;
   };
 
+  // State gérant le reset du filtre par sport
   const [resetFilter, setResetFilter] = useState(false);
-
+  // Fonction gérant le reset du filtre de sport.
   const resetFilterCallback = useCallback(() => {
     setSelectedSportId(null);
     setSelectedSportName(null);
     setResetFilter(true);
   }, []);
+
+  // Gestion du nombre d'évenements à afficher
+
+  // Nombre d'événements à afficher par défaut
+  const eventsPerPage = 10;
+
+  // State de gestion du compteur d'événements à afficher.
+  const [displayedEventsCount, setDisplayedEventsCount] = useState(eventsPerPage);
+  // Incrémentation du compteur (quand on clique sur "voir plus")
+  const increaseDisplayedEventsCount = () => {
+    setDisplayedEventsCount((prevCount) => prevCount + eventsPerPage);
+  };
+
+  // On définit une variable pour limiter le nombre d'événements affichés à la valeur du compteur.
+  const displayedEvents = filteredEventList.slice(0, displayedEventsCount);
+
+  // Fonction de reset du compteur pour revenir au nombre initial d'événements à afficher.
+  const resetDisplayedEventsCount = () => {
+    setDisplayedEventsCount(eventsPerPage);
+  };
 
   return (
     <>
@@ -96,7 +124,9 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
         <title>Accueil - osport</title>
       </Head>
       <div className="mx-4 mt-14">
+        {/* Appel au composant panneau d'information */}
         <InfoPanel />
+        {/* Option de modification à destination de l'administrateur */}
         {isAdmin
           && (
             <div className="my-4 ml-7">
@@ -107,18 +137,27 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
           <h2 className="text-xl mb-7 uppercase text-slate-900">Les événements sportifs</h2>
         </div>
       </div>
-      <p className="text-center font-semibold text-slate-800">Sports proposés</p>
+      <p className="text-center font-semibold text-slate-800">Filtrer par sport</p>
       <div className="flex justify-center"><CgScrollH size={32} /></div>
-      <SportSearch
+      {/* Appel au composant barre de recherche des sports */}
+      <SportFilter
         sports={sportsList}
         onSelectSport={onSelectSport}
         resetFilter={resetFilter}
         setResetFilter={setResetFilter}
       />
       <div className="m-4">
-        <div className=" text-center font-bold text-[#264b81] text-xl uppercase">
-          {selectedSportName || 'Tous les sports'}
+        <div className="text-center font-bold text-[#264b81] text-xl uppercase">
+          {/* Si un sport est sélectionné on affiche son nom et l'icône asociée */}
+          {selectedSportName
+            ? (
+              <div className="flex justify-center items-center gap-3">
+                {getSportIcon(selectedSportName)} {selectedSportName}
+              </div>
+            )
+            : 'Tous les sports'}
         </div>
+        {/* Si un sport est sélectionné on affiche un bouton pour rénitialiser le filtrage */}
         {selectedSportName && (
           <div className="text-center">
             <button
@@ -131,11 +170,14 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
           </div>
         )}
         <div className="mt-12">
-          <Cards
+          {/* Appel au composant affichant les cartes d'événements */}
+          <EventCards
             events={displayedEvents}
           />
         </div>
-        <div className="flex justify-around">
+        <div className="flex justify-center gap-4">
+          {/* Si le compteur d'évenements affichés est inférieur au nombre total d'évenements on
+          ajoute un bouton "voir plus" */}
           {displayedEventsCount < filteredEventList.length && (
             <button
               type="button"
@@ -145,33 +187,36 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
               Voir plus
             </button>
           )}
+          {/* Si le compteur d'évenements affichés est supérieur au nombre par défaut d'evenements
+          à afficher on ajouter un bouton pour revenir à l'affichage par défaut */}
           {displayedEventsCount > eventsPerPage && (
             <button
               type="button"
               onClick={resetDisplayedEventsCount}
               className="bg-[#264b81] hover:bg-[#07252e] text-sm text-white py-2 px-4 rounded mt-14"
             >
-              Réinitialiser l&#39;affichage
+              Limiter l&#39;affichage
             </button>
           )}
         </div>
       </div>
 
+      {/* Appel au composant toaster */}
       <ToastContainer autoClose={toastDuration} />
     </>
   );
 }
 
-// Traitement des requête API coté SSR pour récupérer la liste de événements.
+// Traitement des requête API coté SSR pour récupérer la liste des événements.
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const eventsProps = await getEventsServerSideProps();
 
-    // Récupérer uniquement les sports (avec id et name) associés à un événement
+    // Récupération des sports (avec id et name) associés à un événement
     const sports = eventsProps.eventList.map((event) => (
       { id: event.sportId, name: event.sport.name }));
 
-    // Compter le nombre d'événements par sport
+    // Comptage du nombre d'événements par sport
     const sportsWithCounts = sports.reduce((acc: {
       id: string, name: string, count: number
     }[], sport) => {
