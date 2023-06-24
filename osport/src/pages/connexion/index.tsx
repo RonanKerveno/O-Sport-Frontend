@@ -16,13 +16,18 @@ export default function Login() {
   // Hook personnalisé de redirection vers l'accueil des utilisateurs déjà connectés
   useLoggedRedirect();
 
-  // Lancement de la requêtre d elogin via le Context d'authentification.
+  // Lancement de la requête de login via le Context d'authentification.
   const handleLogin = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     await login(email, password);
   };
+
+  // Gestion des messages toaster
+
+  // State gérant les paramètres du toaster.
   const { setToastMessage, toastMessage, toastDuration } = useToast();
 
+  // useEffect gérant les actions d'affichage des messages toaster.
   useEffect(() => {
     if (toastMessage) {
       toast(toastMessage);
@@ -42,55 +47,53 @@ export default function Login() {
       <Head>
         <title>Connexion - osport</title>
       </Head>
-      <div className="flex flex-col flex-wrap bg-slate-100 justify-center items-center">
-        <div className="flex bg-white shadow-md m-4 rounded-md p-4">
-          <form onSubmit={handleLogin} className="flex flex-col">
-            <label htmlFor="EmailInput" className="m-2 p-1 pl-2 border rounded-md border-gray-400">
-              Email :
-              <input
-                type="text"
-                id="EmailInput"
-                name="Email"
-                className="border w-44 m-2"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </label>
+      <div className="bg-slate-300 shadow-md mx-4 mb-10 rounded-md">
+        <form onSubmit={handleLogin} className="flex flex-col items-center p-7">
+          <label htmlFor="EmailInput" className="p-3 rounded-md border border-gray-400">
+            <div>Email</div>
+            <input
+              type="text"
+              id="EmailInput"
+              name="Email"
+              className="rounded-md m-2 px-3 py-2"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </label>
 
-            <label htmlFor="PasswordInput" className="m-2 p-1 pl-2 border rounded-md border-gray-400">
-              Mot de passe (3 caractères minimum) :
-              <input
-                type="password"
-                id="PasswordInput"
-                name="password"
-                minLength={3}
-                required
-                className="border w-44 m-2"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </label>
-            <div className="w-full text-center">
-              <button type="submit" className="text-center border p-2  rounded-md hover:bg-blue-600 hover:text-[#f9fafb] ">
-                Connexion
-              </button>
-            </div>
-
-            {/* Affichage de l'erreur en cas d'échec de la connexion */}
-            {error && <p>{error}</p>}
-          </form>
-        </div>
-        <div className="bg-white border border-black m-4 rounded-md p-4 h-1/4">
-          <div className="w-full text-center">
-            <p className="mb-3">Pas encore parmis nous ?</p>
-            <button
-              type="button"
-              className="text-center border p-2  rounded-md hover:bg-blue-600 hover:text-[#f9fafb]"
-              onClick={() => router.push('/inscription')}
-            >
-              Inscription
+          <label htmlFor="PasswordInput" className="m-2 p-3 rounded-md border border-gray-400">
+            <div>Mot de passe</div>
+            <input
+              type="password"
+              id="PasswordInput"
+              name="password"
+              minLength={3}
+              required
+              className="rounded-md m-2 px-3 py-2"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </label>
+          <div>
+            <button type="submit" className="mt-6 text-white text-center bg-[#264b81] py-2 px-3 rounded-md hover:bg-blue-600 hover:text-[#f9fafb]">
+              Connexion
             </button>
           </div>
+
+          {/* Affichage de l'erreur en cas d'échec de la connexion */}
+          {error && <p>{error}</p>}
+        </form>
+      </div>
+      <div className="bg-slate-200 shadow-md m-4 rounded-md text-center">
+        <div className="p-5 rounded-md border border-gray-200">
+          <p className="mb-3 text-orange-900 font-bold">Pas encore parmis nous ?</p>
+          <button
+            type="button"
+            className="mt-4 text-white text-center bg-green-700 py-2 px-3 rounded-md hover:bg-blue-600 hover:text-[#f9fafb]"
+            onClick={() => router.push('/inscription')}
+          >
+            Inscription
+          </button>
         </div>
       </div>
       <ToastContainer autoClose={toastDuration} />

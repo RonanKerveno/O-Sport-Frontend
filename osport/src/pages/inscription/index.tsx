@@ -11,31 +11,31 @@ import { useAuth } from '@/contexts/AuthContext';
 import useLoggedRedirect from '@/hooks/useLoggedRedirect';
 import UserProfileForm from '@/components/UserProfileForm';
 import { useToast } from '@/contexts/ToastContext';
+import { FaUser } from 'react-icons/fa';
 
-// Typage TypeScript
+// Typage des données :
+// - Données utilisateur
 type FullUserData = UserPublicData & UserPrivateData;
-
+// - Liste des sports reccueillie en SSR
 interface DataProfileProps {
   sportsList: SportsListData;
 }
 
 export default function Subscribe({ sportsList }: DataProfileProps) {
-  const { isLogged } = useAuth();
-  const [errorMessage, setErrorMessage] = useState('');
+  // Context gérant les paramètres du toaster.
   const { setToastMessage, setToastDuration } = useToast();
 
-  useLoggedRedirect();
+  // State gérant les messages d'erreurs lors de la création du profil.
+  const [errorMessage, setErrorMessage] = useState('');
 
-  // Si l'utilisateur est déjà inscrit on lui indique un message
-  if (isLogged) {
-    return <p>Vous êtes connecté.</p>;
-  }
-
+  // Fonction gérant la demande de création du nouvel utilisteur.
   const handleCreate = async (fullUserData: FullUserData) => {
     try {
       // Appel à la fonction modifyOneUser pour mettre à jour les données utilisateur
       const response = await createOneUser(fullUserData);
 
+      // Si la création est OK on redirige vers la page de connexion en progammant un message sur
+      // le toaster.
       if (response.success) {
         setToastMessage(`Bienvenue ${fullUserData.userName}, vous pouvez vous connecter avec vos identifants`);
         setToastDuration(7000);
@@ -48,7 +48,21 @@ export default function Subscribe({ sportsList }: DataProfileProps) {
     }
   };
 
-  // On initialise les données de profil publiques à blanc
+  // Appel au Hook personnalisé de redirection vers Home si l'utilisateur est déjà connecté
+  useLoggedRedirect();
+
+  // Appel au Context pour determiner si l'utilisateur est déjà loggué.
+  const { isLogged } = useAuth();
+
+  // Si l'utilisateur est déjà loggué (donc inscrit) on rend juste un message.
+  // Utile en complément de "useLoggedRedirect" car le composant est rendu avant que la redirection
+  // ne soit effective.
+  if (isLogged) {
+    return <p>Vous êtes connectés.</p>;
+  }
+
+  // On initialise les données de profil publiques à blanc car le composant UserProfileForm sert à
+  // l'inscription et à la modification de profil : donc il a besoin de données de départ.
   const nullUserPublicData = {
     id: '',
     userName: '',
@@ -67,30 +81,31 @@ export default function Subscribe({ sportsList }: DataProfileProps) {
       <Head>
         <title>Inscription - osport</title>
       </Head>
-      <div className="flex flex-col space- w-screen">
-        <div className="text-2xl font-sans font-bold ml-24 border mt-7">
-          <h1> Inscription </h1>
+      <section className="px-4">
+        <div className="flex justify-center items-center gap-3 mt-2 mb-10">
+          <FaUser size={24} />
+          <h1 className="text-2xl text-center font-bold uppercase"> Inscription </h1>
         </div>
         {/* Utilisation du composant UserProfileForm */}
-        <div className=" max-w-md mt-6">
+        <div>
           <UserProfileForm
             isEdit={false} // Il s'agit d'une création de profil
             userData={nullUserPublicData}// Pas de données utilisateur à afficher
             sportsList={sportsList}
-            onSubmit={handleCreate} // Fonction de rappel pour traiter les données soumises
+            onSubmit={handleCreate}
           />
           {errorMessage && <p className="text-red-500 mt-3 ml-4">{errorMessage}</p>}
         </div>
-      </div>
+      </section>
     </>
   );
 }
 
-// Traitement des requête API coté SSR pour récupérer les données publiques.
+// Traitement des requête API coté SSR pour récupérer la liste des sports.
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const props = await getSportsServerSideProps();
-    return { props };
+    const sportsListData = await getSportsServerSideProps();
+    return { props: sportsListData };
   } catch (error) {
     return { notFound: true };
   }

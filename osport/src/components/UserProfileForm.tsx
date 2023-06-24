@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { CgScrollV } from 'react-icons/cg';
 import { getUserByIdPrivate } from '@/services/userService';
+import sportIconMap from '@/utils/sportIconMap';
+import { sportNameConvert } from '@/utils/sportNameConvert';
 import useAddressSearch from '../hooks/useAddressSearch';
 import UserTextFieldForm from './UserTextFieldForm';
 import AddressSearchModal from './AdressSearchModal';
@@ -10,12 +13,11 @@ import {
   UserPublicData, UserPrivateData, SportsListData, AddressApi,
 } from '../types';
 
-// Typages TypeScript
+// Typages
 
 type FormValues = UserPublicData & UserPrivateData & { password: string; confirmPassword: string; };
-
 type SubmittedData = Omit<FormValues, 'confirmPassword'>;
-
+// Typage des props
 interface UserProfileFormProps {
   isEdit: boolean;
   userData: UserPublicData;
@@ -24,7 +26,8 @@ interface UserProfileFormProps {
   onSubmit: (submittedData: SubmittedData) => void;
 }
 
-// Initialisation par défaut des valeurs des données privées
+// Initialisation par défaut des valeurs des données privées car ces dernières
+// seront requêtées coté client (pas d'ccès au cookie httponly/secure en SSR).
 const nullUserPrivateData = {
   email: '',
   firstName: '',
@@ -38,41 +41,18 @@ const nullUserPrivateData = {
 export default function UserProfileForm({
   isEdit, userData, sportsList, onSubmit,
 }: UserProfileFormProps) {
+  // State gérant les changements d'état de mot de passe via l'input.
   const [changePassword, setChangePassword] = useState(!isEdit);
+
+  // State gérant les données privées de l'utilisateur.
   const [userPrivateData, setUserPrivateData] = useState<UserPrivateData | null>(null);
-  // Etat pour le suivi des sports sélectionnés
+
+  // Définition des propriétés de React Hook Form pour le contrôle du formulaire.
   const {
     handleSubmit, control, setValue, setError, formState: { errors }, watch, reset,
   } = useForm<FormValues>({ defaultValues: { ...userData, ...userPrivateData } });
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const { loading, addresses, errorAddress } = useAddressSearch(searchQuery);
 
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-
-  const extractRegionFromContext = (context: string) => {
-    // Sépare le contexte en utilisant la virgule comme séparateur
-    const contextParts = context.split(',');
-    return contextParts[contextParts.length - 1].trim();
-  };
-
-  const selectAddress = (address: AddressApi) => {
-    // Mise à jour des valeurs de formulaire pour chaque champ d'adresse
-    setValue('street', address.properties.name);
-    setValue('zipCode', address.properties.postcode);
-    setValue('city', address.properties.city);
-    const region = extractRegionFromContext(address.properties.context);
-    setValue('region', region);
-    closeModal();
-  };
-
-  // Définition des données privées de l'utilisateur lorsque les données sont modifiées
+  // useEffect gérant la définition des données privées de l'utilisateur
   useEffect(() => {
     const fetchPrivateData = async () => {
       let updatedDefaultValues;
@@ -109,16 +89,58 @@ export default function UserProfileForm({
     fetchPrivateData();
   }, [userData.id, userData, reset, changePassword, isEdit]);
 
+  // Sureveillance des sports séléctionnés via les cases à cocher.
+  const favoriteSports = watch('favoriteSports');
+
+  // Recherche prédictive d'adresse (via API Adresse)
+
+  // State gérant la saisie d'adresse à envoyer dans la requête API.
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Appel au Hook personnalisé qui va déclencher et gérer les requêtes vers l'API.
+  const { loading, addresses, errorAddress } = useAddressSearch(searchQuery);
+
+  // State gérant l'état de la modale de recherche prédictive d'adresse.
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  // Fonction liée au clic sur le bouton de recherche d'adresse.
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  // Fonction liée aux demande de fermeture de la modale de recherche prédictive d'adresse.
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  // L'API Adresse utilisée retourne une propriété "context" qui contient le n° de département,
+  // le nom de département et le nom de région. Il faut donc extraire le nom de région.
+  const extractRegionFromContext = (context: string) => {
+    // Sépare le contexte en utilisant la virgule comme séparateur
+    const contextParts = context.split(',');
+    return contextParts[contextParts.length - 1].trim();
+  };
+
+  // Fonction de mise à jour des valeurs de formulaire pour chaque champ d'adresse, à partir
+  // de l'adresse séléctionnée dans les réponses de l'API Adresse.
+  const selectAddress = (address: AddressApi) => {
+    setValue('street', address.properties.name);
+    setValue('zipCode', address.properties.postcode);
+    setValue('city', address.properties.city);
+    const region = extractRegionFromContext(address.properties.context);
+    setValue('region', region);
+    closeModal();
+  };
+
   // On attend que les données privées soient récupérées avant le render
   if (!userPrivateData) {
     return null;
   }
-  const favoriteSports = watch('favoriteSports');
 
   return (
     // Formulaire de création ou modificaiton de profil utilisant react-hook-form et le composant
     // UserTextFieldForm pour les types d'inputs les plus répétés.
-    <div className="flex flex-col min-h-screen justify-center container mx-auto px-4 w-screen p-10">
+    <div>
       <form
         onSubmit={handleSubmit((data) => {
           const { confirmPassword, ...submittedData } = data;
@@ -133,9 +155,7 @@ export default function UserProfileForm({
             onSubmit(submittedData as SubmittedData);
           }
         })}
-        className="max-w-sm"
       >
-
         <UserTextFieldForm
           control={control}
           name="userName"
@@ -153,8 +173,8 @@ export default function UserProfileForm({
         />
         {/* Vérification du mot de passe par un champ de confirmation */}
         {isEdit && (
-          <div className="my-4">
-            <label htmlFor="changePassword" className="font-bold block">
+          <div className="my-7">
+            <label htmlFor="changePassword" className="font-bold">
               Modifier le mot de passe
               <input
                 id="changePassword"
@@ -197,9 +217,9 @@ export default function UserProfileForm({
             />
           </>
         )}
-        <div className="my-4">
-          <label htmlFor="description" className="font-bold block">
-            Description
+        <div className="my-7">
+          <label htmlFor="description" className="font-bold">
+            Description <span className="text-sm font-medium">(*Obligatoire)</span>
             <Controller
               name="description"
               control={control}
@@ -219,36 +239,51 @@ export default function UserProfileForm({
           </label>
         </div>
         {/* Définition des sports favoris par cases à cocher */}
-        <div className="my-4 overflow-y-auto max-h-64">
-          <label htmlFor="favoriteSports" className="font-bold block">
-            Sports favoris
-            {sportsList.map((sport) => (
-              <div key={sport.id}>
-                <Controller
-                  name="favoriteSports"
-                  control={control}
-                  render={({ field }) => (
-                    <input
-                      {...field}
-                      type="checkbox"
-                      checked={favoriteSports.some((fs) => fs.id === sport.id)}
-                      onChange={(e) => {
-                        const isAlreadyAdded = favoriteSports.some((fs) => fs.id === sport.id);
-                        if (e.target.checked && !isAlreadyAdded) {
-                          const updatedSports = [...favoriteSports, sport];
-                          setValue('favoriteSports', updatedSports);
-                        } else if (!e.target.checked && isAlreadyAdded) {
-                          const updatedSports = favoriteSports.filter((fs) => fs.id !== sport.id);
-                          setValue('favoriteSports', updatedSports);
-                        }
-                      }}
-                      value={undefined}
+        <div className="my-7">
+          <label htmlFor="favoriteSports">
+            <p className="font-bold mb-3">Sports favoris <span className="text-sm font-medium">(*Un sport minimum)</span></p>
+            <div className="flex">
+              <p className="mb-3 text-sm font-semibold ml-1 pt-0.5">Scrollez pour tout voir</p>
+              <CgScrollV size={22} />
+            </div>
+            <div className={`overflow-y-auto max-h-52 px-4 pt-4 border ${errors.favoriteSports ? 'border-red-600' : 'border-gray-300'} rounded mt-1`}>
+              {sportsList.map((sport) => {
+                const SportIcon = sportIconMap[sportNameConvert(sport.name)] || sportIconMap.Sports;
+                return (
+                  <div key={sport.id} className="flex items-center gap-2 mb-4">
+                    <Controller
+                      name="favoriteSports"
+                      control={control}
+                      render={({ field }) => (
+                        <input
+                          {...field}
+                          type="checkbox"
+                          checked={favoriteSports.some((fs) => fs.id === sport.id)}
+                          onChange={(e) => {
+                            const isAlreadyAdded = favoriteSports.some((fs) => fs.id === sport.id);
+                            if (e.target.checked && !isAlreadyAdded) {
+                              const updatedSports = [...favoriteSports, sport];
+                              setValue('favoriteSports', updatedSports);
+                            } else if (!e.target.checked && isAlreadyAdded) {
+                              const updatedSports = favoriteSports.filter(
+                                (fs) => fs.id !== sport.id,
+                              );
+                              setValue('favoriteSports', updatedSports);
+                            }
+                          }}
+                          value={undefined}
+                        />
+                      )}
                     />
-                  )}
-                />
-                {sport.name}
-              </div>
-            ))}
+                    <div className="flex items-center gap-2">
+                      <SportIcon size={22} />
+                      <div>{sport.name}</div>
+                    </div>
+                  </div>
+                );
+              })}
+
+            </div>
           </label>
           {errors.favoriteSports && <div className="text-red-600">{errors.favoriteSports.message}</div>}
         </div>
@@ -267,9 +302,9 @@ export default function UserProfileForm({
           error={errors.lastName}
         />
         {/* Interface de choix de date pour la date de naissance */}
-        <div className="my-4">
-          <label htmlFor="dateOfBirth" className="font-bold block">
-            Date de naissance
+        <div className="my-7">
+          <label htmlFor="dateOfBirth" className="font-bold">
+            Date de naissance <span className="text-sm font-medium">(*Obligatoire)</span>
             <Controller
               name="dateOfBirth"
               control={control}
@@ -287,9 +322,9 @@ export default function UserProfileForm({
           </label>
         </div>
         {/* Liste déroulante pour le genre */}
-        <div className="my-4">
-          <label htmlFor="gender" className="font-bold block">
-            Genre
+        <div className="my-7">
+          <label htmlFor="gender" className="font-bold">
+            Genre <span className="text-sm font-medium">(*Obligatoire)</span>
             <Controller
               name="gender"
               control={control}
@@ -310,7 +345,14 @@ export default function UserProfileForm({
           </label>
         </div>
 
-        <button type="button" onClick={openModal}>Rechercher une adresse</button>
+        <button
+          type="button"
+          onClick={openModal}
+          className="bg-slate-700 text-white py-2 px-4 rounded-md mt-4 mb-4"
+        >
+          Rechercher l&#39;adresse
+        </button>
+        <p className="font-medium">*Utilisez ce bouton de recherche pour compléter les champs obligatoires ci-dessous.</p>
 
         <UserTextFieldForm
           control={control}
@@ -344,12 +386,14 @@ export default function UserProfileForm({
           error={errors.street}
           disabled={!errorAddress}
         />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white mt-4 px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Valider
-        </button>
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="bg-[#264b81] text-lg text-white mt-4 px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Valider
+          </button>
+        </div>
       </form>
       <AddressSearchModal
         modalIsOpen={modalIsOpen}

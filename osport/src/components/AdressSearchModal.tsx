@@ -1,3 +1,5 @@
+// Composant d'affichage de recherche prédictive d'adresse.
+
 import useDebounce from '@/hooks/useDebounce';
 import { ChangeEvent, useEffect, useState } from 'react';
 import Modal from 'react-modal';
@@ -34,9 +36,10 @@ function AddressSearchModal({
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
       contentLabel="Recherche d'adresse"
-      className="flex flex-col items-center justify-center bg-slate-200 text-black p-8 rounded"
+      className="flex flex-col items-center justify-center bg-slate-300 text-black p-8 rounded"
     >
-      <h2 className="text-2xl font-bold mb-4">Recherche d&#39;adresse</h2>
+      <h2 className="text-xl font-bold mb-4">Entrez votre adresse</h2>
+      <p className="mb-4 font-medium text-center">Puis séléctionnez la bonne correspondance</p>
       <input
         value={inputValue}
         onChange={handleInputChange}
@@ -54,7 +57,7 @@ function AddressSearchModal({
               type="button"
               key={address.properties.id}
               onClick={() => selectAddress(address)}
-              className="cursor-pointer hover:bg-blue-200 p-2 rounded text-left"
+              className="cursor-pointer hover:bg-blue-200 p-3 rounded text-slate-900"
             >
               {address.properties.label}
             </button>

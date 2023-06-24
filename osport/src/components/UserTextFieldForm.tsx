@@ -1,11 +1,11 @@
-// Composant gérant les controlleurs de type string de formulaire de profil utilisateur
+// Composant gérant les controlleurs de type string du formulaire de profil utilisateur
 /* eslint-disable react/require-default-props */
 
 import {
   Control, Controller, RegisterOptions, FieldError, FieldValues, Path,
 } from 'react-hook-form';
 
-// Typage TypeScript
+// Typage des props
 interface UserTextFieldProps<TFieldValues extends FieldValues> {
   control: Control<TFieldValues>;
   name: Path<TFieldValues>;
@@ -16,14 +16,13 @@ interface UserTextFieldProps<TFieldValues extends FieldValues> {
   disabled?: boolean;
 }
 
-// Définition du composant.
 export default function UserTextFieldForm<TFieldValues extends FieldValues>({
   control, name, label, rules, error, type, disabled,
 }: UserTextFieldProps<TFieldValues>) {
   return (
-    <div className="my-4">
-      <label htmlFor={name} className="font-bold block">
-        {label}
+    <div className="my-7">
+      <label htmlFor={name} className="font-bold">
+        {label} <span className="text-sm font-medium">(*Obligatoire)</span>
         <Controller
           name={name}
           control={control}

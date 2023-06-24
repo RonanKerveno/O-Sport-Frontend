@@ -1,10 +1,11 @@
+// Composant Formulaire de contact.
+
 import {
   FormEvent, ChangeEvent, useRef, useState,
 } from 'react';
 import emailjs from '@emailjs/browser';
 import Link from 'next/link';
 
-// Formulaire de contact.
 export default function ContactForm() {
   const form = useRef<HTMLFormElement>(null);
 
@@ -78,12 +79,14 @@ export default function ContactForm() {
         </div>
       )}
       <div className="mb-4">
-        <label htmlFor="user_name" className="block mb-2">Nom (obligatoire)
+        <label htmlFor="user_name" className="mb-2">
+          <div className="mb-2">Nom (obligatoire)</div>
           <input type="text" name="user_name" id="user_name" required className="w-full p-2 bg-white text-black rounded-md" />
         </label>
       </div>
       <div className="mb-4">
-        <label htmlFor="user_email" className="block mb-2">Email (obligatoire)
+        <label htmlFor="user_email" className="mb-2">
+          <div className="mb-2">Email (obligatoire)</div>
           <input
             type="email"
             name="user_email"
@@ -96,7 +99,8 @@ export default function ContactForm() {
         {emailError && <div className="text-red-500 text-sm">Veuillez saisir un email valide.</div>}
       </div>
       <div className="mb-4">
-        <label htmlFor="message" className="block mb-2">Message (obligatoire)
+        <label htmlFor="message" className="mb-2">
+          <div className="mb-2">Message (obligatoire)</div>
           <textarea name="message" id="message" rows={4} required className="w-full p-2 bg-white text-black rounded-md" />
         </label>
       </div>
