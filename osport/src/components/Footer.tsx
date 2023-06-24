@@ -5,14 +5,14 @@ import Link from 'next/link';
 export default function Footer() {
   return (
 
-    <div>
-      <div className=" bg-slate-800 mb-16">
+    <div className=" bg-slate-800 mb-16">
+      <div>
         <ul className="flex flex-col gap-7 justify-center items-center p-7 font-medium text-gray-200">
           <li>
-            <Link href="/">À propos</Link>
+            <Link href="/a-propos">À propos</Link>
           </li>
           <li>
-            <Link href="/">Politique générale</Link>
+            <Link href="/politique-de-confidentialite">Politique de confidentialité</Link>
           </li>
           <li>
             <Link href="/contact">Contact</Link>

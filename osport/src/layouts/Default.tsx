@@ -11,11 +11,13 @@ interface DefaultLayoutProps {
 
 export default function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
-    <>
+    // Classes pour permettre le Sticky footer
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="mb-20">{children}</main>
+      {/* Classe flex pour permettre le Sticky footer */}
+      <main className="flex-grow mb-20">{children}</main>
       <Navbar />
       <Footer />
-    </>
+    </div>
   );
 }

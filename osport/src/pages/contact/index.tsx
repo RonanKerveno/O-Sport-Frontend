@@ -4,7 +4,7 @@ import ContactForm from '../../components/ContactForm';
 export default function Contact() {
   return (
 
-    <section className="mx-4">
+    <section className="px-4">
       <h1 className="text-2xl font-bold mb-7">Nous contacter</h1>
       <p className="mb-10">
         Si vous avez des questions, des remarques sur notre démo ou autre,

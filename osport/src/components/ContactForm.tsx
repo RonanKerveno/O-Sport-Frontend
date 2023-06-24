@@ -110,7 +110,7 @@ export default function ContactForm() {
           />
           <span className="ml-2">
             J&#39;ai lu et accepté la{' '}
-            <Link href="/" className="text-slate-900 underline">
+            <Link href="/politique-de-confidentialite" className="text-slate-900 underline">
               politique de confidentialité
             </Link>
           </span>
