@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import InfoPanel from '@/components/InfoPanel';
 import EventSearchForm from '@/components/EventSearchForm';
-import Cards from '@/components/Cards';
+import EventCards from '@/components/EventCards';
 import EventKeywordSearch from '@/components/EventKeyWordSearch';
 import router from 'next/router';
 
@@ -121,7 +121,7 @@ export default function SearchEvent({ eventList }: EventsDataProps) {
             setForm={setForm}
           />
         </div>
-        {hasSearched && <Cards events={filteredEvents} />}
+        {hasSearched && <EventCards events={filteredEvents} />}
       </div>
 
     </>
