@@ -37,7 +37,6 @@ export default function EditProfile({ userData, sportsList }: EditProfileProps) 
   // Fonction gérant la mise à jour du profil avec les données du formulaire.
   const handleUpdate = async (fullUserData: FullUserData): Promise<void> => {
     try {
-      // Appel à la fonction modifyOneUser pour mettre à jour les données utilisateur
       const response = await updateOneUser(fullUserData);
 
       if (response.success) {

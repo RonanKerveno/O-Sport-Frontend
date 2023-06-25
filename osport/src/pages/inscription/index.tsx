@@ -16,7 +16,7 @@ import { FaUser } from 'react-icons/fa';
 // Typage des données :
 // - Données utilisateur
 type FullUserData = UserPublicData & UserPrivateData;
-// - Liste des sports reccueillie en SSR
+// - Liste des sports recueillie en SSR
 interface DataProfileProps {
   sportsList: SportsListData;
 }
@@ -28,10 +28,9 @@ export default function Subscribe({ sportsList }: DataProfileProps) {
   // State gérant les messages d'erreurs lors de la création du profil.
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Fonction gérant la demande de création du nouvel utilisteur.
+  // Fonction gérant la demande de création du nouvel utilisateur.
   const handleCreate = async (fullUserData: FullUserData) => {
     try {
-      // Appel à la fonction modifyOneUser pour mettre à jour les données utilisateur
       const response = await createOneUser(fullUserData);
 
       // Si la création est OK on redirige vers la page de connexion en progammant un message sur
@@ -51,7 +50,7 @@ export default function Subscribe({ sportsList }: DataProfileProps) {
   // Appel au Hook personnalisé de redirection vers Home si l'utilisateur est déjà connecté
   useLoggedRedirect();
 
-  // Appel au Context pour determiner si l'utilisateur est déjà loggué.
+  // Appel au Context d'authentification pour determiner si l'utilisateur est déjà loggué.
   const { isLogged } = useAuth();
 
   // Si l'utilisateur est déjà loggué (donc inscrit) on rend juste un message.
@@ -86,11 +85,11 @@ export default function Subscribe({ sportsList }: DataProfileProps) {
           <FaUser size={24} />
           <h1 className="text-2xl text-center font-bold uppercase"> Inscription </h1>
         </div>
-        {/* Utilisation du composant UserProfileForm */}
+        {/* Appel au composant UserProfileForm */}
         <div>
           <UserProfileForm
             isEdit={false} // Il s'agit d'une création de profil
-            userData={nullUserPublicData}// Pas de données utilisateur à afficher
+            userData={nullUserPublicData} // Pas de données utilisateur à afficher
             sportsList={sportsList}
             onSubmit={handleCreate}
           />

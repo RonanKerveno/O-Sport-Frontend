@@ -31,7 +31,7 @@ interface EventsDataProps {
 export default function Home({ eventList, sportsList }: EventsDataProps) {
   // Gestion des messages toaster
 
-  // Récupération du statut de l'utilisateur connecté via Context
+  // Récupération du statut de l'utilisateur connecté via le Context d'authentification.
   const {
     isAdmin, isLogged, showLoggedStatus, setShowLoggedStatus,
   } = useAuth();

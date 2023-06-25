@@ -20,7 +20,7 @@ export default function UserCard({
   const registrationDate = format(new Date(userData.createdAt), 'dd/MM/yyyy');
 
   return (
-    <div className="rounded-xl flex justify-around bg-slate-200 text-gray-700 shadow-md w-full">
+    <div className="rounded-md flex justify-around bg-slate-200 text-gray-700 shadow-md w-full">
       <div className="p-7 flex justify-center items-center">
         <Avvvatars value={userData.userName} size={128} />
       </div>

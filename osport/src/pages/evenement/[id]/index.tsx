@@ -1,7 +1,7 @@
 // Page affichant un événement
 
 /* eslint-disable react/no-unescaped-entities */
-import { HiUserGroup } from 'react-icons/hi2';
+import { HiUserGroup, HiUserPlus, HiDocumentText } from 'react-icons/hi2';
 import Head from 'next/head';
 import { Event } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
@@ -18,29 +18,40 @@ import sportIconMap from '@/utils/sportIconMap';
 import { sportNameConvert } from '@/utils/sportNameConvert';
 import Avvvatars from 'avvvatars-react';
 
+// Typage des données reccueillies en SSR
 interface DataProfileProps {
   eventData: Event;
 }
 
 // Visualisation d'un événement en fonction de son ID
 export default function EventDetails({ eventData }: DataProfileProps) {
-  const [errorMessage, setErrorMessage] = useState('');
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [actionType, setActionType] = useState<'subscribe' | 'unsubscribe' | null>(null);
-  const startingTime = format(parseISO(eventData.startingTime), 'dd/MM/yyyy HH:mm');
-  const endingTime = format(parseISO(eventData.endingTime), 'dd/MM/yyyy HH:mm');
+  // Récupération des infos sur l'utilisateur connecté via le Context d'authentification.
   const { userId, isAdmin } = useAuth();
-  const SportIcon = sportIconMap[sportNameConvert(eventData.sport.name)] || sportIconMap.Sports;
+
+  // Gestion de l'inscription et la désinscription
+
+  // State gérant le type d'action relative à l'événement : inscription ou désinscription.
+  const [actionType, setActionType] = useState<'subscribe' | 'unsubscribe' | null>(null);
+
+  // State gérant la confirmation de la désinscription.
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  // Fonction gérant l'inscription
   const handleSubscribe = () => {
     setActionType('subscribe');
     setShowConfirmation(true);
   };
 
+  // Fonction gérant la désinscription
   const handleUnsubscribe = () => {
     setActionType('unsubscribe');
     setShowConfirmation(true);
   };
 
+  // State gérant les erreurs lors de la récupération des données.
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // Fonction gérant les requêtes d'insription et désinscription.
   const confirmAction = async () => {
     if (userId === null) {
       setErrorMessage('Une erreur est survenue');
@@ -64,9 +75,10 @@ export default function EventDetails({ eventData }: DataProfileProps) {
     }
   };
 
-  // Vérifie si l'utilisateur est inscrit à l'événement
+  // Vérification de l'inscription de l'utilisateur à l'événement
   const isUserRegistered = eventData.eventUsers.find((user) => user.id === userId) !== undefined;
 
+  // Définition conditionnelle des boutons à afficher
   const renderButton = () => {
     if (userId === eventData.creatorId) {
       return (
@@ -112,8 +124,11 @@ export default function EventDetails({ eventData }: DataProfileProps) {
     return null;
   };
 
-  const { setToastMessage, toastMessage, toastDuration } = useToast();
+  // Gestion du Toaster
 
+  // Context gérant les paramètres du toaster.
+  const { setToastMessage, toastMessage, toastDuration } = useToast();
+  // useEffect gérant les actions d'affichage des messages toaster.
   useEffect(() => {
     if (toastMessage) {
       toast(toastMessage);
@@ -122,21 +137,30 @@ export default function EventDetails({ eventData }: DataProfileProps) {
     }
   }, [toastMessage, setToastMessage]);
 
+  // Autres variables liées au rendu
+
+  // Récupération de l'icône correspondant au sport de l'événement.
+  const SportIcon = sportIconMap[sportNameConvert(eventData.sport.name)] || sportIconMap.Sports;
+
+  // Formatage des dates du format ISO en format local.
+  const startingTime = format(parseISO(eventData.startingTime), 'dd/MM/yyyy HH:mm');
+  const endingTime = format(parseISO(eventData.endingTime), 'dd/MM/yyyy HH:mm');
+
   return (
     <>
       <Head>
         <title>{eventData.title} - osport</title>
       </Head>
-      <div className="ml-6 min-[1540px]:w-[1200px] min-[1650px]:w-[1280px] mt-2 shadow-md rounded-md border border-gray-400">
-        <div className=" mb-1 bg-white text-gray-700 shadow-md ">
+      <section className="">
+        <div className=" mb-3 bg-slate-200 text-gray-700 rounded-md shadow-md p-2">
           <div className="flex items-center justify-between">
-            <span className="flex items-center">
-              <HiUserGroup className="text-5xl mr-3" />
+            <div className="flex justify-center items-center gap-2">
+              <HiUserGroup size={42} />
               <span className="text-xl">{`${eventData.eventUsers.length}/${eventData.maxNbParticipants}`}</span>
-            </span>
-            <span className="text-right m-1"><SportIcon size={50} /></span>
+            </div>
+            <span className="text-right p-1"><SportIcon size={50} /></span>
           </div>
-          <div className="text-center text-4xl font-bold p-6">{eventData.title}</div>
+          <h1 className="text-center text-2xl font-bold uppercase p-6">{eventData.title}</h1>
           <div className="text-left mb-1">
             {renderButton()}
           </div>
@@ -151,37 +175,52 @@ export default function EventDetails({ eventData }: DataProfileProps) {
           )}
           {errorMessage && <p className="text-red-500 mt-3 ml-4">{errorMessage}</p>}
         </div>
-        <div className=" mb-1 p-8 bg-white text-gray-700 shadow-md">
-          <div className="mt-2 mb-2">{eventData.city}</div>
-          <div className="mt-2 mb-2">{eventData.street}</div>
-          <div className="mt-2 mb-2">{startingTime}</div>
-          <div className="mt-2 mb-2">{endingTime}</div>
-          <div className="mt-2 mb-2">{eventData.sport && eventData.sport.name ? eventData.sport.name : 'sport inconnu'}</div>
-        </div>
 
-        <div className=" mb-1 p-6 bg-white text-gray-700 shadow-md">
-          <span className="text-2xl">Description de l'événement :</span> <br />
-          <br />
-          {eventData.description}
-        </div>
-
-        <div className=" mb-1 flex flex-row space-x-4 p-6 bg-white text-gray-700 shadow-md">
-          <span>Participant à l'événement :</span>
-          {eventData.eventUsers.map((user) => (
-            <Link href={`/profil/${user.id}`} key={user.id} className="flex flex-col items-center hover:scale-105 transition-transform duration-200">
-              <Avvvatars value={user.userName} />
-              <span>{user.userName}</span>
-            </Link>
-          ))}
-        </div>
-        <div className=" flex flex-row space-x-4 p-6 bg-white text-gray-700 shadow-md">
-          <span>Créateur de l'évènement :</span>
-          <Link href={`/profil/${eventData.creatorId}`} className="flex flex-col items-center hover:scale-105 transition-transform duration-200">
-            <Avvvatars value={eventData.creator.userName} />
-            <span>{eventData.creator.userName}</span>
+        <div className=" mb-3 px-4 py-6 bg-slate-200 text-gray-700 rounded-md shadow-md">
+          <div className="mb-4 flex items-center gap-2 font-bold text-xl">
+            <HiUserPlus size={22} />
+            <h2>Créateur de l'évenement</h2>
+          </div>
+          <Link href={`/profil/${eventData.creatorId}`} className="flex items-center gap-2 hover:scale-105 transition-transform duration-200">
+            <Avvvatars value={eventData.creator.userName} size={38} />
+            <p className="text-lg font-medium">{eventData.creator.userName}</p>
           </Link>
         </div>
-      </div>
+
+        <div className=" mb-3 px-4 py-6 bg-slate-200 text-gray-700 rounded-md shadow-md">
+          <div className="mb-4 flex items-center gap-2 font-bold text-xl">
+            <SportIcon size={28} />
+            <h2>{eventData.sport && eventData.sport.name ? eventData.sport.name : 'Sport inconnu'}</h2>
+          </div>
+          <p className="mb-2 font-semibold text-lg">{eventData.city}</p>
+          <p className="mb-2 font-medium">{eventData.street}</p>
+          <p className="mb-2">{startingTime}</p>
+          <p className="mb-2">{endingTime}</p>
+        </div>
+
+        <div className=" mb-3 px-4 py-6 bg-slate-200 text-gray-700 rounded-md shadow-md">
+          <div className="mb-4 flex items-center gap-2 font-bold text-xl">
+            <HiDocumentText size={22} />
+            <h2>Description</h2>
+          </div>
+          <p>{eventData.description}</p>
+        </div>
+
+        <div className="px-4 py-6 bg-slate-200 text-gray-700 rounded-md shadow-md">
+          <div className="mb-4 flex items-center gap-2 font-bold text-xl">
+            <HiUserGroup size={22} />
+            <h2>Participants</h2>
+          </div>
+          <div className="flex flex-wrap gap-4">
+            {eventData.eventUsers.map((user) => (
+              <Link href={`/profil/${user.id}`} key={user.id} className="flex flex-col items-center hover:scale-105 transition-transform duration-200">
+                <Avvvatars value={user.userName} />
+                <p className="text-sm">{user.userName}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
       {showConfirmation && (
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded">
@@ -215,8 +254,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
   );
 }
 
-// Appel vers la fonction spéciale ServerSideProps Next.js qui s'exécute coté serveur (SSR).
-// Elle permet de récupérer les données de l'API avant de rendre la page.
+// Traitement des requête API coté SSR pour récupérer les donnée d'un événement.
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const props = await getEventServerSideProps(context);

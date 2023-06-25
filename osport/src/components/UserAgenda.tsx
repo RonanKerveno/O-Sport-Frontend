@@ -25,7 +25,7 @@ export default function UserAgenda({ events }: UserAgendaProps) {
 
   return (
     <div className="mb-10">
-      <div className="flex justify-center items-center gap-3 rounded-md p-4 bg-slate-200 text-gray-700 shadow-md mb-10">
+      <div className="flex justify-center items-center gap-3 p-4 mb-10">
         <div><FaCalendar size={32} /></div>
         <h2 className="font-bold uppercase">
           Evénéments à venir

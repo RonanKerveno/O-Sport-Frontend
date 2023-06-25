@@ -13,6 +13,8 @@ import { useToast } from '@/contexts/ToastContext';
 import { useEffect } from 'react';
 import sportIconMap from '@/utils/sportIconMap';
 import { sportNameConvert } from '@/utils/sportNameConvert';
+import { HiDocumentText, HiHeart } from 'react-icons/hi';
+import { ImStatsDots } from 'react-icons/im';
 
 // Typage des données renvoyées par les requêtes SSR.
 interface ProfileProps {
@@ -64,12 +66,24 @@ export default function Profile({
               )}
             </div>
           )}
-          <div className="mb-10">
+
+          <div className="mb-3">
             <UserCard userData={userData} />
           </div>
-          <div className="mb-7">{userData.description}</div>
-          <div className="mb-10">
-            <h3 className="font-bold mb-3">Sports favoris :</h3>
+
+          <div className="mb-3 px-4 py-6 bg-slate-200 text-gray-700 rounded-md shadow-md">
+            <div className="mb-4 flex items-center gap-2 font-bold text-xl">
+              <HiDocumentText size={22} />
+              <h2>Présentation</h2>
+            </div>
+            <p>{userData.description}</p>
+          </div>
+
+          <div className=" mb-3 px-4 py-6 bg-slate-200 text-gray-700 rounded-md shadow-md">
+            <div className="mb-4 flex items-center gap-2 font-bold text-xl">
+              <HiHeart size={22} />
+              <h2>Sports favoris</h2>
+            </div>
             <ul>
               {userData.favoriteSports.map((sport) => {
                 const SportIcon = sportIconMap[sportNameConvert(sport.name)] || sportIconMap.Sports;
@@ -82,13 +96,20 @@ export default function Profile({
               })}
             </ul>
           </div>
-          <div className="mb-10">
-            <h3 className="font-bold mb-3">Statistiques événéments :</h3>
+
+          <div className=" mb-10 px-4 py-6 bg-slate-200 text-gray-700 rounded-md shadow-md">
+            <div className="mb-4 flex items-center gap-2 font-bold text-xl">
+              <ImStatsDots size={18} />
+              <h2>Statistiques événéments</h2>
+            </div>
             <p>Evénéments créés : <span className="font-bold">{createdEvents.length}</span></p>
             <p>Participation (créés compris) : <span className="font-bold">{userEvents.length}</span></p>
           </div>
+
         </div>
+
         <UserAgenda events={userEvents} />
+
         <ToastContainer autoClose={toastDuration} />
       </section>
     </>

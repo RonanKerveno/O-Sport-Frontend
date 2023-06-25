@@ -89,7 +89,7 @@ export default function UserProfileForm({
     fetchPrivateData();
   }, [userData.id, userData, reset, changePassword, isEdit]);
 
-  // Sureveillance des sports séléctionnés via les cases à cocher.
+  // Surveillance des sports séléctionnés via les cases à cocher.
   const favoriteSports = watch('favoriteSports');
 
   // Recherche prédictive d'adresse (via API Adresse)
@@ -138,7 +138,7 @@ export default function UserProfileForm({
   }
 
   return (
-    // Formulaire de création ou modificaiton de profil utilisant react-hook-form et le composant
+    // Formulaire de création ou modification de profil utilisant react-hook-form et le composant
     // UserTextFieldForm pour les types d'inputs les plus répétés.
     <div>
       <form
