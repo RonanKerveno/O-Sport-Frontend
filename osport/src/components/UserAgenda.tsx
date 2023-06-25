@@ -1,9 +1,10 @@
 // Composant gérant l'affichage de l'agenda des evenements d'un utilisateur.
 
 import { EventData } from '@/types';
+import { FaCalendar } from 'react-icons/fa';
 import EventCard from './EventCard';
 
-// Typage TypeScript
+// Typage des Props
 interface UserAgendaProps {
   events: EventData;
 }
@@ -23,15 +24,24 @@ export default function UserAgenda({ events }: UserAgendaProps) {
   });
 
   return (
-    <div className="pr-4 mb-10">
-      <h2 className="font-bold my-2 rounded-xl bg-white text-gray-700 shadow-md p-4 ml-4 text-center">Agenda :</h2>
+    <div className="mb-10">
+      <div className="flex justify-center items-center gap-3 rounded-md p-4 bg-slate-200 text-gray-700 shadow-md mb-10">
+        <div><FaCalendar size={32} /></div>
+        <h2 className="font-bold uppercase">
+          Evénéments à venir
+        </h2>
+      </div>
       {/* On retourne chaque évenement en reprenant les données de events */}
-      <div className="flex flex-wrap justify-around gap-7 mx-4 mt-10">
-        {sortedEvents.map((event) => (
-          <div key={event.id} className="sm:w-1/2 md:w-60 text-center">
-            <EventCard event={event} />
-          </div>
-        ))}
+      <div className="flex flex-col gap-7">
+        {sortedEvents.length > 0 ? (
+          sortedEvents.map((event) => (
+            <div key={event.id}>
+              <EventCard event={event} />
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-gray-500">Rien de prévu pour le moment !</p>
+        )}
       </div>
     </div>
   );

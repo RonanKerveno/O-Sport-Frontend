@@ -9,7 +9,7 @@ export default function PrivacyPolicy() {
       <Head>
         <title>Politique de confidentialité - osport</title>
       </Head>
-      <section className="px-4 mx-auto mt-5">
+      <section>
         <h1 className="text-2xl font-bold mb-4">Politique de confidentialité</h1>
         <p>
           La présente politique de confidentialité décrit la manière dont les auteurs collectent,

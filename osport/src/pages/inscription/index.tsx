@@ -81,7 +81,7 @@ export default function Subscribe({ sportsList }: DataProfileProps) {
       <Head>
         <title>Inscription - osport</title>
       </Head>
-      <section className="px-4">
+      <section>
         <div className="flex justify-center items-center gap-3 mt-2 mb-10">
           <FaUser size={24} />
           <h1 className="text-2xl text-center font-bold uppercase"> Inscription </h1>

@@ -11,6 +11,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/contexts/ToastContext';
 import Head from 'next/head';
 import { FaUserEdit } from 'react-icons/fa';
+import Link from 'next/link';
 
 // Typage des données :
 // - Données utilisateur
@@ -118,8 +119,16 @@ export default function EditProfile({ userData, sportsList }: EditProfileProps) 
       <Head>
         <title>Modification du profil - osport</title>
       </Head>
-      <section className="px-4">
-        <div className="flex justify-center items-center gap-3 mt-2 mb-10">
+      <section>
+        <div className="flex justify-center mb-10">
+          <Link
+            href={`/profil/${userData.id}`}
+            className="bg-[#264b81] hover:bg-[#07252e] text-white px-4 py-2 rounded"
+          >
+            Retour au profil
+          </Link>
+        </div>
+        <div className="flex justify-center items-center gap-3 mb-10">
           <FaUserEdit size={24} />
           <h1 className={`text-2xl text-center font-bold uppercase ${isAdmin && userId !== userData.id ? 'text-red-500' : ''}`}>
             {isAdmin && userId !== userData.id ? 'Modification Admin' : 'Modifier mon profil'}

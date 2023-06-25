@@ -8,7 +8,7 @@ export default function Contact() {
       <Head>
         <title>Contact - osport</title>
       </Head>
-      <section className="px-4">
+      <section>
         <h1 className="text-2xl font-bold mb-7">Nous contacter</h1>
         <p className="mb-10">
           Si vous avez des questions, des remarques sur notre démo ou autre,

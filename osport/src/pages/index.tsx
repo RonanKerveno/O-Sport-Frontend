@@ -123,7 +123,7 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
       <Head>
         <title>Accueil - osport</title>
       </Head>
-      <div className="mx-4 mt-7">
+      <div className="mx-4 mt-5">
         {/* Appel au composant panneau d'information */}
         <InfoPanel />
         {/* Option de modification à destination de l'administrateur */}
