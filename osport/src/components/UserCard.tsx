@@ -20,11 +20,11 @@ export default function UserCard({
   const registrationDate = format(new Date(userData.createdAt), 'dd/MM/yyyy');
 
   return (
-    <div className="rounded-md flex justify-around bg-slate-200 text-gray-700 shadow-md w-full">
-      <div className="p-7 flex justify-center items-center">
-        <Avvvatars value={userData.userName} size={128} />
+    <div className="rounded-md flex bg-slate-200 text-gray-700 shadow-md w-full">
+      <div className="p-7 flex justify-center items-center w-1/2">
+        <Avvvatars value={userData.userName} size={100} />
       </div>
-      <div className="p-7">
+      <div className="py-4">
         <div className="mb-2">
           <h2 className="text-xl font-bold">{`${userData.userName}`}</h2>
           <p className=" text-green-700">{`${userData.isAdmin ? ' (Admin)' : ''}`}</p>

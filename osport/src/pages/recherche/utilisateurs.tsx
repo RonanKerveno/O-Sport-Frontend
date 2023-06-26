@@ -109,7 +109,7 @@ export default function SearchUser({ usersData }: EventsDataProps) {
     return (
       <div className="flex flex-wrap gap-4">
         {hasSearched && filteredUsers.map((user) => (
-          <Link key={user.id} href={`/profil/${user.id}`} className="hover:scale-105 transition-transform duration-200">
+          <Link key={user.id} href={`/profil/${user.id}`} className="hover:scale-105 transition-transform duration-200 w-full">
             <UserCard userData={user} />
           </Link>
         ))}

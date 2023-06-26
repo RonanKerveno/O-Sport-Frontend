@@ -13,16 +13,16 @@ export default function Navbar() {
     <div className="fixed bottom-0 z-50 w-full h-16 bg-gray-900">
       <div className="grid h-full grid-cols-4">
         <Link
-          href="/recherche"
-          className="flex flex-col items-center justify-center px-5"
-        >
-          <HiSearch size={24} color="#f9fafb" />
-        </Link>
-        <Link
           href="/"
           className="flex flex-col items-center justify-center px-5"
         >
           <HiHome size={24} color="#f9fafb" />
+        </Link>
+        <Link
+          href="/recherche"
+          className="flex flex-col items-center justify-center px-5"
+        >
+          <HiSearch size={24} color="#f9fafb" />
         </Link>
         <Link
           // Lien conditionnel selon que l'utilisateur soit connecté ou non.
