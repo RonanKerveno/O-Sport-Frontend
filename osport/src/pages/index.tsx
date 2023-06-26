@@ -123,8 +123,9 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
       <Head>
         <title>Accueil - osport</title>
       </Head>
-      <div className="mx-4 mt-5">
-        {/* Appel au composant panneau d'information */}
+
+      {/* Appel au composant panneau d'information */}
+      <section className="mt-4">
         <InfoPanel />
         {/* Option de modification à destination de l'administrateur */}
         {isAdmin
@@ -133,9 +134,10 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
               Admin : <Link href="/sports" className=" text-red-500 font-semibold">modification des sports</Link>
             </div>
           )}
-        <div className="font-bold text-center">
-          <h2 className="text-xl mb-7 uppercase text-slate-900">Les événements sportifs</h2>
-        </div>
+      </section>
+
+      <div className="font-bold text-center">
+        <h2 className="text-xl mb-7 uppercase text-slate-900">Les événements sportifs</h2>
       </div>
       <p className="text-center font-semibold text-slate-800">Filtrer par sport</p>
       <div className="flex justify-center"><CgScrollH size={32} /></div>
@@ -146,7 +148,8 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
         resetFilter={resetFilter}
         setResetFilter={setResetFilter}
       />
-      <div className="m-4">
+
+      <section className="my-4">
         <div className="text-center font-bold text-[#264b81] text-xl uppercase">
           {/* Si un sport est sélectionné on affiche son nom et l'icône asociée */}
           {selectedSportName
@@ -199,7 +202,7 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
             </button>
           )}
         </div>
-      </div>
+      </section>
 
       {/* Appel au composant toaster */}
       <ToastContainer autoClose={toastDuration} />

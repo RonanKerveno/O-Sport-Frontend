@@ -1,6 +1,16 @@
+// Composant formulaire de recherche d'utilisateurs.
+
+// Eslint ne prend pas le Select de react-select pour un contrôle, donc désactivation de la règle.
+// Cela ne devrait pas avoir d'impact sur l'accéssibilité.
+/* eslint-disable jsx-a11y/label-has-associated-control */
+
 import React, { FormEvent } from 'react';
 import { UserPublicData } from '@/types';
+import Select from 'react-select';
+import sportIconMap from '@/utils/sportIconMap';
+import { sportNameConvert } from '@/utils/sportNameConvert';
 
+// Typage des props
 interface UserSearchFormProps {
   usersData: UserPublicData[];
   // eslint-disable-next-line no-unused-vars
@@ -24,121 +34,131 @@ interface UserSearchFormProps {
 export default function UserSearchForm({
   usersData, handleSubmit, form, setForm,
 }: UserSearchFormProps) {
+  // Définition des filtres selon la recherche demandée.
   const regions = Array.from(new Set(usersData.map((user) => user.region)));
   const sortedRegions = regions.sort();
   const cities = Array.from(new Set(usersData.map((user) => user.city)));
   const sortedCities = cities.sort();
   const genders = Array.from(new Set(usersData.map((user) => user.gender)));
 
-  // Concatenate favorite sports from all users and remove duplicates
+  // Concaténation des sports favoris de tous les utilisateurs et suppression des doublons.
   const favoriteSports = Array.from(
     new Set(usersData.flatMap((user) => user.favoriteSports.map((sport) => sport.name))),
   );
 
+  // Options pour les Select
+  const searchTypeOptions = [
+    { value: 'region', label: 'Région' },
+    { value: 'city', label: 'Ville' },
+    { value: 'gender', label: 'Genre' },
+  ];
+  const regionOptions = sortedRegions.map((region) => ({ value: region, label: region }));
+  const cityOptions = sortedCities.map((city) => ({ value: city, label: city }));
+  const genderOptions = genders.map((gender) => ({ value: gender, label: gender }));
+  const sportOptions = favoriteSports.map((sport) => {
+    const SportIcon = sportIconMap[sportNameConvert(sport)] || sportIconMap.Sports;
+    return {
+      value: sport,
+      label: (
+        <div className="flex items-center gap-2">
+          <SportIcon size={22} />
+          <div>{sport}</div>
+        </div>
+      ),
+    };
+  });
+
   return (
-    <form onSubmit={handleSubmit} className="p-4">
+    <form onSubmit={handleSubmit}>
+      <div className="mb-7">
+        <div className="mb-4">
+          <label htmlFor="searchType">
+            <h2 className="text-lg font-semibold mb-2">Filtrage par lieu</h2>
+            <Select
+              id="searchType"
+              className="text-gray-700 shadow-md"
+              placeholder="Sélectionnez un type de lieu"
+              value={form.searchType ? searchTypeOptions.find(
+                (option) => option.value === form.searchType,
+              ) : null}
+              onChange={(option) => setForm({
+                ...form, searchType: option ? option.value : '', region: '', city: '',
+              })}
+              options={searchTypeOptions}
+              isClearable
+            />
+          </label>
+        </div>
 
-      <div className="my-2">
-        <label htmlFor="searchType" className="mt-2 mb-1">
-          Type de recherche
-          <select
-            id="searchType"
-            className="bg-white text-gray-700 shadow-md border"
-            value={form.searchType}
-            onChange={(e) => setForm({
-              ...form, searchType: e.target.value, region: '', city: '',
-            })}
-          >
-            <option value="">Sélectionnez un type de recherche</option>
-            <option value="region">Région</option>
-            <option value="city">Ville</option>
-          </select>
-        </label>
+        {form.searchType === 'region' && (
+          <div>
+            <label htmlFor="region">
+              <p className="text-sm font-medium mb-1">Région</p>
+              <Select
+                id="region"
+                className="text-gray-700 shadow-md"
+                placeholder="Sélectionnez une région"
+                value={regionOptions.find((option) => option.value === form.region)}
+                onChange={(option) => setForm({ ...form, region: option ? option.value : '' })}
+                options={regionOptions}
+              />
+            </label>
+          </div>
+        )}
+
+        {form.searchType === 'city' && (
+          <div>
+            <label htmlFor="city">
+              <p className="text-sm font-medium mb-1">Ville</p>
+              <Select
+                id="city"
+                className="text-gray-700 shadow-md"
+                value={cityOptions.find((option) => option.value === form.city)}
+                onChange={(option) => setForm({ ...form, city: option ? option.value : '' })}
+                options={cityOptions}
+              />
+            </label>
+          </div>
+        )}
       </div>
 
-      {form.searchType === 'region' && (
-        <div>
-          <label htmlFor="region" className="mt-2 mb-1">
-            Région
-            <select
-              id="region"
-              className="bg-white text-gray-700 shadow-md border"
-              value={form.region}
-              onChange={(e) => setForm({ ...form, region: e.target.value })}
-            >
-              <option value="">Sélectionnez une région</option>
-              {sortedRegions.map((region) => (
-                <option key={region} value={region}>
-                  {region}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-      )}
-
-      {form.searchType === 'city' && (
-        <div>
-          <label htmlFor="city" className="mt-2 mb-1">
-            Ville
-            <select
-              id="city"
-              className="bg-white text-gray-700 shadow-md border"
-              value={form.city}
-              onChange={(e) => setForm({ ...form, city: e.target.value })}
-            >
-              <option value="">Sélectionnez une ville</option>
-              {sortedCities.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-      )}
-
-      <div className="my-2">
-        <label htmlFor="gender" className="mt-2 mb-1">
-          Genre
-          <select
+      <div className="mb-7">
+        <label htmlFor="gender">
+          <h2 className="text-lg font-semibold mb-2">Filtrage par genre</h2>
+          <Select
             id="gender"
-            className="bg-white text-gray-700 shadow-md border"
-            value={form.gender}
-            onChange={(e) => setForm({ ...form, gender: e.target.value })}
-          >
-            <option value="">Sélectionnez un genre</option>
-            {genders.map((gender) => (
-              <option key={gender} value={gender}>
-                {gender}
-              </option>
-            ))}
-          </select>
+            className="text-gray-700 shadow-md"
+            placeholder="Sélectionnez un genre"
+            value={form.gender ? genderOptions.find(
+              (option) => option.value === form.gender,
+            ) : null}
+            onChange={(option) => setForm({ ...form, gender: option ? option.value : '' })}
+            options={genderOptions}
+            isClearable
+          />
         </label>
       </div>
 
-      <div className="my-2">
-        <label htmlFor="favoriteSport" className="mt-2 mb-1">
-          Sport Favori
-          <select
-            id="favoriteSport"
-            className="bg-white text-gray-700 shadow-md border"
-            value={form.favoriteSport}
-            onChange={(e) => setForm({ ...form, favoriteSport: e.target.value })}
-          >
-            <option value="">Sélectionnez un sport</option>
-            {favoriteSports.map((sport) => (
-              <option key={sport} value={sport}>
-                {sport}
-              </option>
-            ))}
-          </select>
+      <div className="mb-8">
+        <label htmlFor="sport">
+          <h2 className="text-lg font-semibold mb-2">Filtrage par sport</h2>
+          <Select
+            id="sport"
+            className="text-gray-700 shadow-md"
+            placeholder="Sélectionnez un sport"
+            value={form.favoriteSport ? sportOptions.find(
+              (option) => option.value === form.favoriteSport,
+            ) : null}
+            onChange={(option) => setForm({ ...form, favoriteSport: option ? option.value : '' })}
+            options={sportOptions}
+            isClearable
+          />
         </label>
       </div>
 
-      <div className="mt-4">
-        <button type="submit" className="border bg-blue-500 hover:bg-blue-700 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded mb-9">
-          Recherche
+      <div>
+        <button type="submit" className="border bg-[#264b81] hover:bg-[#07252e] transition-colors duration-1000 text-white font-semibold py-2 px-4 rounded">
+          Rechercher
         </button>
       </div>
     </form>

@@ -1,24 +1,30 @@
-import React from 'react';
+// Composant formulaire de recherche d'événements par mots-clé.
+
+import React, { RefObject } from 'react';
 import { EventData } from '@/types';
 
+// Typage des props
 interface KeywordSearchProps {
   eventList: EventData;
   setFilteredEvents: React.Dispatch<React.SetStateAction<EventData>>;
   setHasSearched: React.Dispatch<React.SetStateAction<boolean>>;
   keyword: string;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;
+  searchResultRef: RefObject<HTMLDivElement>;
 }
 
 export default function EventKeywordSearch(
   {
-    eventList, setFilteredEvents, setHasSearched, keyword, setKeyword,
+    eventList, setFilteredEvents, setHasSearched, keyword, setKeyword, searchResultRef,
   }: KeywordSearchProps,
 ) {
+  // Fonction gérant la soumission des mots-clé.
   const handleSubmit = (evt: React.FormEvent) => {
     evt.preventDefault();
 
     const filteredEvents = eventList.filter((event) => {
       const {
+        // Périmètre de la recherche
         title, description, city, region, zipCode, creator, sport,
       } = event;
       const keywords = [title, description, city, region, zipCode, creator.userName, sport.name].join(' ').toLowerCase();
@@ -27,25 +33,27 @@ export default function EventKeywordSearch(
 
     setFilteredEvents(filteredEvents);
     setHasSearched(true);
+    // scroll vers searchResult
+    searchResultRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="ml-4">
-      <div>
+    <form onSubmit={handleSubmit}>
+      <div className="mb-8">
         <label htmlFor="keyword">
-          <h2 className="font-semibold text-gray-700">Recherche par mots-clés</h2>
+          <h2 className="text-xl font-semibold mb-5">Recherche par mots-clés</h2>
           <input
             type="text"
             id="keyword"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            placeholder="mot-clé : titre, auteur..."
-            className="bg-white text-gray-700 shadow-md border"
+            placeholder="Titre, auteur..."
+            className="bg-white text-gray-700 shadow-md border py-2 px-3 w-full"
           />
         </label>
       </div>
-      <div className="mt-4">
-        <button type="submit" className="border bg-blue-500 hover:bg-blue-700 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded">
+      <div>
+        <button type="submit" className="border bg-[#264b81] hover:bg-[#07252e] transition-colors duration-1000 text-white font-semibold py-2 px-4 rounded">
           Rechercher
         </button>
       </div>

@@ -11,11 +11,11 @@ export default function Header() {
 
   return (
     <header className=" bg-slate-900 text-white font-bold text-2xl py-7 px-4 mb-10 flex justify-between">
-      <div className="flex items-center">
+      <Link href="/" className="flex items-center">
         <MdSportsSoccer size={30} />
         <div>&#39;Sport</div>
         <div className="text-sm ml-3">*démo</div>
-      </div>
+      </Link>
       <div>
         {/* Si l'utilisateur est connecté on génére son avatar, sinon on utilise une icône
         d'utilisateur non connecté */}

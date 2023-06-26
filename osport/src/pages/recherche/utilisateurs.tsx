@@ -1,15 +1,18 @@
-import { useState } from 'react';
+// Page de recherche d'utilisateurs
+
+import { useEffect, useRef, useState } from 'react';
 import { UserPublicData } from '@/types';
 import getUsersServerSideProps from '@/utils/usersServerSideProps';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import InfoPanel from '@/components/InfoPanel';
 import UserSearchForm from '@/components/UserSearchForm';
 import router from 'next/router';
 import UserKeywordSearch from '@/components/UserKeyWordSearch';
 import UserCard from '@/components/UserCard';
 import Link from 'next/link';
+import { RiUserSearchFill } from 'react-icons/ri';
 
+// Typage des données reccueillies en SSR
 interface EventsDataProps {
   usersData: UserPublicData[];
 }
@@ -23,14 +26,22 @@ export default function SearchUser({ usersData }: EventsDataProps) {
     favoriteSport: '',
   });
 
+  // State gérant les listes d'utilisateurs filtrés.
   const [filteredUsers, setFilteredUsers] = useState<UserPublicData[]>(usersData);
+
+  // State gérant le statut de lancement d'une recherche.
   const [hasSearched, setHasSearched] = useState(false);
+
+  // State gérant les mots clés saisis pour la recherche.
   const [keyword, setKeyword] = useState('');
 
+  // Fonction gérant la recherche par filtrage de la liste des utilisateurs renvoyés par l'API.
+  // Il s'agit donc d'une recherche purement frontend.
   const handleSubmit = (evt: { preventDefault: () => void; }) => {
     evt.preventDefault();
     let updatedUsers = [...usersData];
 
+    // Recherche par type de lieu
     if (form.searchType) {
       updatedUsers = updatedUsers.filter((user) => {
         switch (form.searchType) {
@@ -43,11 +54,13 @@ export default function SearchUser({ usersData }: EventsDataProps) {
         }
       });
     }
+    // Recherche par genre
     if (form.gender) {
       updatedUsers = updatedUsers.filter(
         (user) => user.gender === form.gender,
       );
     }
+    // Recherche par sport favori
     if (form.favoriteSport) {
       updatedUsers = updatedUsers.filter(
         (user) => user.favoriteSports.some((sport) => sport.name === form.favoriteSport),
@@ -58,6 +71,7 @@ export default function SearchUser({ usersData }: EventsDataProps) {
     setHasSearched(true);
   };
 
+  // Réinitialisation de la recherche.
   const resetForm = () => {
     setForm({
       searchType: '',
@@ -71,39 +85,74 @@ export default function SearchUser({ usersData }: EventsDataProps) {
     setHasSearched(false);
   };
 
+  // Gestion du scroll vers le résultat de recherche.
+
+  // Création d'une reférence pour scroller vers les résultats de recherche.
+  const searchResultRef = useRef<HTMLDivElement | null>(null);
+
+  // useEffect gérant le déclenchement du scroll vers la recherche quand tous les éléments sont
+  // rendus, afin d'éviter des imprécisions sur le point d'arrivée dues à un rendu en cours.
+  useEffect(() => {
+    if (hasSearched) {
+      searchResultRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [filteredUsers, hasSearched]);
+
+  // Rendu conditionnel selon qu'il y ait des utilisateurs trouvés ou non.
+  const renderUserCards = () => {
+    if (!hasSearched) {
+      return null;
+    }
+    if (filteredUsers.length === 0) {
+      return <div className="text-center text-xl font-bold mt-10">Aucun résultat trouvé</div>;
+    }
+    return (
+      <div className="flex flex-wrap gap-4">
+        {hasSearched && filteredUsers.map((user) => (
+          <Link key={user.id} href={`/profil/${user.id}`} className="hover:scale-105 transition-transform duration-200">
+            <UserCard userData={user} />
+          </Link>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <>
       <Head>
         <title>Recherche - osport</title>
       </Head>
-      <InfoPanel />
-      <button
-        type="button"
-        className="ml-4 border text-xs bg-blue-700 hover:bg-blue-900 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
-        onClick={() => router.push('/recherche')}
-      >
-        Aller sur recherche événements
-      </button>
-      <h1 className="font-bold text-xl mx-4 my-5">Recherche d&#39;utilisateurs</h1>
-      <div className="bg-white mx-4 rounded-md p-7">
-        <button
-          type="button"
-          className="ml-4 border text-sm bg-black hover:bg-gray-500 transition-colors duration-1000 text-white font-bold py-2 px-4 my-2 rounded"
-          onClick={resetForm}
-        >
-          Reset
-        </button>
 
-        <div className="my-4">
+      <section className="text-gray-800">
+        <div className="mb-10">
+          <div className="flex justify-center mb-10">
+            <button
+              type="button"
+              className="border text-xs bg-[#264b81] hover:bg-[#07252e] transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
+              onClick={() => router.push('/recherche')}
+            >
+              Aller sur recherche événements
+            </button>
+          </div>
+          <div className="flex justify-center items-center gap-2 mb-7">
+            <RiUserSearchFill size={24} />
+            <h1 className="font-bold text-xl uppercase">Recherche d&#39;utilisateurs</h1>
+          </div>
+        </div>
+
+        <div className="mb-12 border-y-2 py-5">
           <UserKeywordSearch
             usersData={usersData}
             setFilteredUsers={setFilteredUsers}
             setHasSearched={setHasSearched}
             keyword={keyword}
             setKeyword={setKeyword}
+            searchResultRef={searchResultRef}
           />
         </div>
-        <div>
+
+        <div className="border-y-2 py-5">
+          <h2 className="text-xl font-semibold mb-5">Recherche par filtres</h2>
           <UserSearchForm
             usersData={usersData}
             handleSubmit={handleSubmit}
@@ -111,21 +160,25 @@ export default function SearchUser({ usersData }: EventsDataProps) {
             setForm={setForm}
           />
         </div>
-        <div className="flex flex-wrap gap-4">
-          {hasSearched && filteredUsers.map((user) => (
-            <Link key={user.id} href={`/profil/${user.id}`} className="hover:scale-105 transition-transform duration-200">
-              <UserCard userData={user} />
-            </Link>
-          ))}
-        </div>
 
-      </div>
+        <div ref={searchResultRef} className="flex justify-center mb-12 pt-10">
+          <button
+            type="button"
+            className="border text-sm bg-black hover:bg-gray-500 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
+            onClick={resetForm}
+          >
+            Reset de la recherche
+          </button>
+        </div>
+        {renderUserCards()}
+
+      </section>
 
     </>
   );
 }
 
-// Traitement des requête API coté SSR pour récupérer la liste de événements.
+// Traitement des requête API coté SSR pour récupérer la liste des utilisateurs.
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const props = await getUsersServerSideProps();
