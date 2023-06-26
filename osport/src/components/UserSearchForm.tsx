@@ -50,7 +50,6 @@ export default function UserSearchForm({
   const searchTypeOptions = [
     { value: 'region', label: 'Région' },
     { value: 'city', label: 'Ville' },
-    { value: 'gender', label: 'Genre' },
   ];
   const regionOptions = sortedRegions.map((region) => ({ value: region, label: region }));
   const cityOptions = sortedCities.map((city) => ({ value: city, label: city }));
@@ -77,7 +76,7 @@ export default function UserSearchForm({
             <Select
               id="searchType"
               className="text-gray-700 shadow-md"
-              placeholder="Sélectionnez un type de lieu"
+              placeholder="Sélectionner un type de lieu"
               value={form.searchType ? searchTypeOptions.find(
                 (option) => option.value === form.searchType,
               ) : null}
@@ -97,7 +96,7 @@ export default function UserSearchForm({
               <Select
                 id="region"
                 className="text-gray-700 shadow-md"
-                placeholder="Sélectionnez une région"
+                placeholder="Sélectionner une région"
                 value={regionOptions.find((option) => option.value === form.region)}
                 onChange={(option) => setForm({ ...form, region: option ? option.value : '' })}
                 options={regionOptions}
@@ -113,6 +112,7 @@ export default function UserSearchForm({
               <Select
                 id="city"
                 className="text-gray-700 shadow-md"
+                placeholder="Sélectionner une ville"
                 value={cityOptions.find((option) => option.value === form.city)}
                 onChange={(option) => setForm({ ...form, city: option ? option.value : '' })}
                 options={cityOptions}
@@ -128,7 +128,7 @@ export default function UserSearchForm({
           <Select
             id="gender"
             className="text-gray-700 shadow-md"
-            placeholder="Sélectionnez un genre"
+            placeholder="Sélectionner un genre"
             value={form.gender ? genderOptions.find(
               (option) => option.value === form.gender,
             ) : null}
@@ -145,7 +145,7 @@ export default function UserSearchForm({
           <Select
             id="sport"
             className="text-gray-700 shadow-md"
-            placeholder="Sélectionnez un sport"
+            placeholder="Sélectionner un sport"
             value={form.favoriteSport ? sportOptions.find(
               (option) => option.value === form.favoriteSport,
             ) : null}

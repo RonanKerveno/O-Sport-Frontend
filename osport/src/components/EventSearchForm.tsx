@@ -79,7 +79,7 @@ export default function EventSearchForm({
             <Select
               id="searchType"
               className="text-gray-700 shadow-md"
-              placeholder="Sélectionnez un type de lieu"
+              placeholder="Sélectionner un type de lieu"
               value={form.searchType ? searchTypeOptions.find(
                 (option) => option.value === form.searchType,
               ) : null}
@@ -99,7 +99,7 @@ export default function EventSearchForm({
               <Select
                 id="region"
                 className="text-gray-700 shadow-md"
-                placeholder="Sélectionnez une région"
+                placeholder="Sélectionner une région"
                 value={regionOptions.find((option) => option.value === form.region)}
                 onChange={(option) => setForm({ ...form, region: option ? option.value : '' })}
                 options={regionOptions}
@@ -115,6 +115,7 @@ export default function EventSearchForm({
               <Select
                 id="zipCode"
                 className="text-gray-700 shadow-md"
+                placeholder="Sélectionner un code postal"
                 value={zipCodeOptions.find((option) => option.value === form.zipCode)}
                 onChange={(option) => setForm({ ...form, zipCode: option ? option.value : '' })}
                 options={zipCodeOptions}
@@ -130,6 +131,7 @@ export default function EventSearchForm({
               <Select
                 id="city"
                 className="text-gray-700 shadow-md"
+                placeholder="Sélectionner une ville"
                 value={cityOptions.find((option) => option.value === form.city)}
                 onChange={(option) => setForm({ ...form, city: option ? option.value : '' })}
                 options={cityOptions}
@@ -174,7 +176,7 @@ export default function EventSearchForm({
           <Select
             id="sport"
             className="text-gray-700 shadow-md"
-            placeholder="Sélectionnez un sport"
+            placeholder="Sélectionner un sport"
             value={form.sport ? sportOptions.find(
               (option) => option.value === form.sport,
             ) : null}

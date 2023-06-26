@@ -48,7 +48,7 @@ export default function UserKeywordSearch(
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             placeholder="Nom d'utilisateur, région, ville, sport favori..."
-            className="bg-white text-gray-700 shadow-md border py-2 px-3 w-full"
+            className="text-gray-700 shadow-md border py-2 px-3 w-full"
           />
         </label>
       </div>

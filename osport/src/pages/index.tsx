@@ -13,10 +13,10 @@ import InfoPanel from '@/components/InfoPanel';
 import EventCards from '@/components/EventCards';
 import SportFilter from '@/components/SportFilter';
 import { EventData } from '@/types';
-import Link from 'next/link';
 import { CgScrollH } from 'react-icons/cg';
 import sportIconMap from '@/utils/sportIconMap';
 import { sportNameConvert } from '@/utils/sportNameConvert';
+import router from 'next/router';
 
 // Typage des données reccueillies en SSR
 interface EventsDataProps {
@@ -130,8 +130,14 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
         {/* Option de modification à destination de l'administrateur */}
         {isAdmin
           && (
-            <div className="my-4 ml-7">
-              Admin : <Link href="/sports" className=" text-red-500 font-semibold">modification des sports</Link>
+            <div className="flex justify-center">
+              <button
+                type="button"
+                onClick={() => router.push('/sports')}
+                className="bg-red-500 hover:bg-red-700 text-sm text-white font-bold py-2 px-4 rounded mb-10"
+              >
+                Modification Admin des sports
+              </button>
             </div>
           )}
       </section>
