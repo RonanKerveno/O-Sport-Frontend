@@ -68,12 +68,12 @@ export default function SportFilter({
   };
 
   return (
-    <div className="flex justify-around items-center mb-12 bg-slate-300 rounded-md">
+    <div className="flex justify-around items-center mb-12 bg-slate-300 shadow-md rounded-md">
       <div className="flex justify-center">
         <FaAngleLeft size={42} onClick={scrollLeft} />
       </div>
       <div
-        className="flex items-center w-11/12 bg-slate-100 overflow-x-scroll no-scrollbar no-scrollbar-sports gap-10 px-4 py-2 border-2"
+        className="flex items-center w-11/12 bg-slate-100 overflow-x-scroll no-scrollbar no-scrollbar-sports gap-10 p-4 border-2"
         ref={scrollContainerRef}
       >
         {sports.map((sport) => {
@@ -92,7 +92,7 @@ export default function SportFilter({
                 <SportIcon size={50} color={color} />
 
                 <div className={`text-center ${textColorClass}`}>
-                  <div className="text-sm font-semibold">{sport.name}</div>
+                  <div className="text-sm font-semibold line-clamp-1">{sport.name}</div>
                   <div className=" text-sm">({sport.count})</div>
                 </div>
               </button>

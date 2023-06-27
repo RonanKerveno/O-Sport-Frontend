@@ -192,10 +192,18 @@ export default function EventDetails({ eventData }: DataProfileProps) {
             <SportIcon size={28} />
             <h2>{eventData.sport && eventData.sport.name ? eventData.sport.name : 'Sport inconnu'}</h2>
           </div>
-          <p className="mb-2 font-semibold text-lg">{eventData.city}</p>
-          <p className="mb-2 font-medium">{eventData.street}</p>
-          <p className="mb-2">{startingTime}</p>
-          <p className="mb-2">{endingTime}</p>
+          <div className="md:flex md:items-center md:gap-2 mb-3 md:mb-2">
+            <p className="mb-2 md:mb-0 font-semibold text-lg">{eventData.city}</p>
+            <p className="hidden md:block"> - </p>
+            <p className="font-medium">{eventData.street}</p>
+          </div>
+          <div className="md:flex md:gap-2">
+            <p className="hidden md:block font-semibold">Début :</p>
+            <p className="mb-2 md:mb-0">{startingTime}</p>
+            <p className="hidden md:block">-</p>
+            <p className="hidden md:block font-semibold">Fin :</p>
+            <p>{endingTime}</p>
+          </div>
         </div>
 
         <div className=" mb-3 px-4 py-6 bg-slate-200 text-gray-700 rounded-md shadow-md">
@@ -213,7 +221,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
           </div>
           <div className="flex flex-wrap gap-4">
             {eventData.eventUsers.map((user) => (
-              <Link href={`/profil/${user.id}`} key={user.id} className="flex flex-col items-center hover:scale-105 transition-transform duration-200">
+              <Link href={`/profil/${user.id}`} key={user.id} className="flex flex-col items-center gap-1 hover:scale-105 transition-transform duration-200">
                 <Avvvatars value={user.userName} />
                 <p className="text-sm">{user.userName}</p>
               </Link>

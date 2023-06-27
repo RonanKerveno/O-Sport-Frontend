@@ -72,8 +72,8 @@ export default function EventSearchForm({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="mb-7">
-        <div className="mb-4">
+      <div className="mb-7 md:mb-8 md:flex items-center gap-14">
+        <div className="mb-4 md:mb-0 md:w-2/5">
           <label htmlFor="searchType">
             <h2 className="text-lg font-semibold mb-2">Filtrage par lieu</h2>
             <Select
@@ -93,9 +93,9 @@ export default function EventSearchForm({
         </div>
 
         {form.searchType === 'region' && (
-          <div>
+          <div className="md:mt-9 md:w-2/5">
             <label htmlFor="region">
-              <p className="text-sm font-medium mb-1">Région</p>
+              <p className="text-sm font-medium mb-1 md:hidden">Région</p>
               <Select
                 id="region"
                 className="text-gray-700 shadow-md"
@@ -109,9 +109,9 @@ export default function EventSearchForm({
         )}
 
         {form.searchType === 'zipCode' && (
-          <div>
+          <div className="md:mt-9 md:w-2/5">
             <label htmlFor="zipCode">
-              <p className="text-sm font-medium mb-1">Code Postal</p>
+              <p className="text-sm font-medium mb-1 md:hidden">Code Postal</p>
               <Select
                 id="zipCode"
                 className="text-gray-700 shadow-md"
@@ -125,9 +125,9 @@ export default function EventSearchForm({
         )}
 
         {form.searchType === 'city' && (
-          <div>
+          <div className="md:mt-9 md:w-2/5">
             <label htmlFor="city">
-              <p className="text-sm font-medium mb-1">Ville</p>
+              <p className="text-sm font-medium mb-1 md:hidden">Ville</p>
               <Select
                 id="city"
                 className="text-gray-700 shadow-md"
@@ -141,28 +141,28 @@ export default function EventSearchForm({
         )}
       </div>
 
-      <div className="mb-7">
-        <div className="mb-4">
+      <div className="mb-7 md:mb-5 md:flex gap-14">
+        <div className="mb-4 md:w-2/5">
           <h2 className="text-lg font-semibold mb-4">Filtrage par date</h2>
           <label htmlFor="startDateTime">
             <p className="text-sm font-medium mb-1">Date et heure minimum</p>
             <input
               type="datetime-local"
               id="startDateTime"
-              className="bg-white text-gray-700 shadow-md border w-full px-2 py-1"
+              className="bg-white text-gray-500 shadow-md border w-full px-2 py-1"
               value={form.startDateTime}
               onChange={(e) => setForm({ ...form, startDateTime: e.target.value })}
             />
           </label>
         </div>
 
-        <div>
+        <div className="md:mt-11 md:w-2/5">
           <label htmlFor="endDateTime">
             <p className="text-sm font-medium mb-1">Date et heure maximum</p>
             <input
               type="datetime-local"
               id="endDateTime"
-              className="bg-white text-gray-700 shadow-md border w-full px-2 py-1"
+              className="bg-white text-gray-500 shadow-md border w-full px-2 py-1"
               value={form.endDateTime}
               onChange={(e) => setForm({ ...form, endDateTime: e.target.value })}
             />
@@ -170,7 +170,7 @@ export default function EventSearchForm({
         </div>
       </div>
 
-      <div className="mb-8">
+      <div className="mb-8 md:w-2/5">
         <label htmlFor="sport">
           <h2 className="text-lg font-semibold mb-2">Filtrage par sport</h2>
           <Select

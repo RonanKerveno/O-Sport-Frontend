@@ -10,7 +10,7 @@ export default function PrivacyPolicy() {
         <title>Politique de confidentialité - osport</title>
       </Head>
       <section>
-        <h1 className="text-2xl font-bold mb-4">Politique de confidentialité</h1>
+        <h1 className="text-xl uppercase font-bold mb-6">Politique de confidentialité</h1>
         <p>
           La présente politique de confidentialité décrit la manière dont les auteurs collectent,
           utilisent et protègent les données personnelles des visiteurs de ce site. Cette politique

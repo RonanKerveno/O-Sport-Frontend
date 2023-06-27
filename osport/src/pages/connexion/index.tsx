@@ -82,7 +82,7 @@ export default function Login() {
             </div>
 
             {/* Affichage de l'erreur en cas d'échec de la connexion */}
-            {error && <p>{error}</p>}
+            {error && <p className="text-red-700 mt-4">{error}</p>}
           </form>
         </div>
         <div className="bg-slate-200 shadow-md my-4 rounded-md text-center">

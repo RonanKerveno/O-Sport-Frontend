@@ -38,7 +38,7 @@ export default function EventKeywordSearch(
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="bg-slate-200 shadow-md rounded-md px-4 py-6">
       <div className="mb-8">
         <label htmlFor="keyword">
           <h2 className="text-xl font-semibold mb-5">Recherche par mots-clés</h2>

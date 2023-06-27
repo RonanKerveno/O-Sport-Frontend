@@ -84,7 +84,7 @@ export default function Profile({
               <HiHeart size={22} />
               <h2>Sports favoris</h2>
             </div>
-            <ul>
+            <ul className="md:flex md:flex-wrap gap-7">
               {userData.favoriteSports.map((sport) => {
                 const SportIcon = sportIconMap[sportNameConvert(sport.name)] || sportIconMap.Sports;
                 return (
@@ -102,8 +102,10 @@ export default function Profile({
               <ImStatsDots size={18} />
               <h2>Statistiques événéments</h2>
             </div>
-            <p>Evénéments créés : <span className="font-bold">{createdEvents.length}</span></p>
-            <p>Participation (créés compris) : <span className="font-bold">{userEvents.length}</span></p>
+            <div className="md:flex md:flex-wrap gap-7">
+              <p>Evénéments créés : <span className="font-bold">{createdEvents.length}</span></p>
+              <p>Participation (créés compris) : <span className="font-bold">{userEvents.length}</span></p>
+            </div>
           </div>
 
         </div>

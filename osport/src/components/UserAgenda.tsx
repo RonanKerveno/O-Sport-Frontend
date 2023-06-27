@@ -2,7 +2,7 @@
 
 import { EventData } from '@/types';
 import { FaCalendar } from 'react-icons/fa';
-import EventCard from './EventCard';
+import EventCards from './EventCards';
 
 // Typage des Props
 interface UserAgendaProps {
@@ -32,17 +32,11 @@ export default function UserAgenda({ events }: UserAgendaProps) {
         </h2>
       </div>
       {/* On retourne chaque évenement en reprenant les données de events */}
-      <div className="flex flex-col gap-7">
-        {sortedEvents.length > 0 ? (
-          sortedEvents.map((event) => (
-            <div key={event.id}>
-              <EventCard event={event} />
-            </div>
-          ))
-        ) : (
-          <p className="text-center text-gray-500">Rien de prévu pour le moment !</p>
-        )}
-      </div>
+      {sortedEvents.length > 0 ? (
+        <EventCards events={sortedEvents} />
+      ) : (
+        <p className="text-center text-gray-500">Rien de prévu pour le moment !</p>
+      )}
     </div>
   );
 }
