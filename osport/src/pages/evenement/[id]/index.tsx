@@ -83,7 +83,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
     if (userId === eventData.creatorId) {
       return (
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1"
+          className="bg-[#264b81] hover:bg-slate-600 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded m-1"
           type="button"
           onClick={() => router.push(`/evenement/${eventData.id}/modifier`)}
         >
@@ -93,7 +93,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
     } if (isUserRegistered) {
       return (
         <button
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-1"
+          className="bg-red-500 hover:bg-red-700 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded m-1"
           type="button"
           onClick={handleUnsubscribe}
         >
@@ -113,7 +113,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
     } if (userId) {
       return (
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1"
+          className="bg-[#264b81] hover:bg-slate-600 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded m-1"
           type="button"
           onClick={handleSubscribe}
         >
@@ -158,7 +158,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
               <HiUserGroup size={42} />
               <span className="text-xl">{`${eventData.eventUsers.length}/${eventData.maxNbParticipants}`}</span>
             </div>
-            <span className="text-right p-1"><SportIcon size={50} /></span>
+            <span className="text-right p-2"><SportIcon size={50} /></span>
           </div>
           <h1 className="text-center text-2xl font-bold uppercase p-6">{eventData.title}</h1>
           <div className="text-left mb-1">
@@ -181,7 +181,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
             <HiUserPlus size={22} />
             <h2>Créateur de l'évenement</h2>
           </div>
-          <Link href={`/profil/${eventData.creatorId}`} className="flex items-center gap-2 hover:scale-105 transition-transform duration-200">
+          <Link href={`/profil/${eventData.creatorId}`} className="flex items-center gap-2 w-fit hover:scale-105 transition-transform duration-200">
             <Avvvatars value={eventData.creator.userName} size={38} />
             <p className="text-lg font-medium">{eventData.creator.userName}</p>
           </Link>

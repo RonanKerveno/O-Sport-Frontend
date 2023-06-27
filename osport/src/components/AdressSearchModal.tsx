@@ -5,6 +5,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { AddressApi } from '../types';
 
+// Typage des props
 interface AddressSearchModalProps {
   modalIsOpen: boolean;
   closeModal: () => void;
@@ -20,13 +21,17 @@ interface AddressSearchModalProps {
 function AddressSearchModal({
   modalIsOpen, closeModal, setSearchQuery, loading, addresses, selectAddress, errorAddress,
 }: AddressSearchModalProps) {
+  // État pour la valeur de l'input
   const [inputValue, setInputValue] = useState('');
+  // Appel au hook useDebounce pour limiter les requêtes pendant la saisie.
   const debouncedSearchTerm = useDebounce(inputValue);
 
+  // useEffect gérant la mise à jour de la requête de recherche.
   useEffect(() => {
     setSearchQuery(debouncedSearchTerm);
   }, [debouncedSearchTerm, setSearchQuery]);
 
+  // Fonction gérant la mise à jour de la valeur d'input pendant la saisie.
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };

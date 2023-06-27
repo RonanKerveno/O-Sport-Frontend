@@ -13,7 +13,6 @@ import InfoPanel from '@/components/InfoPanel';
 import EventCards from '@/components/EventCards';
 import SportFilter from '@/components/SportFilter';
 import { EventData } from '@/types';
-import { CgScrollH } from 'react-icons/cg';
 import sportIconMap from '@/utils/sportIconMap';
 import { sportNameConvert } from '@/utils/sportNameConvert';
 import router from 'next/router';
@@ -125,7 +124,7 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
       </Head>
 
       {/* Appel au composant panneau d'information */}
-      <section className="mt-4">
+      <section>
         <InfoPanel />
         {/* Option de modification à destination de l'administrateur */}
         {isAdmin
@@ -140,22 +139,19 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
               </button>
             </div>
           )}
-      </section>
 
-      <div className="font-bold text-center">
-        <h2 className="text-xl mb-7 uppercase text-slate-900">Les événements sportifs</h2>
-      </div>
-      <p className="text-center font-semibold text-slate-800">Filtrer par sport</p>
-      <div className="flex justify-center"><CgScrollH size={32} /></div>
-      {/* Appel au composant barre de recherche des sports */}
-      <SportFilter
-        sports={sportsList}
-        onSelectSport={onSelectSport}
-        resetFilter={resetFilter}
-        setResetFilter={setResetFilter}
-      />
+        <div className="font-bold text-center">
+          <h2 className="text-xl mb-7 uppercase text-slate-900">Les événements sportifs</h2>
+        </div>
+        <p className="text-center font-semibold text-slate-800 mb-3">Filtrer par sport</p>
+        {/* Appel au composant barre de recherche des sports */}
+        <SportFilter
+          sports={sportsList}
+          onSelectSport={onSelectSport}
+          resetFilter={resetFilter}
+          setResetFilter={setResetFilter}
+        />
 
-      <section className="my-4">
         <div className="text-center font-bold text-[#264b81] text-xl uppercase">
           {/* Si un sport est sélectionné on affiche son nom et l'icône asociée */}
           {selectedSportName
@@ -172,7 +168,7 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
             <button
               type="button"
               onClick={resetFilterCallback}
-              className="mt-5 border text-sm bg-[#264b81] hover:bg-[#3b9dbb] transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
+              className="mt-5 border text-sm bg-[#264b81] hover:bg-slate-600 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
             >
               Réinitialiser le filtre
             </button>

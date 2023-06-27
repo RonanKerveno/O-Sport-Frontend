@@ -2,7 +2,10 @@
 
 import sportIconMap from '@/utils/sportIconMap';
 import { sportNameConvert } from '@/utils/sportNameConvert';
-import { useCallback, useEffect, useState } from 'react';
+import {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
 // Typage des props
 interface SportFilterProps {
@@ -41,9 +44,38 @@ export default function SportFilter({
     }
   }, [resetFilter, setResetFilter]);
 
+  // Gestion du scroll de la liste via les boutons latéraux
+
+  // Création de la référence pour le conteneur scrollable
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Fonctions pour gérer le défilement
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        left: -100, // déterminer la quantité à défiler
+        behavior: 'smooth',
+      });
+    }
+  };
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        left: 100, // déterminer la quantité à défiler
+        behavior: 'smooth',
+      });
+    }
+  };
+
   return (
-    <div>
-      <div className="flex overflow-x-scroll no-scrollbar no-scrollbar-sports gap-10 mb-12 border-y-4 p-4">
+    <div className="flex justify-around items-center mb-12 bg-slate-300 rounded-md">
+      <div className="flex justify-center">
+        <FaAngleLeft size={42} onClick={scrollLeft} />
+      </div>
+      <div
+        className="flex items-center w-11/12 bg-slate-100 overflow-x-scroll no-scrollbar no-scrollbar-sports gap-10 px-4 py-2 border-2"
+        ref={scrollContainerRef}
+      >
         {sports.map((sport) => {
           // Récupération de l'icône correspondant au sport séléctionné
           const SportIcon = sportIconMap[sportNameConvert(sport.name)] || sportIconMap.Sports;
@@ -55,7 +87,7 @@ export default function SportFilter({
               <button
                 type="button"
                 onClick={onSportClick(sport.id)}
-                className="flex flex-col items-center gap-1"
+                className="flex flex-col items-center gap-1 w-14 hover:scale-110 transition-transform duration-200"
               >
                 <SportIcon size={50} color={color} />
 
@@ -67,6 +99,9 @@ export default function SportFilter({
             </div>
           );
         })}
+      </div>
+      <div className="flex justify-center">
+        <FaAngleRight size={42} onClick={scrollRight} />
       </div>
     </div>
   );

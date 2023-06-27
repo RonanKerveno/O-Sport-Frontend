@@ -143,7 +143,7 @@ export default function EditEvent({ eventData }: DataProfileProps) {
         />
         {errorMessage && <p className="text-red-500 mt-3 ml-4">{errorMessage}</p>}
         <div className="my-10 text-center">
-          <p className="mb-3">Vous souhaitez annuler ?</p>
+          <p className="mb-3">La sortie n&#39;est plus possible ?</p>
           <button
             type="button"
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"

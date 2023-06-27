@@ -15,7 +15,7 @@ export default function EventCards({ events }: EventCardsProps) {
 
   return (
     <div>
-      <div className="flex flex-col gap-14">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-14">
         {events.map((event) => (
           // Appel au composant d'affichage d'une carte
           <EventCard key={event.id} event={event} />

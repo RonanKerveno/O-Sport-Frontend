@@ -17,14 +17,14 @@ export default function Header() {
   const isLinkActive = (href: string) => router.pathname === href;
 
   return (
-    <header className="sticky top-0 bg-slate-900 text-white py-7 px-4 md:px-7 mb-10 md:mb-0 md:h-screen flex md:flex-col justify-between">
+    <header className="sticky top-0 bg-slate-900 text-white py-7 px-4 lg:px-7 mb-10 lg:mb-0 lg:h-screen flex lg:flex-col justify-between">
       <div>
         <Link href="/" className="flex items-center font-bold text-2xl">
           <MdSportsSoccer size={30} />
           <div>&#39;Sport</div>
           <div className="text-sm ml-3">*démo</div>
         </Link>
-        <div className="hidden md:flex flex-col gap-10 font-bold mt-20">
+        <div className="hidden lg:flex flex-col gap-10 font-bold mt-20">
           <Link
             href="/"
             className={`flex gap-3 ${isLinkActive('/') ? 'text-slate-400' : ''}`}
@@ -63,12 +63,12 @@ export default function Header() {
           ? (
             <Link href={`/profil/${userId}`} className="flex items-center gap-4">
               <Avvvatars value={userName} size={32} />
-              <span className="text-sm font-bold hidden md:block">{userName}</span>
+              <span className="text-sm font-bold hidden lg:block">{userName}</span>
             </Link>
           ) : (
             <Link href="/connexion" className="flex items-center gap-4">
               <FaUserSlash size={30} />
-              <p className="text-sm hidden md:block">Non connecté</p>
+              <p className="text-sm hidden lg:block">Non connecté</p>
             </Link>
           )}
       </div>

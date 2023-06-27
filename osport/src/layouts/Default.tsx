@@ -12,14 +12,14 @@ interface DefaultLayoutProps {
 export default function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
     // Classes pour permettre le Sticky footer
-    <div className="flex flex-col md:flex-row">
+    <div className="flex flex-col lg:flex-row">
       <div className="sticky top-0 z-50">
         <Header />
       </div>
       {/* Classe flex pour permettre le Sticky footer */}
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen w-full">
         <main className="flex-grow mb-20">{children}</main>
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <Navbar />
         </div>
         <Footer />

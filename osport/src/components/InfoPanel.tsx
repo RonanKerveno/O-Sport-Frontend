@@ -15,7 +15,7 @@ export default function InfoPanel() {
       <p className="px-4 pb-4 font-medium text-sm">
         *Ceci est une démo avec des données fictives.
       </p>
-      <Link href="/" className="flex justify-center text-slate-900 underline font-medium pb-3">
+      <Link href="/a-propos" className="flex justify-center text-slate-900 underline font-medium pb-3">
         En savoir plus
       </Link>
     </div>
