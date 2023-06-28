@@ -133,7 +133,7 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
               <button
                 type="button"
                 onClick={() => router.push('/sports')}
-                className="bg-red-500 hover:bg-red-700 text-sm text-white font-bold py-2 px-4 rounded mb-10"
+                className="bg-red-500 hover:bg-red-700 transition-colors duration-1000 text-sm text-white font-bold py-2 px-4 rounded mb-10"
               >
                 Modification Admin des sports
               </button>

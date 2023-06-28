@@ -76,7 +76,7 @@ export default function Login() {
               />
             </label>
             <div>
-              <button type="submit" className="mt-6 text-white text-center bg-[#264b81] py-2 px-3 rounded-md hover:bg-blue-600 hover:text-[#f9fafb]">
+              <button type="submit" className="mt-6 text-white font-medium text-center bg-[#264b81] hover:bg-slate-600 transition-colors duration-1000 py-2 px-3 rounded-md">
                 Connexion
               </button>
             </div>
@@ -90,7 +90,7 @@ export default function Login() {
             <p className="mb-3 text-orange-900 font-bold">Pas encore parmis nous ?</p>
             <button
               type="button"
-              className="mt-4 text-white text-center bg-green-700 py-2 px-3 rounded-md hover:bg-blue-600 hover:text-[#f9fafb]"
+              className="mt-4 text-white font-medium text-center bg-green-700 hover:bg-green-900 transition-colors duration-1000 py-2 px-3 rounded-md"
               onClick={() => router.push('/inscription')}
             >
               Inscription

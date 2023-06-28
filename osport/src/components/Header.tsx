@@ -17,14 +17,14 @@ export default function Header() {
   const isLinkActive = (href: string) => router.pathname === href;
 
   return (
-    <header className="sticky top-0 bg-slate-900 text-white py-7 px-4 lg:px-7 mb-10 lg:mb-0 lg:h-screen flex lg:flex-col justify-between">
+    <header className="sticky top-0 bg-slate-900 text-white py-7 px-4 lg:px-7 mb-10 lg:mb-0 lg:h-screen flex lg:flex-col justify-between items-center">
       <div>
         <Link href="/" className="flex items-center font-bold text-2xl">
           <MdSportsSoccer size={30} />
           <div>&#39;Sport</div>
           <div className="text-sm ml-3">*démo</div>
         </Link>
-        <div className="hidden lg:flex flex-col gap-10 font-bold mt-20">
+        <div className="hidden lg:flex flex-col gap-10 font-semibold mt-20">
           <Link
             href="/"
             className={`flex gap-3 ${isLinkActive('/') ? 'text-slate-400' : ''}`}
@@ -67,7 +67,7 @@ export default function Header() {
             </Link>
           ) : (
             <Link href="/connexion" className="flex items-center gap-4">
-              <FaUserSlash size={30} />
+              <FaUserSlash size={28} />
               <p className="text-sm hidden lg:block">Non connecté</p>
             </Link>
           )}

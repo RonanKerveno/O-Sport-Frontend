@@ -120,10 +120,10 @@ export default function EditEvent({ eventData }: DataProfileProps) {
         <title>Modificaton de l&#39;événement</title>
       </Head>
       <section>
-        <div className="flex justify-center mb-10">
+        <div className="flex justify-center md:block mb-10">
           <Link
             href={`/evenement/${eventId}`}
-            className="bg-[#264b81] hover:bg-[#07252e] text-white px-4 py-2 rounded"
+            className="bg-[#264b81] hover:bg-slate-600 transition-colors duration-1000 font-bold text-white px-4 py-2 rounded"
           >
             Retour sur l&#39;événement
           </Link>
@@ -146,7 +146,7 @@ export default function EditEvent({ eventData }: DataProfileProps) {
           <p className="mb-3">La sortie n&#39;est plus possible ?</p>
           <button
             type="button"
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            className="bg-red-500 hover:bg-red-700 transition-colors duration-1000 text-white font-bold px-4 py-2 rounded"
             onClick={handleDelete}
           >
             Annuler l&#39;événement
@@ -159,14 +159,14 @@ export default function EditEvent({ eventData }: DataProfileProps) {
               <div className="flex justify-end">
                 <button
                   type="button"
-                  className="bg-gray-200 text-gray-800 px-4 py-2 rounded mr-2"
+                  className="bg-gray-200 hover:bg-gray-300 transition-colors duration-1000 text-gray-800 px-4 py-2 rounded mr-2"
                   onClick={() => setShowConfirmation(false)}
                 >
                   Annuler
                 </button>
                 <button
                   type="button"
-                  className="bg-red-500 text-white px-4 py-2 rounded"
+                  className="bg-red-500 hover:bg-red-700 transition-colors duration-1000 text-white font-bold px-4 py-2 rounded"
                   onClick={confirmDelete}
                 >
                   Confirmer

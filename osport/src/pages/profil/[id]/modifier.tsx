@@ -122,7 +122,7 @@ export default function EditProfile({ userData, sportsList }: EditProfileProps) 
         <div className="flex justify-center mb-10">
           <Link
             href={`/profil/${userData.id}`}
-            className="bg-[#264b81] hover:bg-[#07252e] text-white px-4 py-2 rounded"
+            className="bg-[#264b81] hover:bg-slate-600 transition-colors duration-1000 font-bold text-white px-4 py-2 rounded"
           >
             Retour au profil
           </Link>
@@ -144,7 +144,7 @@ export default function EditProfile({ userData, sportsList }: EditProfileProps) 
           <p className="mb-3">Vous souhaitez nous quitter ?</p>
           <button
             type="button"
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            className="bg-red-500 hover:bg-red-700 transition-colors duration-1000 text-white font-bold px-4 py-2 rounded"
             onClick={handleDelete}
           >
             Se désinscrire

@@ -41,10 +41,10 @@ function AddressSearchModal({
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
       contentLabel="Recherche d'adresse"
-      className="flex flex-col items-center justify-center bg-slate-300 text-black p-8 rounded"
+      className="flex flex-col items-center 2xl:items-start justify-center bg-slate-300 text-black p-8 rounded mt-20 lg:mt-0 lg:ml-52 2xl:pl-44"
     >
-      <h2 className="text-xl font-bold mb-4">Entrez votre adresse</h2>
-      <p className="mb-4 font-medium text-center">Puis séléctionnez la bonne correspondance</p>
+      <h2 className="text-xl font-bold mb-4">Entrer une adresse</h2>
+      <p className="mb-4 font-medium">Puis sélectionner un résultat</p>
       <input
         value={inputValue}
         onChange={handleInputChange}
@@ -56,13 +56,13 @@ function AddressSearchModal({
       {loading ? (
         <div>Chargement...</div>
       ) : (
-        <div className="mt-4">
+        <div className="mt-4 flex flex-col md:flex-row md:flex-wrap gap-5 pt-3">
           {addresses.map((address) => (
             <button
               type="button"
               key={address.properties.id}
               onClick={() => selectAddress(address)}
-              className="cursor-pointer hover:bg-blue-200 p-3 rounded text-slate-900"
+              className="cursor-pointer hover:bg-slate-200 rounded text-slate-900"
             >
               {address.properties.label}
             </button>

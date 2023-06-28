@@ -211,110 +211,117 @@ export default function AddEvent() {
             </p>
           )}
 
-        <h2 className="text-lg font-semibold mb-1">Sélection</h2>
-        <Select
-          value={selectedSport ? {
-            value: selectedSport.id,
-            label: (
-              <div className="flex items-center gap-2">
-                {React.createElement(sportIconMap[sportNameConvert(selectedSport.name)]
-                  || sportIconMap.Sports, { size: 22 })}
-                <div>{selectedSport.name}</div>
+        <div className="bg-slate-200 px-4 py-7 rounded-md shadow-md">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
+            <div>
+              <h2 className="text-lg font-semibold mb-1">Sélection</h2>
+              <Select
+                value={selectedSport ? {
+                  value: selectedSport.id,
+                  label: (
+                    <div className="flex items-center gap-2">
+                      {React.createElement(sportIconMap[sportNameConvert(selectedSport.name)]
+                        || sportIconMap.Sports, { size: 22 })}
+                      <div>{selectedSport.name}</div>
+                    </div>
+                  ),
+                } : null}
+                options={selectOptions}
+                onChange={handleSelectSport}
+                placeholder="Sélectionner un sport"
+                isClearable
+                className="mb-4"
+              />
+
+              <button
+                className="border bg-red-700 hover:bg-red-900 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
+                type="button"
+                onClick={handleDeleteSport}
+              >Supprimer le sport (à éviter !)
+              </button>
+            </div>
+
+            <div>
+              <h2 className="text-lg font-semibold mb-1">Modification</h2>
+              <input
+                type="text"
+                value={editSportName}
+                placeholder="Sélectionner un sport plus haut"
+                onChange={(e) => setEditSportName(e.target.value)}
+                className="text-gray-700 shadow-md border py-1.5 px-3 w-full mb-4"
+              />
+              <button
+                className="border bg-orange-700 hover:bg-orange-900 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
+                type="button"
+                onClick={handleEditSport}
+              >Modifier le sport
+              </button>
+            </div>
+
+            <div>
+              <h2 className="text-lg font-semibold mb-1">Ajout</h2>
+              <input
+                type="text"
+                value={newSportName}
+                placeholder="Entrer le nom du sport"
+                onChange={(e) => setNewSportName(e.target.value)}
+                className="text-gray-700 shadow-md border py-1.5 px-3 w-full mb-4"
+              />
+              <button
+                className="border bg-green-700 hover:bg-green-900 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
+                type="button"
+                onClick={handleNewSport}
+              >Ajouter un sport
+              </button>
+            </div>
+          </div>
+
+          {showConfirmation.create && (
+            <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white p-4 rounded mx-2">
+                <p className="mb-3">Êtes-vous sûr de vouloir ajouter le sport &#34;{confirmSportName}&#34; ?</p>
+                <div className="flex justify-end">
+                  <button type="button" className="bg-gray-200 text-gray-800 px-4 py-2 rounded mr-2" onClick={() => setShowConfirmation({ create: false, update: false, delete: false })}>
+                    Annuler
+                  </button>
+                  <button type="button" className="bg-green-500 text-white px-4 py-2 rounded" onClick={confirmNewSport}>
+                    Confirmer
+                  </button>
+                </div>
               </div>
-            ),
-          } : null}
-          options={selectOptions}
-          onChange={handleSelectSport}
-          placeholder="Sélectionner un sport"
-          isClearable
-          className="mb-4"
-        />
-
-        <button
-          className="border bg-red-700 hover:bg-red-900 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded mb-7"
-          type="button"
-          onClick={handleDeleteSport}
-        >Supprimer le sport (à éviter !)
-        </button>
-
-        <h2 className="text-lg font-semibold mb-1">Modification</h2>
-        <div className="mb-7">
-          <input
-            type="text"
-            value={editSportName}
-            placeholder="Sélectionner un sport plus haut"
-            onChange={(e) => setEditSportName(e.target.value)}
-            className="text-gray-700 shadow-md border py-2 px-3 w-full mb-4"
-          />
-          <button
-            className="border bg-orange-700 hover:bg-orange-900 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
-            type="button"
-            onClick={handleEditSport}
-          >Modifier le sport
-          </button>
+            </div>
+          )}
+          {showConfirmation.update && (
+            <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white p-4 rounded mx-2">
+                <p className="mb-3">Êtes-vous sûr de vouloir modifier le sport &#34;{confirmSportName}&#34; ?</p>
+                <div className="flex justify-end">
+                  <button type="button" className="bg-gray-200 text-gray-800 px-4 py-2 rounded mr-2" onClick={() => setShowConfirmation({ create: false, update: false, delete: false })}>
+                    Annuler
+                  </button>
+                  <button type="button" className="bg-orange-500 text-white px-4 py-2 rounded" onClick={confirmEditSport}>
+                    Confirmer
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          {showConfirmation.delete && (
+            <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white p-4 rounded mx-2">
+                <p className="mb-3">Êtes-vous sûr de vouloir supprimer le sport &#34;{confirmSportName}&#34; ?</p>
+                <div className="flex justify-end">
+                  <button type="button" className="bg-gray-200 text-gray-800 px-4 py-2 rounded mr-2" onClick={() => setShowConfirmation({ create: false, update: false, delete: false })}>
+                    Annuler
+                  </button>
+                  <button type="button" className="bg-red-500 text-white px-4 py-2 rounded" onClick={confirmDeleteSport}>
+                    Confirmer
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-
-        <h2 className="text-lg font-semibold mb-1">Ajout</h2>
-        <div className="">
-          <input
-            type="text"
-            value={newSportName}
-            placeholder="Entrer le nom du sport"
-            onChange={(e) => setNewSportName(e.target.value)}
-            className="text-gray-700 shadow-md border py-2 px-3 w-full mb-4"
-          />
-          <button
-            className="border bg-green-700 hover:bg-green-900 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
-            type="button"
-            onClick={handleNewSport}
-          >Ajouter un sport
-          </button>
-        </div>
-        {showConfirmation.create && (
-          <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-4 rounded mx-2">
-              <p className="mb-3">Êtes-vous sûr de vouloir ajouter le sport &#34;{confirmSportName}&#34; ?</p>
-              <div className="flex justify-end">
-                <button type="button" className="bg-gray-200 text-gray-800 px-4 py-2 rounded mr-2" onClick={() => setShowConfirmation({ create: false, update: false, delete: false })}>
-                  Annuler
-                </button>
-                <button type="button" className="bg-green-500 text-white px-4 py-2 rounded" onClick={confirmNewSport}>
-                  Confirmer
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-        {showConfirmation.update && (
-          <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-4 rounded mx-2">
-              <p className="mb-3">Êtes-vous sûr de vouloir modifier le sport &#34;{confirmSportName}&#34; ?</p>
-              <div className="flex justify-end">
-                <button type="button" className="bg-gray-200 text-gray-800 px-4 py-2 rounded mr-2" onClick={() => setShowConfirmation({ create: false, update: false, delete: false })}>
-                  Annuler
-                </button>
-                <button type="button" className="bg-orange-500 text-white px-4 py-2 rounded" onClick={confirmEditSport}>
-                  Confirmer
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-        {showConfirmation.delete && (
-          <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-4 rounded mx-2">
-              <p className="mb-3">Êtes-vous sûr de vouloir supprimer le sport &#34;{confirmSportName}&#34; ?</p>
-              <div className="flex justify-end">
-                <button type="button" className="bg-gray-200 text-gray-800 px-4 py-2 rounded mr-2" onClick={() => setShowConfirmation({ create: false, update: false, delete: false })}>
-                  Annuler
-                </button>
-                <button type="button" className="bg-red-500 text-white px-4 py-2 rounded" onClick={confirmDeleteSport}>
-                  Confirmer
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </section>
     </>
   );

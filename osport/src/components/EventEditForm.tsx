@@ -77,11 +77,11 @@ export default function EventEditForm({
 
   return (
     // Formulaire de création ou modification d'événement utilisant react-hook-form.
-    <div>
+    <div className="bg-slate-200 px-4 py-7 rounded-md shadow-md">
       <form onSubmit={handleSubmit(onSubmit)}>
 
-        <div className="md:grid md:grid-cols-2 md:gap-7 md:mt-12">
-          <div className="my-7 md:my-0">
+        <div className="md:grid md:grid-cols-2 md:gap-7">
+          <div className="mb-7 md:mb-0">
             <label htmlFor="title" className="font-bold">
               Titre <span className="text-sm font-medium">(*Obligatoire)</span>
               <Controller
@@ -271,7 +271,7 @@ export default function EventEditForm({
         <button
           type="button"
           onClick={openModal}
-          className="bg-slate-700 text-white py-2 px-4 rounded-md mt-4 mb-4"
+          className="bg-slate-700 hover:bg-slate-600 transition-colors duration-1000 text-white py-2 px-4 rounded-md mt-4 mb-4"
         >
           Rechercher l&#39;adresse
         </button>
@@ -370,7 +370,7 @@ export default function EventEditForm({
         <div className="flex justify-center">
           <button
             type="submit"
-            className="bg-[#264b81] text-lg text-white mt-4 px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-[#264b81] hover:bg-slate-600 transition-colors duration-1000 text-white text-lg font-bold rounded mt-4 px-4 py-2"
           >
             {isEdit ? 'Mettre à jour' : 'Créer'}
           </button>

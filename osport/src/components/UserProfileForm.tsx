@@ -140,7 +140,7 @@ export default function UserProfileForm({
   return (
     // Formulaire de création ou modification de profil utilisant react-hook-form et le composant
     // UserTextFieldForm pour les types d'inputs les plus répétés.
-    <div>
+    <div className="bg-slate-200 px-4 py-7 rounded-md shadow-md">
       <form
         onSubmit={handleSubmit((data) => {
           const { confirmPassword, ...submittedData } = data;
@@ -156,24 +156,31 @@ export default function UserProfileForm({
           }
         })}
       >
-        <UserTextFieldForm
-          control={control}
-          name="userName"
-          label="Nom d'utilisateur"
-          rules={{ required: 'Nom d\'utilisateur est obligatoire' }}
-          error={errors.userName}
-        />
-        <UserTextFieldForm
-          control={control}
-          name="email"
-          label="Email"
-          type="email"
-          rules={{ required: 'Email est obligatoire' }}
-          error={errors.email}
-        />
+
+        <div className="md:grid md:grid-cols-2 md:gap-7 mb-7">
+          <div className="mb-7 md:mb-0">
+            <UserTextFieldForm
+              control={control}
+              name="userName"
+              label="Nom d'utilisateur"
+              rules={{ required: 'Nom d\'utilisateur est obligatoire' }}
+              error={errors.userName}
+            />
+          </div>
+          <div>
+            <UserTextFieldForm
+              control={control}
+              name="email"
+              label="Email"
+              type="email"
+              rules={{ required: 'Email est obligatoire' }}
+              error={errors.email}
+            />
+          </div>
+        </div>
         {/* Vérification du mot de passe par un champ de confirmation */}
         {isEdit && (
-          <div className="my-7">
+          <div className="mb-5">
             <label htmlFor="changePassword" className="font-bold">
               Modifier le mot de passe
               <input
@@ -193,29 +200,33 @@ export default function UserProfileForm({
           </div>
         )}
         {(!isEdit || changePassword) && (
-          <>
-            <UserTextFieldForm
-              control={control}
-              name="password"
-              label={isEdit ? 'Nouveau mot de passe' : 'Mot de passe'}
-              type="password"
-              rules={{
-                required: changePassword ? 'Mot de passe est obligatoire' : false,
-              }}
-              error={errors.password}
-            />
-            <UserTextFieldForm
-              control={control}
-              name="confirmPassword"
-              label="Confirmer le mot de passe"
-              type="password"
-              rules={{
-                required: changePassword ? 'Confirmation du mot de passe est obligatoire' : false,
-                validate: (value) => (changePassword ? value === watch('password') || 'Les mots de passe ne correspondent pas' : true),
-              }}
-              error={errors.confirmPassword}
-            />
-          </>
+          <div className="md:grid md:grid-cols-2 md:gap-7 mb-7">
+            <div className="mb-4 md:mb-0">
+              <UserTextFieldForm
+                control={control}
+                name="password"
+                label={isEdit ? 'Nouveau mot de passe' : 'Mot de passe'}
+                type="password"
+                rules={{
+                  required: changePassword ? 'Mot de passe est obligatoire' : false,
+                }}
+                error={errors.password}
+              />
+            </div>
+            <div className="mb-7 md:mb-0">
+              <UserTextFieldForm
+                control={control}
+                name="confirmPassword"
+                label="Confirmer le mot de passe"
+                type="password"
+                rules={{
+                  required: changePassword ? 'Confirmation du mot de passe est obligatoire' : false,
+                  validate: (value) => (changePassword ? value === watch('password') || 'Les mots de passe ne correspondent pas' : true),
+                }}
+                error={errors.confirmPassword}
+              />
+            </div>
+          </div>
         )}
         <div className="my-7">
           <label htmlFor="description" className="font-bold">
@@ -239,14 +250,14 @@ export default function UserProfileForm({
           </label>
         </div>
         {/* Définition des sports favoris par cases à cocher */}
-        <div className="my-7">
+        <div className="mb-10">
           <label htmlFor="favoriteSports">
             <p className="font-bold mb-3">Sports favoris <span className="text-sm font-medium">(*Un sport minimum)</span></p>
             <div className="flex">
               <p className="mb-3 text-sm font-semibold ml-1 pt-0.5">Scrollez pour tout voir</p>
               <CgScrollV size={22} />
             </div>
-            <div className={`overflow-y-auto max-h-52 px-4 pt-4 border ${errors.favoriteSports ? 'border-red-600' : 'border-gray-300'} rounded mt-1`}>
+            <div className={` bg-slate-50 overflow-y-auto max-h-52 px-4 pt-4 md:w-5/12 xl:w-1/3 border ${errors.favoriteSports ? 'border-red-600' : 'border-gray-300'} rounded-md mt-1`}>
               {sportsList.map((sport) => {
                 const SportIcon = sportIconMap[sportNameConvert(sport.name)] || sportIconMap.Sports;
                 return (
@@ -287,109 +298,132 @@ export default function UserProfileForm({
           </label>
           {errors.favoriteSports && <div className="text-red-600">{errors.favoriteSports.message}</div>}
         </div>
-        <UserTextFieldForm
-          control={control}
-          name="firstName"
-          label="Prénom"
-          rules={{ required: 'Prénom est obligatoire' }}
-          error={errors.firstName}
-        />
-        <UserTextFieldForm
-          control={control}
-          name="lastName"
-          label="Nom"
-          rules={{ required: 'Nom est obligatoire' }}
-          error={errors.lastName}
-        />
-        {/* Interface de choix de date pour la date de naissance */}
-        <div className="my-7">
-          <label htmlFor="dateOfBirth" className="font-bold">
-            Date de naissance <span className="text-sm font-medium">(*Obligatoire)</span>
-            <Controller
-              name="dateOfBirth"
+
+        <div className="md:grid md:grid-cols-2 md:gap-7 mb-7">
+          <div className="mb-7 md:mb-0">
+            <UserTextFieldForm
               control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  id="dateOfBirth"
-                  type="date"
-                  className={`w-full px-2 py-1 border ${errors.dateOfBirth ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
-                />
-              )}
-              rules={{ required: 'Date de naissance est obligatoire' }}
+              name="firstName"
+              label="Prénom"
+              rules={{ required: 'Prénom est obligatoire' }}
+              error={errors.firstName}
             />
-            {errors.dateOfBirth && <div className="text-red-600">{errors.dateOfBirth.message}</div>}
-          </label>
-        </div>
-        {/* Liste déroulante pour le genre */}
-        <div className="my-7">
-          <label htmlFor="gender" className="font-bold">
-            Genre <span className="text-sm font-medium">(*Obligatoire)</span>
-            <Controller
-              name="gender"
+          </div>
+          <div className="mb-7 md:mb-0">
+            <UserTextFieldForm
               control={control}
-              render={({ field }) => (
-                <select
-                  {...field}
-                  id="gender"
-                  className={`w-full px-2 py-1 border ${errors.gender ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
-                >
-                  <option value="">Sélectionner...</option>
-                  <option value="masculin">Homme</option>
-                  <option value="féminin">Femme</option>
-                </select>
-              )}
-              rules={{ required: 'Genre est obligatoire' }}
+              name="lastName"
+              label="Nom"
+              rules={{ required: 'Nom est obligatoire' }}
+              error={errors.lastName}
             />
-            {errors.gender && <div className="text-red-600">{errors.gender.message}</div>}
-          </label>
+          </div>
         </div>
 
-        <button
-          type="button"
-          onClick={openModal}
-          className="bg-slate-700 text-white py-2 px-4 rounded-md mt-4 mb-4"
-        >
-          Rechercher l&#39;adresse
-        </button>
-        <p className="font-medium">*Utilisez ce bouton de recherche pour compléter les champs obligatoires ci-dessous.</p>
+        <div className="md:grid md:grid-cols-2 md:gap-7 mb-7">
+          {/* Interface de choix de date pour la date de naissance */}
+          <div className="mb-7 md:mb-0">
+            <label htmlFor="dateOfBirth" className="font-bold">
+              Date de naissance <span className="text-sm font-medium">(*Obligatoire)</span>
+              <Controller
+                name="dateOfBirth"
+                control={control}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    id="dateOfBirth"
+                    type="date"
+                    className={`w-full px-2 py-1 border ${errors.dateOfBirth ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
+                  />
+                )}
+                rules={{ required: 'Date de naissance est obligatoire' }}
+              />
+              {errors.dateOfBirth && <div className="text-red-600">{errors.dateOfBirth.message}</div>}
+            </label>
+          </div>
 
-        <UserTextFieldForm
-          control={control}
-          name="region"
-          label="Région"
-          rules={{ required: 'Région est obligatoire' }}
-          error={errors.region}
-          disabled={!errorAddress}
-        />
-        <UserTextFieldForm
-          control={control}
-          name="zipCode"
-          label="Code postal"
-          rules={{ required: 'Code postal est obligatoire' }}
-          error={errors.zipCode}
-          disabled={!errorAddress}
-        />
-        <UserTextFieldForm
-          control={control}
-          name="city"
-          label="Ville"
-          rules={{ required: 'Ville est obligatoire' }}
-          error={errors.city}
-          disabled={!errorAddress}
-        />
-        <UserTextFieldForm
-          control={control}
-          name="street"
-          label="Rue"
-          rules={{ required: 'Rue est obligatoire' }}
-          error={errors.street}
-          disabled={!errorAddress}
-        />
+          {/* Liste déroulante pour le genre */}
+          <div className="mb-7 md:mb-0">
+            <label htmlFor="gender" className="font-bold">
+              Genre <span className="text-sm font-medium">(*Obligatoire)</span>
+              <Controller
+                name="gender"
+                control={control}
+                render={({ field }) => (
+                  <select
+                    {...field}
+                    id="gender"
+                    className={`w-full px-2 py-1.5 border bg-slate-50 ${errors.gender ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
+                  >
+                    <option value="">Sélectionner...</option>
+                    <option value="masculin">Homme</option>
+                    <option value="féminin">Femme</option>
+                  </select>
+                )}
+                rules={{ required: 'Genre est obligatoire' }}
+              />
+              {errors.gender && <div className="text-red-600">{errors.gender.message}</div>}
+            </label>
+          </div>
+        </div>
+
+        <div className="mb-7 md:mb-0">
+          <button
+            type="button"
+            onClick={openModal}
+            className="bg-slate-700 hover:bg-slate-600 transition-colors duration-1000 text-white py-2 px-4 rounded-md mt-4 mb-4"
+          >
+            Rechercher l&#39;adresse
+          </button>
+          <p className="font-medium">*Utilisez ce bouton de recherche pour compléter les champs obligatoires ci-dessous.</p>
+        </div>
+
+        <div className="md:grid md:grid-cols-2 md:gap-7 md:mt-7 mb-10 md:mb-12">
+          <div className="mb-7 md:mb-0">
+            <UserTextFieldForm
+              control={control}
+              name="region"
+              label="Région"
+              rules={{ required: 'Région est obligatoire' }}
+              error={errors.region}
+              disabled={!errorAddress}
+            />
+          </div>
+          <div className="mb-7 md:mb-0">
+            <UserTextFieldForm
+              control={control}
+              name="zipCode"
+              label="Code postal"
+              rules={{ required: 'Code postal est obligatoire' }}
+              error={errors.zipCode}
+              disabled={!errorAddress}
+            />
+          </div>
+          <div className="mb-7 md:mb-0">
+            <UserTextFieldForm
+              control={control}
+              name="city"
+              label="Ville"
+              rules={{ required: 'Ville est obligatoire' }}
+              error={errors.city}
+              disabled={!errorAddress}
+            />
+          </div>
+          <div className="mb-7 md:mb-0">
+            <UserTextFieldForm
+              control={control}
+              name="street"
+              label="Rue"
+              rules={{ required: 'Rue est obligatoire' }}
+              error={errors.street}
+              disabled={!errorAddress}
+            />
+          </div>
+        </div>
         <div className="flex justify-center">
           <button
             type="submit"
-            className="bg-[#264b81] text-lg text-white mt-4 px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-[#264b81] hover:bg-slate-600 transition-colors duration-1000 text-white text-lg font-bold rounded mt-4 px-4 py-2"
           >
             Valider
           </button>

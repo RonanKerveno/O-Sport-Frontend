@@ -55,12 +55,12 @@ export default function Profile({
               <button
                 type="button"
                 onClick={() => router.push(`/profil/${userData.id}/modifier`)}
-                className={`font-bold py-2 px-4 rounded text-white ${isAdmin && loggedUserId !== userData.id ? 'bg-red-500 hover:bg-red-700' : 'bg-[#264b81] hover:bg-blue-700'}`}
+                className={`font-bold py-2 px-4 rounded text-white transition-colors duration-1000 ${isAdmin && loggedUserId !== userData.id ? 'bg-red-500 hover:bg-red-700' : 'bg-[#264b81] hover:bg-slate-600'}`}
               >
                 {isAdmin && loggedUserId !== userData.id ? 'Modification admin' : 'Modifier mon profil'}
               </button>
               {loggedUserId === userData.id && (
-                <button type="button" onClick={logout} className="bg-orange-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <button type="button" onClick={logout} className="bg-orange-700 hover:bg-orange-900 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded">
                   Déconnexion
                 </button>
               )}

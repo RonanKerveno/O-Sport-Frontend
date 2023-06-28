@@ -149,7 +149,7 @@ export default function EventSearchForm({
             <input
               type="datetime-local"
               id="startDateTime"
-              className="bg-white text-gray-500 shadow-md border w-full px-2 py-1"
+              className="bg-white text-gray-500 shadow-md border w-full px-2.5 py-1.5 rounded"
               value={form.startDateTime}
               onChange={(e) => setForm({ ...form, startDateTime: e.target.value })}
             />
@@ -162,7 +162,7 @@ export default function EventSearchForm({
             <input
               type="datetime-local"
               id="endDateTime"
-              className="bg-white text-gray-500 shadow-md border w-full px-2 py-1"
+              className="bg-white text-gray-500 shadow-md border w-full px-2.5 py-1.5 rounded"
               value={form.endDateTime}
               onChange={(e) => setForm({ ...form, endDateTime: e.target.value })}
             />

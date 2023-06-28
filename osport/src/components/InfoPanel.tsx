@@ -5,7 +5,7 @@ import Link from 'next/link';
 export default function InfoPanel() {
   return (
     <div className="bg-slate-200 md:w-auto rounded-md shadow-md mb-14">
-      <div className="text-white bg-slate-700 p-4 rounded-t-md">
+      <div className="text-white font-medium bg-slate-700 p-4 rounded-t-md">
         <h2>Bienvenue sur O&#39;Sport <span className="text-xs">*démo</span></h2>
       </div>
       <p className="p-4">Besoin de compagnons de sport ? Créez un événement !

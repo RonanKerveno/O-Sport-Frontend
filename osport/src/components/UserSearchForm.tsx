@@ -69,8 +69,8 @@ export default function UserSearchForm({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="mb-7">
-        <div className="mb-4">
+      <div className="mb-7 md:mb-8 md:flex items-center gap-14">
+        <div className="mb-4 md:mb-0 md:w-2/5">
           <label htmlFor="searchType">
             <h2 className="text-lg font-semibold mb-2">Filtrage par lieu</h2>
             <Select
@@ -90,9 +90,9 @@ export default function UserSearchForm({
         </div>
 
         {form.searchType === 'region' && (
-          <div>
+          <div className="md:mt-9 md:w-2/5">
             <label htmlFor="region">
-              <p className="text-sm font-medium mb-1">Région</p>
+              <p className="text-sm font-medium mb-1 md:hidden">Région</p>
               <Select
                 id="region"
                 className="text-gray-700 shadow-md"
@@ -106,9 +106,9 @@ export default function UserSearchForm({
         )}
 
         {form.searchType === 'city' && (
-          <div>
+          <div className="md:mt-9 md:w-2/5">
             <label htmlFor="city">
-              <p className="text-sm font-medium mb-1">Ville</p>
+              <p className="text-sm font-medium mb-1 md:hidden">Ville</p>
               <Select
                 id="city"
                 className="text-gray-700 shadow-md"
@@ -122,38 +122,40 @@ export default function UserSearchForm({
         )}
       </div>
 
-      <div className="mb-7">
-        <label htmlFor="gender">
-          <h2 className="text-lg font-semibold mb-2">Filtrage par genre</h2>
-          <Select
-            id="gender"
-            className="text-gray-700 shadow-md"
-            placeholder="Sélectionner un genre"
-            value={form.gender ? genderOptions.find(
-              (option) => option.value === form.gender,
-            ) : null}
-            onChange={(option) => setForm({ ...form, gender: option ? option.value : '' })}
-            options={genderOptions}
-            isClearable
-          />
-        </label>
-      </div>
+      <div className="mb-7 md:mb-8 md:flex items-center gap-14">
+        <div className="mb-7 md:mb-0 md:w-2/5">
+          <label htmlFor="gender">
+            <h2 className="text-lg font-semibold mb-2">Filtrage par genre</h2>
+            <Select
+              id="gender"
+              className="text-gray-700 shadow-md"
+              placeholder="Sélectionner un genre"
+              value={form.gender ? genderOptions.find(
+                (option) => option.value === form.gender,
+              ) : null}
+              onChange={(option) => setForm({ ...form, gender: option ? option.value : '' })}
+              options={genderOptions}
+              isClearable
+            />
+          </label>
+        </div>
 
-      <div className="mb-8">
-        <label htmlFor="sport">
-          <h2 className="text-lg font-semibold mb-2">Filtrage par sport</h2>
-          <Select
-            id="sport"
-            className="text-gray-700 shadow-md"
-            placeholder="Sélectionner un sport"
-            value={form.favoriteSport ? sportOptions.find(
-              (option) => option.value === form.favoriteSport,
-            ) : null}
-            onChange={(option) => setForm({ ...form, favoriteSport: option ? option.value : '' })}
-            options={sportOptions}
-            isClearable
-          />
-        </label>
+        <div className="mb-7 md:mb-0 md:w-2/5">
+          <label htmlFor="sport">
+            <h2 className="text-lg font-semibold mb-2">Filtrage par sport</h2>
+            <Select
+              id="sport"
+              className="text-gray-700 shadow-md"
+              placeholder="Sélectionner un sport"
+              value={form.favoriteSport ? sportOptions.find(
+                (option) => option.value === form.favoriteSport,
+              ) : null}
+              onChange={(option) => setForm({ ...form, favoriteSport: option ? option.value : '' })}
+              options={sportOptions}
+              isClearable
+            />
+          </label>
+        </div>
       </div>
 
       <div>

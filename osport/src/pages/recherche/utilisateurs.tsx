@@ -107,7 +107,7 @@ export default function SearchUser({ usersData }: EventsDataProps) {
       return <div className="text-center text-xl font-bold mt-10">Aucun résultat trouvé</div>;
     }
     return (
-      <div className="flex flex-wrap gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-5">
         {hasSearched && filteredUsers.map((user) => (
           <Link key={user.id} href={`/profil/${user.id}`} className="hover:scale-105 transition-transform duration-200 w-full">
             <UserCard userData={user} />
@@ -125,10 +125,10 @@ export default function SearchUser({ usersData }: EventsDataProps) {
 
       <section className="text-gray-800">
         <div className="mb-10">
-          <div className="flex justify-center mb-10">
+          <div className="flex justify-center md:block mb-10">
             <button
               type="button"
-              className="border text-xs bg-[#264b81] hover:bg-[#07252e] transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
+              className="border text-sm bg-[#264b81] hover:bg-[#07252e] transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
               onClick={() => router.push('/recherche')}
             >
               Aller sur recherche événements
@@ -140,7 +140,7 @@ export default function SearchUser({ usersData }: EventsDataProps) {
           </div>
         </div>
 
-        <div className="mb-12 border-y-2 py-5">
+        <div className="mb-12">
           <UserKeywordSearch
             usersData={usersData}
             setFilteredUsers={setFilteredUsers}
@@ -151,7 +151,7 @@ export default function SearchUser({ usersData }: EventsDataProps) {
           />
         </div>
 
-        <div className="border-y-2 py-5">
+        <div className="bg-slate-200 py-6 px-4 rounded-md shadow-md">
           <h2 className="text-xl font-semibold mb-5">Recherche par filtres</h2>
           <UserSearchForm
             usersData={usersData}
@@ -167,7 +167,7 @@ export default function SearchUser({ usersData }: EventsDataProps) {
             className="border text-sm bg-black hover:bg-gray-500 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded"
             onClick={resetForm}
           >
-            Reset de la recherche
+            Reset des champs de recherche
           </button>
         </div>
         {renderUserCards()}

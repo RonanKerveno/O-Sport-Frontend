@@ -166,7 +166,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
           </div>
           {isAdmin && (userId !== eventData.creatorId) && (
             <button
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-1"
+              className="bg-red-500 hover:bg-red-700 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded m-1"
               type="button"
               onClick={() => router.push(`/evenement/${eventData.id}/modifier`)}
             >
