@@ -15,7 +15,8 @@ import {
 
 // Typages
 
-type FormValues = UserPublicData & UserPrivateData & { password: string; confirmPassword: string; };
+type FormValues = UserPublicData & UserPrivateData
+  & { password: string; confirmPassword: string; changePassword?: boolean };
 type SubmittedData = Omit<FormValues, 'confirmPassword'>;
 // Typage des props
 interface UserProfileFormProps {
@@ -41,16 +42,22 @@ const nullUserPrivateData = {
 export default function UserProfileForm({
   isEdit, userData, sportsList, onSubmit,
 }: UserProfileFormProps) {
-  // State gérant les changements d'état de mot de passe via l'input.
-  const [changePassword, setChangePassword] = useState(!isEdit);
-
   // State gérant les données privées de l'utilisateur.
   const [userPrivateData, setUserPrivateData] = useState<UserPrivateData | null>(null);
 
   // Définition des propriétés de React Hook Form pour le contrôle du formulaire.
   const {
-    handleSubmit, control, setValue, setError, formState: { errors }, watch, reset,
-  } = useForm<FormValues>({ defaultValues: { ...userData, ...userPrivateData } });
+    handleSubmit, control, setValue, setError, formState: { errors }, watch, reset, register,
+  } = useForm<FormValues>({
+    defaultValues: {
+      ...userData,
+      ...userPrivateData,
+      changePassword: !isEdit, // Ajoutez cette ligne
+      password: '', // Initialiser le champ password avec une chaîne vide
+      confirmPassword: '',
+    },
+  });
+  useForm<FormValues>({ defaultValues: { ...userData, ...userPrivateData } });
 
   // useEffect gérant la définition des données privées de l'utilisateur
   useEffect(() => {
@@ -64,33 +71,27 @@ export default function UserProfileForm({
         if (response.success) {
           setUserPrivateData(response.userPrivate);
           // Mise à jour des valeurs par défaut
-          updatedDefaultValues = { ...userData, ...response.userPrivate };
-          // Si changePassword est false on vide les champs de mots de passe pour ne pas
-          // qu'il soient enregistrés.
-          if (!changePassword) {
-            updatedDefaultValues.password = '';
-            updatedDefaultValues.confirmPassword = '';
-          }
+          updatedDefaultValues = {
+            ...userData, ...response.userPrivate, password: '', confirmPassword: '',
+          };
           reset(updatedDefaultValues);
         }
         // Si on est dans une création de profil on charge les données à blanc
       } else {
         setUserPrivateData(nullUserPrivateData);
-        updatedDefaultValues = { ...userData, ...nullUserPrivateData };
-        // Si changePassword est false on vide les champs de mots de passe pour ne pas
-        // qu'il soient enregistrés.
-        if (!changePassword) {
-          updatedDefaultValues.password = '';
-          updatedDefaultValues.confirmPassword = '';
-        }
+        updatedDefaultValues = {
+          ...userData, ...nullUserPrivateData, password: '', confirmPassword: '',
+        };
         reset(updatedDefaultValues);
       }
     };
     fetchPrivateData();
-  }, [userData.id, userData, reset, changePassword, isEdit]);
+  }, [userData.id, userData, reset, isEdit]);
 
   // Surveillance des sports séléctionnés via les cases à cocher.
   const favoriteSports = watch('favoriteSports');
+
+  const changePassword = watch('changePassword');
 
   // Recherche prédictive d'adresse (via API Adresse)
 
@@ -143,15 +144,19 @@ export default function UserProfileForm({
     <div className="bg-slate-200 px-4 py-7 rounded-md shadow-md">
       <form
         onSubmit={handleSubmit((data) => {
-          const { confirmPassword, ...submittedData } = data;
-          // On vérifie si le nombre de sports sélectionnés est entre 1 et 5
+          // Créez un nouvel objet en excluant les champs de mot de passe
+          // si l'utilisateur n'a pas coché "Modifier le mot de passe" en mode édition.
+          const { password, confirmPassword, ...rest } = data;
+          const submittedData = (isEdit && !data.changePassword) ? rest : { ...rest, password };
+
+          // Vérifiez si le nombre de sports sélectionnés est entre 1 et 5
           if (favoriteSports.length < 1 || favoriteSports.length > 5) {
             setError('favoriteSports', {
               type: 'manual',
               message: 'Vous devez sélectionner entre 1 et 5 sports',
             });
           } else {
-            // si c'est correct on envoi la soumission du formulaire
+            // Si c'est correct, envoyez la soumission du formulaire
             onSubmit(submittedData as SubmittedData);
           }
         })}
@@ -186,14 +191,7 @@ export default function UserProfileForm({
               <input
                 id="changePassword"
                 type="checkbox"
-                checked={changePassword}
-                onChange={() => {
-                  setChangePassword(!changePassword);
-                  if (changePassword) {
-                    setValue('password', '', { shouldValidate: true });
-                    setValue('confirmPassword', '', { shouldValidate: true });
-                  }
-                }}
+                {...register('changePassword')}
                 className="ml-7"
               />
             </label>

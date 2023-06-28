@@ -26,11 +26,11 @@ export default function UserCard({
       </div>
       <div className="py-4 pr-2">
         <div className="mb-2">
-          <h2 className="text-xl font-bold line-clamp-1 xl:line-clamp-none">
+          <h2 className="text-xl font-bold line-clamp-1">
             {userData.userName}<span className="font-normal text-orange-800 text-sm">{`${userData.isAdmin ? ' (Admin)' : ''}`}</span>
           </h2>
         </div>
-        <div className="mb-2 line-clamp-1">
+        <div className="mb-2 line-clamp-1 xl:line-clamp-none">
           {`${age}/${genderSymbol}`} <span className="xl:hidden"> - </span> <span className="xl:line-clamp-1 xl:font-medium">{userData.city}</span>
         </div>
         <div className="text-sm font-semibold">Date d&#39;inscription</div>

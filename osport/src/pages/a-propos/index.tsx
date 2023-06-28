@@ -9,7 +9,7 @@ export default function About() {
         <title>À propos - osport</title>
       </Head>
       <section>
-        <h1 className="text-xl font-bold uppercase mb-4">A propos de O&#39;Sport</h1>
+        <h1 className="text-xl font-bold mb-4 uppercase">A propos de O&#39;Sport</h1>
 
         <h2 className="text-xl font-semibold mt-7 mb-2">Projet d&#39;apothéose école O&#39;Clock</h2>
         <p>
@@ -19,7 +19,7 @@ export default function About() {
             className="font-medium underline"
           >
             O&#39;Clock Développeur Fullstack JS
-          </a>
+          </a>.
         </p>
 
         <h2 className="text-xl font-semibold mt-7 mb-2">Objectif</h2>
