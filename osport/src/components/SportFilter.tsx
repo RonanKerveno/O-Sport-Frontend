@@ -76,29 +76,32 @@ export default function SportFilter({
         className="flex items-center w-11/12 bg-slate-100 overflow-x-scroll max-lg:no-scrollbar-sports lg:scrollbar-sport gap-10 p-4 border-2"
         ref={scrollContainerRef}
       >
-        {sports.map((sport) => {
-          // Récupération de l'icône correspondant au sport séléctionné
-          const SportIcon = sportIconMap[sportNameConvert(sport.name)] || sportIconMap.Sports;
-          // Ajustement de la couleur de l'icône et du texte du sport séléctionné.
-          const color = sport.id === activeSportId ? '#264b81' : 'black';
-          const textColorClass = sport.id === activeSportId ? 'text-[#264b81]' : 'text-slate-800';
-          return (
-            <div key={sport.id}>
-              <button
-                type="button"
-                onClick={onSportClick(sport.id)}
-                className="flex flex-col items-center gap-1 w-14 hover:scale-110 transition-transform duration-200"
-              >
-                <SportIcon size={50} color={color} />
+        {[...sports]
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((sport) => {
+            // Récupération de l'icône correspondant au sport séléctionné
+            const SportIcon = sportIconMap[sportNameConvert(sport.name)] || sportIconMap.Sports;
+            // Ajustement de la couleur de l'icône et du texte du sport séléctionné.
+            const color = sport.id === activeSportId ? '#264b81' : 'black';
+            const textColorClass = sport.id === activeSportId ? 'text-[#264b81]' : 'text-slate-800';
+            return (
+              <div key={sport.id}>
+                <button
+                  type="button"
+                  onClick={onSportClick(sport.id)}
+                  className="flex flex-col items-center gap-1 w-14 hover:scale-110 transition-transform duration-200"
+                >
+                  <SportIcon size={50} color={color} />
 
-                <div className={`text-center ${textColorClass}`}>
-                  <div className="text-sm font-semibold line-clamp-1">{sport.name}</div>
-                  <div className=" text-sm">({sport.count})</div>
-                </div>
-              </button>
-            </div>
-          );
-        })}
+                  <div className={`text-center ${textColorClass}`}>
+                    <div className="text-sm font-semibold line-clamp-1">{sport.name}</div>
+                    <div className=" text-sm">({sport.count})</div>
+                  </div>
+                </button>
+              </div>
+            );
+          })}
+
       </div>
       <div className="flex justify-center">
         <FaAngleRight size={42} onClick={scrollRight} />
