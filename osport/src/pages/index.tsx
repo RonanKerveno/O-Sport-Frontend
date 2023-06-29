@@ -100,7 +100,7 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
   // Gestion du nombre d'évenements à afficher
 
   // Nombre d'événements à afficher par défaut
-  const eventsPerPage = 10;
+  const eventsPerPage = 12;
 
   // State de gestion du compteur d'événements à afficher.
   const [displayedEventsCount, setDisplayedEventsCount] = useState(eventsPerPage);
@@ -200,7 +200,7 @@ export default function Home({ eventList, sportsList }: EventsDataProps) {
               onClick={resetDisplayedEventsCount}
               className="bg-[#264b81] hover:bg-[#07252e] text-sm text-white py-2 px-4 rounded mt-14"
             >
-              Limiter l&#39;affichage
+              Réduire l&#39;affichage
             </button>
           )}
         </div>

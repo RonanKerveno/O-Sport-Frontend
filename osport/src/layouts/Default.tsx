@@ -17,7 +17,7 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
         <Header />
       </div>
       {/* Classe flex pour permettre le Sticky footer */}
-      <div className="flex flex-col min-h-screen w-full">
+      <div className="flex flex-col min-h-screen w-full overflow-x-hidden">
         <main className="flex-grow mb-20">{children}</main>
         <div className="lg:hidden">
           <Navbar />

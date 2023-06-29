@@ -1,4 +1,5 @@
-// Composant de formulaire de profil utilisateur
+// Composant de formulaire de profil utilisateur, utilisable pour l'inscription et la modification.
+// La variable isEdit définit si l'on est dans un cas modificatiion.
 
 import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -53,7 +54,7 @@ export default function UserProfileForm({
       ...userData,
       ...userPrivateData,
       changePassword: !isEdit, // Ajoutez cette ligne
-      password: '', // Initialiser le champ password avec une chaîne vide
+      password: '',
       confirmPassword: '',
     },
   });
@@ -91,6 +92,7 @@ export default function UserProfileForm({
   // Surveillance des sports séléctionnés via les cases à cocher.
   const favoriteSports = watch('favoriteSports');
 
+  // Surveillance de la via case à cocher pour modifier le mot de passe en mode édition.
   const changePassword = watch('changePassword');
 
   // Recherche prédictive d'adresse (via API Adresse)
@@ -144,12 +146,12 @@ export default function UserProfileForm({
     <div className="bg-slate-200 px-4 py-7 rounded-md shadow-md">
       <form
         onSubmit={handleSubmit((data) => {
-          // Créez un nouvel objet en excluant les champs de mot de passe
-          // si l'utilisateur n'a pas coché "Modifier le mot de passe" en mode édition.
+          // Création un nouvel objet en excluant les champs de mot de passe si l'utilisateur n'a
+          // pas coché "Modifier le mot de passe" en mode édition.
           const { password, confirmPassword, ...rest } = data;
           const submittedData = (isEdit && !data.changePassword) ? rest : { ...rest, password };
 
-          // Vérifiez si le nombre de sports sélectionnés est entre 1 et 5
+          // Vérification si le nombre de sports sélectionnés est entre 1 et 5
           if (favoriteSports.length < 1 || favoriteSports.length > 5) {
             setError('favoriteSports', {
               type: 'manual',
@@ -172,6 +174,7 @@ export default function UserProfileForm({
               error={errors.userName}
             />
           </div>
+
           <div>
             <UserTextFieldForm
               control={control}
@@ -183,6 +186,7 @@ export default function UserProfileForm({
             />
           </div>
         </div>
+
         {/* Vérification du mot de passe par un champ de confirmation */}
         {isEdit && (
           <div className="mb-5">
@@ -226,6 +230,7 @@ export default function UserProfileForm({
             </div>
           </div>
         )}
+
         <div className="my-7">
           <label htmlFor="description" className="font-bold">
             Description <span className="text-sm font-medium">(*Obligatoire)</span>
@@ -247,6 +252,7 @@ export default function UserProfileForm({
             {errors.description && <div className="text-red-600">{errors.description.message}</div>}
           </label>
         </div>
+
         {/* Définition des sports favoris par cases à cocher */}
         <div className="mb-10">
           <label htmlFor="favoriteSports">

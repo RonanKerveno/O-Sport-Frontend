@@ -193,9 +193,10 @@ export default function EventDetails({ eventData }: DataProfileProps) {
             <h2>{eventData.sport && eventData.sport.name ? eventData.sport.name : 'Sport inconnu'}</h2>
           </div>
           <div className="md:flex md:items-center md:gap-2 mb-3 md:mb-2">
-            <p className="mb-2 md:mb-0 font-semibold text-lg">{eventData.city}</p>
-            <p className="hidden md:block"> - </p>
-            <p className="font-medium">{eventData.street}</p>
+            <p className="hidden md:block font-semibold">Lieu :</p>
+            <p>{eventData.street}</p>
+            <p>{eventData.zipCode}</p>
+            <p className="uppercase">{eventData.city}</p>
           </div>
           <div className="md:flex md:gap-2">
             <p className="hidden md:block font-semibold">Début :</p>
