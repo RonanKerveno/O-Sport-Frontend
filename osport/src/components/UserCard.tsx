@@ -30,8 +30,9 @@ export default function UserCard({
             {userData.userName}<span className="font-normal text-orange-800 text-sm">{`${userData.isAdmin ? ' (Admin)' : ''}`}</span>
           </h2>
         </div>
-        <div className="mb-2 line-clamp-1 xl:line-clamp-none">
-          {`${age}/${genderSymbol}`} <span className="xl:hidden"> - </span> <span className="xl:line-clamp-1 xl:font-medium">{userData.city}</span>
+        <div className="mb-2">
+          <p>{`${age}/${genderSymbol}`}</p>
+          <p className="line-clamp-1 font-medium">{userData.city}</p>
         </div>
         <div className="text-sm font-semibold">Date d&#39;inscription</div>
         <div className="text-sm">{registrationDate}</div>

@@ -17,7 +17,7 @@ export default function Header() {
   const isLinkActive = (href: string) => router.pathname === href;
 
   return (
-    <header className="sticky top-0 bg-slate-900 text-white py-7 px-4 lg:px-7 mb-10 lg:mb-0 lg:h-screen flex lg:flex-col justify-between items-center">
+    <header className="sticky top-0 bg-slate-900 text-white py-7 px-4 lg:pl-7 lg:pr-8 mb-10 lg:mb-0 lg:h-screen flex lg:flex-col justify-between items-center">
       <div>
         <Link href="/" className="flex items-center font-bold text-2xl">
           <MdSportsSoccer size={30} />
