@@ -41,22 +41,27 @@ export default function EventSearchForm({
   // Définition des filtres selon la recherche demandée.
   const regions = Array.from(new Set(eventList.map((event) => event.region)));
   const sortedRegions = regions.sort();
-  const cities = Array.from(new Set(eventList.map((event) => event.city)));
-  const sortedCities = cities.sort();
+  const departments = Array.from(new Set(eventList.map((event) => event.zipCode.slice(0, 2))));
+  const sortedDepartments = departments.sort();
   const zipCodes = Array.from(new Set(eventList.map((event) => event.zipCode)));
   const sortedZipCodes = zipCodes.sort();
+  const cities = Array.from(new Set(eventList.map((event) => event.city)));
+  const sortedCities = cities.sort();
   const sports = Array.from(new Set(eventList.map((event) => event.sport.name)));
   const sortedSports = sports.sort();
 
   // Options pour les Select
   const searchTypeOptions = [
     { value: 'region', label: 'Région' },
+    { value: 'department', label: 'Numéro département' },
     { value: 'zipCode', label: 'Code Postal' },
     { value: 'city', label: 'Ville' },
   ];
   const regionOptions = sortedRegions.map((region) => ({ value: region, label: region }));
-  const cityOptions = sortedCities.map((city) => ({ value: city, label: city }));
+  const departmentOptions = sortedDepartments.map((department) => (
+    { value: department, label: department }));
   const zipCodeOptions = sortedZipCodes.map((zipCode) => ({ value: zipCode, label: zipCode }));
+  const cityOptions = sortedCities.map((city) => ({ value: city, label: city }));
   const sportOptions = sortedSports.map((sport) => {
     const SportIcon = sportIconMap[sportNameConvert(sport)] || sportIconMap.Sports;
     return {
@@ -103,6 +108,24 @@ export default function EventSearchForm({
                 value={regionOptions.find((option) => option.value === form.region)}
                 onChange={(option) => setForm({ ...form, region: option ? option.value : '' })}
                 options={regionOptions}
+              />
+            </label>
+          </div>
+        )}
+
+        {form.searchType === 'department' && (
+          <div className="md:mt-9 md:w-2/5">
+            <label htmlFor="department">
+              <p className="text-sm font-medium mb-1 md:hidden">N° département</p>
+              <Select
+                id="department"
+                className="text-gray-700 shadow-md"
+                placeholder="Sélectionner un département"
+                value={departmentOptions.find((
+                  option,
+                ) => option.value === form.zipCode.slice(0, 2))}
+                onChange={(option) => setForm({ ...form, zipCode: option ? option.value : '' })}
+                options={departmentOptions}
               />
             </label>
           </div>
