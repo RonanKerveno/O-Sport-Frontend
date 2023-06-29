@@ -73,7 +73,7 @@ export default function SportFilter({
         <FaAngleLeft size={42} onClick={scrollLeft} />
       </div>
       <div
-        className="flex items-center w-11/12 bg-slate-100 overflow-x-scroll no-scrollbar no-scrollbar-sports gap-10 p-4 border-2"
+        className="flex items-center w-11/12 bg-slate-100 overflow-x-scroll max-lg:no-scrollbar-sports lg:scrollbar-sport gap-10 p-4 border-2"
         ref={scrollContainerRef}
       >
         {sports.map((sport) => {

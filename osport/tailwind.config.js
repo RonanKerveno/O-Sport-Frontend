@@ -21,6 +21,19 @@ module.exports = {
           '-ms-overflow-style': 'none',
           'scrollbar-width': 'none',
         },
+        '.scrollbar-sport': {
+          'scrollbar-color': '#334155 transparent',
+        },
+        '.scrollbar-sport::-webkit-scrollbar': {
+          height: '10px', /* Safari and Chrome */
+        },
+        '.scrollbar-sport::-webkit-scrollbar-track': {
+          background: 'transparent',
+        },
+        '.scrollbar-sport::-webkit-scrollbar-thumb': {
+          backgroundColor: '#334155',
+          borderRadius: '20px',
+        },
       };
       addUtilities(newUtilities);
     },
