@@ -168,7 +168,7 @@ export default function EventSearchForm({
         <div className="mb-4 md:w-2/5">
           <h2 className="text-lg font-semibold mb-4">Filtrage par date</h2>
           <label htmlFor="startDateTime">
-            <p className="text-sm font-medium mb-1">Date et heure minimum</p>
+            <p className="text-sm font-medium mb-1">Début minimum</p>
             <input
               type="datetime-local"
               id="startDateTime"
@@ -181,7 +181,7 @@ export default function EventSearchForm({
 
         <div className="md:mt-11 md:w-2/5">
           <label htmlFor="endDateTime">
-            <p className="text-sm font-medium mb-1">Date et heure maximum</p>
+            <p className="text-sm font-medium mb-1">Fin maximum</p>
             <input
               type="datetime-local"
               id="endDateTime"

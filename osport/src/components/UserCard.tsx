@@ -24,7 +24,7 @@ export default function UserCard({
       <div className="p-7 flex justify-end items-center w-1/2">
         <Avvvatars value={userData.userName} size={100} />
       </div>
-      <div className="py-4 pr-2">
+      <div className="py-4 pr-2 w-1/2">
         <div className="mb-2">
           <h2 className="text-xl font-bold line-clamp-1">
             {userData.userName}<span className="font-normal text-orange-800 text-sm">{`${userData.isAdmin ? ' (Admin)' : ''}`}</span>
