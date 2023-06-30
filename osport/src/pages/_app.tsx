@@ -6,6 +6,7 @@ import { Inter } from 'next/font/google';
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
 import Modal from 'react-modal';
+import Head from 'next/head';
 import { AuthProvider } from '../contexts/AuthContext';
 import { ToastProvider } from '../contexts/ToastContext';
 import DefaultLayout from '../layouts/Default';
@@ -26,6 +27,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         }
       `}
       </style>
+      <Head>
+        <link rel="icon" href="/favicon.png" />
+      </Head>
       <AuthProvider>
         <ToastProvider>
           <DefaultLayout>
