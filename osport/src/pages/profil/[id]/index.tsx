@@ -97,7 +97,7 @@ export default function Profile({
             </ul>
           </div>
 
-          <div className=" mb-10 px-4 py-6 bg-slate-200 text-gray-700 rounded-md shadow-md">
+          <div className="mb-12 px-4 py-6 bg-slate-200 text-gray-700 rounded-md shadow-md">
             <div className="mb-4 flex items-center gap-2 font-bold text-xl">
               <ImStatsDots size={18} />
               <h2>Statistiques événéments</h2>

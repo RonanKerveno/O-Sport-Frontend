@@ -186,9 +186,7 @@ export default function SearchEvent({ eventList }: EventsDataProps) {
 // Traitement des requête API coté SSR pour récupérer la liste des événements.
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const eventsProps = await getEventsServerSideProps();
-
-    // Pas besoin de trier ici car déjà trié par getAllEvents
+    const eventsProps = await getEventsServerSideProps({ pastEvents: true });
 
     return {
       props: {

@@ -9,10 +9,16 @@ interface ServerError {
   error: string;
 }
 
+// Déclaration de l'interface pour le type du paramètre 'options'
+interface GetAllEventsOptions {
+  pastEvents?: boolean;
+}
+
 // Récupération des données concernant tous les événements
-export const getAllEvents = async () => {
+export const getAllEvents = async (options: GetAllEventsOptions = {}) => {
+  const endPoint = options.pastEvents ? '/events/all' : '/events';
   try {
-    const response = await axios.get(`${API_URL}/events`);
+    const response = await axios.get(`${API_URL}${endPoint}`);
 
     // Tri des événements par date de début
     const sortedEvents = response.data.sort((a: {

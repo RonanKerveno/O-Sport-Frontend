@@ -9,11 +9,16 @@ interface EventsServerSideProps {
   eventList: EventData;
 }
 
+// Déclaration de l'interface pour le type du paramètre 'options'
+interface GetEventsServerSidePropsOptions {
+  pastEvents?: boolean;
+}
+
 // Récupérations de la liste des événements.
-const getEventsServerSideProps = async ():
+const getEventsServerSideProps = async (options: GetEventsServerSidePropsOptions = {}):
 Promise<EventsServerSideProps> => {
   // On lance les requêtes API.
-  const eventsResponse = await getAllEvents();
+  const eventsResponse = await getAllEvents({ pastEvents: options.pastEvents });
 
   // On retourne des tableaux vides en cas d'echec de la requête.
   return {

@@ -7,7 +7,7 @@ import { Event } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { GetServerSideProps } from 'next';
 import getEventServerSideProps from '@/utils/eventServerSideProps';
-import { format, parseISO } from 'date-fns';
+import { format, isPast, parseISO } from 'date-fns';
 import router from 'next/router';
 import { useEffect, useState } from 'react';
 import { addOneUserToOneEvent, deleteOneUserFromOneEvent } from '@/services/userService';
@@ -78,8 +78,21 @@ export default function EventDetails({ eventData }: DataProfileProps) {
   // Vérification de l'inscription de l'utilisateur à l'événement
   const isUserRegistered = eventData.eventUsers.find((user) => user.id === userId) !== undefined;
 
+  const isEventPast = isPast(new Date(eventData.startingTime));
+
   // Définition conditionnelle des boutons à afficher
   const renderButton = () => {
+    if (isEventPast) {
+      return (
+        <button
+          className="bg-slate-500 text-white font-bold py-2 px-4 rounded m-1"
+          type="button"
+          disabled
+        >
+          Passé
+        </button>
+      );
+    }
     if (userId === eventData.creatorId) {
       return (
         <button
@@ -164,7 +177,7 @@ export default function EventDetails({ eventData }: DataProfileProps) {
           <div className="text-left mb-1">
             {renderButton()}
           </div>
-          {isAdmin && (userId !== eventData.creatorId) && (
+          {isAdmin && ((userId !== eventData.creatorId) || isEventPast) && (
             <button
               className="bg-red-500 hover:bg-red-700 transition-colors duration-1000 text-white font-bold py-2 px-4 rounded m-1"
               type="button"
