@@ -12,6 +12,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/contexts/ToastContext';
 import Link from 'next/link';
 import { FaEdit } from 'react-icons/fa';
+import { isPast } from 'date-fns';
 
 // Typage des données reccueillies en SSR
 interface DataProfileProps {
@@ -84,6 +85,10 @@ export default function EditEvent({ eventData }: DataProfileProps) {
 
   // Vérification des autorisations
 
+  // On vérifie si l'événement est passé (considéré comme passé si sa date début est antérieure à
+  // la date actuelle)
+  const isEventPast = isPast(new Date(eventData.startingTime));
+
   // Appel au Context pour obtenir l'ID de l'utilisateur connecté et son statut Admin.
   const { userId, isAdmin } = useAuth();
 
@@ -98,14 +103,16 @@ export default function EditEvent({ eventData }: DataProfileProps) {
   useEffect(() => {
     // Vérification de l'égalité des Id. Si l'ID de l'utilisateur connecté ne matche pas avec l'ID
     // du créateur de l'évenement et que l'utilisateur n'est pas admin on redirige vers Home.
-    if (userId !== eventData.creatorId && !isAdmin) {
+    // Dans tous les cas si l'événement est passé et que l'utilisateur n'est pas admin on redirige
+    // également.
+    if ((userId !== eventData.creatorId || isEventPast) && !isAdmin) {
       router.push('/');
       setIsAuthorized(false);
     } else {
       setIsAuthorized(true);
     }
     setIsLoading(false);
-  }, [userId, isAdmin, eventData.creatorId]);
+  }, [userId, isAdmin, eventData.creatorId, isEventPast]);
 
   if (isLoading) {
     // Pendant que nous vérifions l'authentification, nous affichons ce message

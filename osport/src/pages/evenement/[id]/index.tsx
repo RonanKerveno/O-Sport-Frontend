@@ -78,6 +78,8 @@ export default function EventDetails({ eventData }: DataProfileProps) {
   // Vérification de l'inscription de l'utilisateur à l'événement
   const isUserRegistered = eventData.eventUsers.find((user) => user.id === userId) !== undefined;
 
+  // On vérifie si l'événement est passé (considéré comme passé si sa date début est antérieure à
+  // la date actuelle)
   const isEventPast = isPast(new Date(eventData.startingTime));
 
   // Définition conditionnelle des boutons à afficher
