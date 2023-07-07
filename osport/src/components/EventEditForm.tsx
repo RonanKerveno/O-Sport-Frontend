@@ -160,7 +160,7 @@ export default function EventEditForm({
                           <SportIcon size={22} />
                           <div>{eventData.sport && eventData.sport.name ? eventData.sport.name : 'sport inconnu'}</div>
                         </div>
-                        <p className="text-sm">*Sport non modifiable sur un profil existant</p>
+                        <p className="text-sm">*Sport non modifiable après création</p>
                       </div>
                     );
                   })()}
