@@ -109,7 +109,11 @@ export default function EditProfile({ userData, sportsList }: EditProfileProps) 
     return <h1>Verification en cours...</h1>;
   } if (!isAuthorized) {
     // Si l'utilisateur n'est pas autorisé, nous affichons ce message
-    return <h1>Non autorisé !</h1>;
+    return (
+      <section>
+        <h1 className="text-red-500 font-bold text-xl">Non autorisé !</h1>
+      </section>
+    );
   }
 
   // Si l'utilisateur est autorisé, nous rendons la page de profil

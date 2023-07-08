@@ -13,18 +13,15 @@ import { useToast } from '@/contexts/ToastContext';
 import Link from 'next/link';
 import { FaEdit } from 'react-icons/fa';
 import { isPast } from 'date-fns';
+import getSportsServerSideProps from '@/utils/sportsServerSideProps';
 
 // Typage des données reccueillies en SSR
 interface DataProfileProps {
   eventData: Event;
+  sportsList: SportsListData;
 }
 
-export default function EditEvent({ eventData }: DataProfileProps) {
-  // Chargement de la liste des sports comme un tableau vide car on ne recupère pas les données.
-  // Par design la modification d'événement ne doit pas permettre de modifier le sport, qui est le
-  // "coeur" de l'événement.
-  const sportsList: SportsListData = [];
-
+export default function EditEvent({ eventData, sportsList }: DataProfileProps) {
   // Context gérant les paramètres du toaster.
   const { setToastMessage, setToastDuration } = useToast();
 
@@ -119,7 +116,11 @@ export default function EditEvent({ eventData }: DataProfileProps) {
     return <h1>Verification en cours...</h1>;
   } if (!isAuthorized) {
     // Si l'utilisateur n'est pas autorisé, nous affichons ce message
-    return <h1>Non autorisé !</h1>;
+    return (
+      <section>
+        <h1 className="text-red-500 font-bold text-xl">Non autorisé !</h1>
+      </section>
+    );
   }
   return (
     <>
@@ -190,8 +191,14 @@ export default function EditEvent({ eventData }: DataProfileProps) {
 // Traitement des requête API coté SSR pour récupérer les données de l'événements.
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const props = await getEventServerSideProps(context);
-    return { props };
+    const eventProps = await getEventServerSideProps(context);
+    const sportsProps = await getSportsServerSideProps();
+    return {
+      props: {
+        ...eventProps,
+        ...sportsProps,
+      },
+    };
   } catch (error) {
     return { notFound: true };
   }

@@ -57,7 +57,11 @@ export default function Subscribe({ sportsList }: DataProfileProps) {
   // Utile en complément de "useLoggedRedirect" car le composant est rendu avant que la redirection
   // ne soit effective.
   if (isLogged) {
-    return <p>Vous êtes connectés.</p>;
+    return (
+      <section>
+        <h1 className="text-green-700 font-bold text-xl">Vous êtes connectés !</h1>
+      </section>
+    );
   }
 
   // On initialise les données de profil publiques à blanc car le composant UserProfileForm sert à

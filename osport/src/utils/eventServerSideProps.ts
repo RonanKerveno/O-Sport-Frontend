@@ -23,6 +23,11 @@ const getEventServerSideProps = async (context: GetServerSidePropsContext):
   // On lance les requêtes API.
   const eventResponse = await getOneEvent(eventId);
 
+  // Vérifier si la requête a échoué
+  if (!eventResponse.success) {
+    throw new Error('Event not found');
+  }
+
   return {
     eventData: eventResponse.event,
   };

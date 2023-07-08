@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { format } from 'date-fns';
+import { format, isFuture } from 'date-fns';
 import { EditEventData, SportsListData, AddressApi } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
 import { useForm, Controller } from 'react-hook-form';
 import useAddressSearch from '@/hooks/useAddressSearch';
 import sportIconMap from '@/utils/sportIconMap';
@@ -25,9 +26,13 @@ export default function EventEditForm({
 }: EventEditFormProps) {
   const defaultValues = {
     ...eventData,
+    sportId: eventData.sportId,
     startingTime: eventData.startingTime ? format(new Date(eventData.startingTime), "yyyy-MM-dd'T'HH:mm") : '',
     endingTime: eventData.endingTime ? format(new Date(eventData.endingTime), "yyyy-MM-dd'T'HH:mm") : '',
   };
+
+  // Appel au Context d'authentification pour récupérer le statut admin de l'utilisateur connecté.
+  const { isAdmin } = useAuth();
 
   // Définition des propriétés de React Hook Form pour le contrôle du formulaire.
   const {
@@ -105,10 +110,13 @@ export default function EventEditForm({
           <div className="my-7 md:my-0">
             <label htmlFor="sport" className="font-bold">
               Sport <span className="text-sm font-medium">(*Obligatoire)</span>
-              {!isEdit ? (
+              {/* Modification du sport permise uniquement en création. Exception en modification si
+              l'utilisateur connecté est admin */}
+              {!isEdit || isAdmin ? (
                 <Controller
                   name="sportId"
                   control={control}
+                  defaultValue={eventData.sportId}
                   render={({ field }) => {
                     const options = sportsList.map((sport) => {
                       const SportIcon = sportIconMap[sportNameConvert(sport.name)]
@@ -209,7 +217,12 @@ export default function EventEditForm({
                     />
                   </div>
                 )}
-                rules={{ required: "L'heure de début est obligatoire" }}
+                rules={{
+                  required: "L'heure de début est obligatoire",
+                  validate: {
+                    isFuture: (value) => isFuture(new Date(value)) || "L'heure de début doit être dans le futur.",
+                  },
+                }}
               />
               {errors.startingTime && <div className="text-red-600">{errors.startingTime.message}</div>}
             </label>
@@ -259,7 +272,7 @@ export default function EventEditForm({
                   required: 'Le nombre maximum de participants est obligatoire',
                   validate: (value) => {
                     const parsedValue = Number(value);
-                    return (!Number.isNaN(parsedValue) && parsedValue > 0) || 'Le nombre de participants doit être supérieur à 0';
+                    return (!Number.isNaN(parsedValue) && parsedValue > 1) || 'Il faut au moins 2 participants';
                   },
                 }}
               />

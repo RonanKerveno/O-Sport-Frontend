@@ -16,6 +16,10 @@ export default function Header() {
   // Fonction pour vérifier si le lien est actif
   const isLinkActive = (href: string) => router.pathname === href;
 
+  // On vérifie si l'on est sur le profil de l'utilisateur connecté.
+  const pathId = router.query.id;
+  const isUserProfil = pathId === userId?.toString();
+
   return (
     <header className="sticky top-0 bg-slate-900 text-white py-7 px-4 lg:pl-7 lg:pr-8 mb-10 lg:mb-0 lg:h-screen flex lg:flex-col justify-between items-center">
       <div>
@@ -42,7 +46,7 @@ export default function Header() {
           <Link
             // Lien conditionnel selon que l'utilisateur soit connecté ou non.
             href={isLogged ? `/profil/${userId}` : '/connexion'}
-            className={`flex gap-3 ${router.pathname.startsWith('/profil') ? 'text-slate-400' : ''}`}
+            className={`flex gap-3 ${isUserProfil ? 'text-slate-400' : ''}`}
           >
             <HiUser size={24} />
             <p>Profil</p>
