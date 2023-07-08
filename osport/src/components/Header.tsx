@@ -18,7 +18,7 @@ export default function Header() {
 
   // On vérifie si l'on est sur le profil de l'utilisateur connecté.
   const pathId = router.query.id;
-  const isUserProfil = pathId === userId?.toString();
+  const isUserProfil = isLogged && pathId === userId?.toString();
 
   return (
     <header className="sticky top-0 bg-slate-900 text-white py-7 px-4 lg:pl-7 lg:pr-8 mb-10 lg:mb-0 lg:h-screen flex lg:flex-col justify-between items-center">
