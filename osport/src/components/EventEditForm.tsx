@@ -205,7 +205,7 @@ export default function EventEditForm({
         <div className="md:grid md:grid-cols-2 xl:grid-cols-3 md:gap-7 md:mb-10">
           <div className="my-7 md:my-0">
             <label htmlFor="startingTime" className="font-bold">
-              Heure de début <span className="text-sm font-medium">(*Obligatoire)</span>
+              Début <span className="text-sm font-medium">(*Obligatoire)</span>
               <Controller
                 name="startingTime"
                 control={control}
@@ -220,9 +220,9 @@ export default function EventEditForm({
                   </div>
                 )}
                 rules={{
-                  required: "L'heure de début est obligatoire",
+                  required: 'La date de début est obligatoire',
                   validate: {
-                    isFuture: (value) => isFuture(new Date(value)) || "L'heure de début doit être dans le futur.",
+                    isFuture: (value) => isFuture(new Date(value)) || 'La date de début doit être dans le futur.',
                   },
                 }}
               />
@@ -231,7 +231,7 @@ export default function EventEditForm({
           </div>
           <div className="my-7 md:my-0">
             <label htmlFor="endingTime" className="font-bold">
-              Heure de fin <span className="text-sm font-medium">(*Obligatoire)</span>
+              Fin <span className="text-sm font-medium">(*Obligatoire)</span>
               <Controller
                 name="endingTime"
                 control={control}
@@ -246,8 +246,8 @@ export default function EventEditForm({
                   </div>
                 )}
                 rules={{
-                  required: "L'heure de fin est obligatoire",
-                  validate: (value) => value >= getValues('startingTime') || "L'heure de fin doit être postérieure à l'heure de début.",
+                  required: 'La date de fin est obligatoire',
+                  validate: (value) => value >= getValues('startingTime') || 'La date de fin doit être postérieure à la date de début.',
                 }}
               />
               {errors.endingTime && <div className="text-red-600">{errors.endingTime.message}</div>}
