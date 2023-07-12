@@ -217,29 +217,37 @@ export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const eventsProps = await getEventsServerSideProps();
 
-    // Récupération des sports (avec id et name) associés à un événement
+    // On crée un tableau des sports (avec id et name) associés à chaque événement.
     const sports = eventsProps.eventList.map((event) => (
       { id: event.sportId, name: event.sport.name }));
 
-    // Comptage du nombre d'événements par sport
+    // Comptage du nombre d'événements par sport, avec la méthode "reduce".
+    // Les doublons de sports sont filtrés et le nombre d'occurrences de chaque sport
+    // est ajouté en tant que propriété count.
     const sportsWithCounts = sports.reduce((acc: {
       id: string, name: string, count: number
     }[], sport) => {
+      // Recherche d'un sport existant dans l'accumulateur avec le même ID.
       const existingSport = acc.find((s) => s.id === sport.id);
       if (existingSport) {
+        // Si le sport existe déjà, on incrémente le compteur.
         existingSport.count += 1;
       } else {
+        // Si le sport n'existe pas encore, on l'ajoute à l'accumulateur avec un compteur
+        // initialisé à 1.
         acc.push({ ...sport, count: 1 });
       }
       return acc;
     }, []);
 
+    // Retour des données récupérées, en tant que que props.
     return {
       props: {
         eventList: eventsProps.eventList,
         sportsList: sportsWithCounts,
       },
     };
+    // En cas d'erreur, on renvoit vers la page 404.
   } catch (error) {
     return { notFound: true };
   }

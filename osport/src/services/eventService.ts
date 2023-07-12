@@ -15,7 +15,9 @@ interface GetAllEventsOptions {
 }
 
 // Récupération des données concernant tous les événements
+// Contient en paramètre un objet "options".
 export const getAllEvents = async (options: GetAllEventsOptions = {}) => {
+  // Définition du endPoint selon la valeur du booleen options.pastEvents.
   const endPoint = options.pastEvents ? '/events/all' : '/events';
   try {
     const response = await axios.get(`${API_URL}${endPoint}`);

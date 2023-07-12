@@ -22,7 +22,7 @@ type authContextType = {
   userId: string | null;
   // Nom de l'utilisateur connecté
   userName: string | null;
-  // Affichage ou non de l'état de connexion (notifications)
+  // Affichage ou non de l'état de connexion (notifications toaster)
   showLoggedStatus: boolean;
   // Fonction pour modifier showLoggedStatus (le passer sur true ou false)
   // eslint-disable-next-line no-unused-vars

@@ -123,7 +123,8 @@ export default function EventEditForm({
                         || sportIconMap.Sports;
                       return {
                         value: sport.id,
-                        label: (
+                        label: sport.name,
+                        component: (
                           <div className="flex items-center gap-2">
                             <SportIcon size={22} />
                             <div>{sport.name}</div>
@@ -152,6 +153,7 @@ export default function EventEditForm({
                         options={options}
                         onChange={onChange}
                         value={options.find((option) => option.value === field.value)}
+                        formatOptionLabel={(option) => option.component}
                       />
                     );
                   }}
