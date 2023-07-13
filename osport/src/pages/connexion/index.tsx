@@ -58,6 +58,7 @@ export default function Login() {
               <div>Email</div>
               <input
                 type="text"
+                autoComplete="email"
                 id="EmailInput"
                 name="Email"
                 className="rounded-md m-2 px-3 py-2"
@@ -70,6 +71,7 @@ export default function Login() {
               <div>Mot de passe</div>
               <input
                 type="password"
+                autoComplete="current-password"
                 id="PasswordInput"
                 name="password"
                 minLength={3}
