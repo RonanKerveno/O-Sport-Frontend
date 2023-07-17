@@ -32,6 +32,7 @@ export default function UserTextFieldForm<TFieldValues extends FieldValues>({
             type={type}
             className={`w-full px-2 py-1 border ${error ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
             disabled={disabled}
+            autoComplete="off"
           />
         )}
         rules={rules}
