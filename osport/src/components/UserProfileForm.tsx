@@ -187,6 +187,7 @@ export default function UserProfileForm({
             <UserTextFieldForm
               control={control}
               name="email"
+              autocomplete="username"
               label="Email"
               type="email"
               rules={{ required: 'Email est obligatoire' }}

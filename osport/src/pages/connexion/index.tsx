@@ -58,7 +58,7 @@ export default function Login() {
               <div>Email</div>
               <input
                 type="text"
-                autoComplete="email"
+                autoComplete="username"
                 id="loginEmail"
                 name="loginEmail"
                 className="rounded-md m-2 px-3 py-2"
