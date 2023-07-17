@@ -14,11 +14,10 @@ interface UserTextFieldProps<TFieldValues extends FieldValues> {
   error?: FieldError;
   type?: string;
   disabled?: boolean;
-  autocomplete?: string;
 }
 
 export default function UserTextFieldForm<TFieldValues extends FieldValues>({
-  control, name, label, rules, error, type, disabled, autocomplete,
+  control, name, label, rules, error, type, disabled,
 }: UserTextFieldProps<TFieldValues>) {
   return (
     <label htmlFor={name} className="font-bold">
@@ -33,7 +32,7 @@ export default function UserTextFieldForm<TFieldValues extends FieldValues>({
             type={type}
             className={`w-full px-2 py-1 border ${error ? 'border-red-600' : 'border-gray-300'} rounded mt-1 font-normal`}
             disabled={disabled}
-            autoComplete={autocomplete}
+            autoComplete="off"
           />
         )}
         rules={rules}
