@@ -145,6 +145,7 @@ export default function UserProfileForm({
     // UserTextFieldForm pour les types d'inputs les plus répétés.
     <div className="bg-slate-200 px-4 py-7 rounded-md shadow-md">
       <form
+        autoComplete="off"
         onSubmit={handleSubmit((data) => {
           // Création un nouvel objet en excluant les champs de mot de passe si l'utilisateur n'a
           // pas coché "Modifier le mot de passe" en mode édition.
@@ -170,7 +171,15 @@ export default function UserProfileForm({
               control={control}
               name="userName"
               label="Nom d'utilisateur"
-              rules={{ required: 'Nom d\'utilisateur est obligatoire' }}
+              rules={{
+                required: 'Nom d\'utilisateur est obligatoire',
+                validate: (value) => {
+                  if (typeof value === 'string') {
+                    return /^[a-zA-Z0-9]+$/.test(value) || 'Le nom d\'utilisateur ne peut contenir que des lettres et des chiffres';
+                  }
+                  return false;
+                },
+              }}
               error={errors.userName}
             />
           </div>
