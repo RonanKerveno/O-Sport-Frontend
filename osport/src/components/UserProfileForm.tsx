@@ -145,7 +145,7 @@ export default function UserProfileForm({
     // UserTextFieldForm pour les types d'inputs les plus répétés.
     <div className="bg-slate-200 px-4 py-7 rounded-md shadow-md">
       <form
-        autoComplete="off"
+        autoComplete="new-password"
         onSubmit={handleSubmit((data) => {
           // Création un nouvel objet en excluant les champs de mot de passe si l'utilisateur n'a
           // pas coché "Modifier le mot de passe" en mode édition.
