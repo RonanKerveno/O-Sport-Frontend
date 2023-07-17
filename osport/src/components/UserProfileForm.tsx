@@ -172,6 +172,7 @@ export default function UserProfileForm({
               label="Nom d'utilisateur"
               rules={{ required: 'Nom d\'utilisateur est obligatoire' }}
               error={errors.userName}
+              autocomplete="username"
             />
           </div>
 

@@ -54,26 +54,26 @@ export default function Login() {
       <section>
         <div className="bg-slate-300 shadow-md mb-10 rounded-md">
           <form onSubmit={handleLogin} className="flex flex-col items-center p-7">
-            <label htmlFor="EmailInput" className="p-3 rounded-md border border-gray-400">
+            <label htmlFor="loginEmail" className="p-3 rounded-md border border-gray-400">
               <div>Email</div>
               <input
                 type="text"
                 autoComplete="email"
-                id="EmailInput"
-                name="Email"
+                id="loginEmail"
+                name="loginEmail"
                 className="rounded-md m-2 px-3 py-2"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </label>
 
-            <label htmlFor="PasswordInput" className="m-2 p-3 rounded-md border border-gray-400">
+            <label htmlFor="loginPassword" className="m-2 p-3 rounded-md border border-gray-400">
               <div>Mot de passe</div>
               <input
                 type="password"
                 autoComplete="current-password"
-                id="PasswordInput"
-                name="password"
+                id="loginPassword"
+                name="loginPassword"
                 minLength={3}
                 required
                 className="rounded-md m-2 px-3 py-2"
