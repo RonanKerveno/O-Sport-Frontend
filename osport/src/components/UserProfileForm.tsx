@@ -145,7 +145,6 @@ export default function UserProfileForm({
     // UserTextFieldForm pour les types d'inputs les plus répétés.
     <div className="bg-slate-200 px-4 py-7 rounded-md shadow-md">
       <form
-        autoComplete="new-password"
         onSubmit={handleSubmit((data) => {
           // Création un nouvel objet en excluant les champs de mot de passe si l'utilisateur n'a
           // pas coché "Modifier le mot de passe" en mode édition.
@@ -216,6 +215,7 @@ export default function UserProfileForm({
               <UserTextFieldForm
                 control={control}
                 name="password"
+                autocomplete="new-password"
                 label={isEdit ? 'Nouveau mot de passe' : 'Mot de passe'}
                 type="password"
                 rules={{
@@ -228,6 +228,7 @@ export default function UserProfileForm({
               <UserTextFieldForm
                 control={control}
                 name="confirmPassword"
+                autocomplete="new-password"
                 label="Confirmer le mot de passe"
                 type="password"
                 rules={{
