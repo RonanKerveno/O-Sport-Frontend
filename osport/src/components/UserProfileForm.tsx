@@ -50,15 +50,8 @@ export default function UserProfileForm({
   const {
     handleSubmit, control, setValue, setError, formState: { errors }, watch, reset, register,
   } = useForm<FormValues>({
-    defaultValues: {
-      ...userData,
-      ...userPrivateData,
-      changePassword: !isEdit, // Ajoutez cette ligne
-      password: '',
-      confirmPassword: '',
-    },
+    defaultValues: userData,
   });
-  useForm<FormValues>({ defaultValues: { ...userData, ...userPrivateData } });
 
   // useEffect gérant la définition des données privées de l'utilisateur
   useEffect(() => {
@@ -81,7 +74,7 @@ export default function UserProfileForm({
       } else {
         setUserPrivateData(nullUserPrivateData);
         updatedDefaultValues = {
-          ...userData, ...nullUserPrivateData, password: '', confirmPassword: '',
+          ...userData, ...nullUserPrivateData, password: '', confirmPassword: '', changePassword: !isEdit,
         };
         reset(updatedDefaultValues);
       }
@@ -92,7 +85,7 @@ export default function UserProfileForm({
   // Surveillance des sports séléctionnés via les cases à cocher.
   const favoriteSports = watch('favoriteSports');
 
-  // Surveillance de la via case à cocher pour modifier le mot de passe en mode édition.
+  // Surveillance de la case à cocher pour modifier le mot de passe en mode édition.
   const changePassword = watch('changePassword');
 
   // Recherche prédictive d'adresse (via API Adresse)
