@@ -26,7 +26,7 @@ interface DataProfileProps {
 // Visualisation d'un événement en fonction de son ID
 export default function EventDetails({ eventData }: DataProfileProps) {
   // Récupération des infos sur l'utilisateur connecté via le Context d'authentification.
-  const { userId, isAdmin } = useAuth();
+  const { userId, isLogged, isAdmin } = useAuth();
 
   // Gestion de l'inscription et la désinscription
 
@@ -66,7 +66,8 @@ export default function EventDetails({ eventData }: DataProfileProps) {
       }
 
       if (response.success) {
-        window.location.href = `/evenement/${eventData.id}`;
+        setShowConfirmation(false);
+        router.push(`/evenement/${eventData.id}`);
       } else if ('error' in response && response.error !== undefined) {
         setErrorMessage(response.error);
       }
@@ -84,6 +85,10 @@ export default function EventDetails({ eventData }: DataProfileProps) {
 
   // Définition conditionnelle des boutons à afficher
   const renderButton = () => {
+    // Si l'utilisateur n'est pas connecté, on ne rend aucun bouton
+    if (!isLogged) {
+      return null;
+    }
     if (isEventPast) {
       return (
         <button

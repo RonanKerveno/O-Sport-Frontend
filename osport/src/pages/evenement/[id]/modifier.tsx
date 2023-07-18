@@ -87,7 +87,7 @@ export default function EditEvent({ eventData, sportsList }: DataProfileProps) {
   const isEventPast = isPast(new Date(eventData.startingTime));
 
   // Appel au Context pour obtenir l'ID de l'utilisateur connecté et son statut Admin.
-  const { userId, isAdmin } = useAuth();
+  const { userId, isLogged, isAdmin } = useAuth();
 
   // State gérant le statut de l'autorisation de l'utilisateur pour éditer l'événement.
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -102,14 +102,14 @@ export default function EditEvent({ eventData, sportsList }: DataProfileProps) {
     // du créateur de l'évenement et que l'utilisateur n'est pas admin on redirige vers Home.
     // Dans tous les cas si l'événement est passé et que l'utilisateur n'est pas admin on redirige
     // également.
-    if ((userId !== eventData.creatorId || isEventPast) && !isAdmin) {
+    if (!isLogged || ((userId !== eventData.creatorId || isEventPast) && !isAdmin)) {
       router.push('/');
       setIsAuthorized(false);
     } else {
       setIsAuthorized(true);
     }
     setIsLoading(false);
-  }, [userId, isAdmin, eventData.creatorId, isEventPast]);
+  }, [userId, isAdmin, eventData.creatorId, isEventPast, isLogged]);
 
   if (isLoading) {
     // Pendant que nous vérifions l'authentification, nous affichons ce message
