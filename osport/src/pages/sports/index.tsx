@@ -150,7 +150,6 @@ export default function AddEvent() {
   };
 
   // Définition des options pour le composant React Select.
-  // Définition des options pour le composant React Select.
   const selectOptions = sportsList.map((sport) => {
     const SportIcon = sportIconMap[sportNameConvert(sport.name)] || sportIconMap.Sports;
     return {
@@ -163,6 +162,14 @@ export default function AddEvent() {
       ),
     };
   });
+
+  const filterOption = (option: { value: string; }, inputValue: string) => {
+    // Récupérer le texte réel de l'option à partir de l'objet sport correspondant
+    const sport = sportsList.find((oneSport) => oneSport.id === option.value);
+    if (!sport) return false; // Devrait être impossible, mais juste au cas où
+    // Vérifier si le nom du sport contient la valeur d'entrée
+    return sport.name.toLowerCase().includes(inputValue.toLowerCase());
+  };
 
   // Gestion des autorisations de l'utilisateur.
 
@@ -235,6 +242,7 @@ export default function AddEvent() {
                 placeholder="Sélectionner un sport"
                 isClearable
                 className="mb-4"
+                filterOption={filterOption}
               />
 
               <button
