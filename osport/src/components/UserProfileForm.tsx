@@ -167,7 +167,7 @@ export default function UserProfileForm({
                 required: 'Nom d\'utilisateur est obligatoire',
                 validate: (value) => {
                   if (typeof value === 'string') {
-                    return /^[a-zA-Z0-9]+$/.test(value) || 'Le nom d\'utilisateur ne peut contenir que des lettres et des chiffres';
+                    return /^[a-zA-Z0-9_-]+$/.test(value) || 'Le nom d\'utilisateur ne peut pas contenir de caractères spéciaux';
                   }
                   return false;
                 },
